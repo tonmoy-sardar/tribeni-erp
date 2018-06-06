@@ -39,16 +39,4 @@ export class MaterialService {
     })
   }
 
-  getMaterialTypeList(): Observable<any>{
-    return this.http.get(environment.apiEndpoint+'all_material_type/', {
-      headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
-    })
-  }
-
-  getMaterialTypeDetails(id): Observable<any>{
-    return this.http.get(environment.apiEndpoint+'all_material_type/'+id+'/', {
-      headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
-    })
-  }
-
 }

@@ -3,7 +3,6 @@
         <img class="img-fluid" src="assets/images/logo.png" alt="" />
     </a>
     <button class="navbar-toggler pull-right" type="button" (click)="toggleSidebar()">
-        <!-- <span class="navbar-toggler-icon"></span> -->
         <i class="fa fa-bars text-muted" aria-hidden="true"></i>
     </button>
     <div class="collapse navbar-collapse">
@@ -23,19 +22,11 @@
                     <a class="dropdown-item" href="javascript:void(0)" [routerLink]="['/grn']">
                         <i class="fa fa-truck" aria-hidden="true"></i> GRN
                     </a>
-                    <!--<a class="dropdown-item" href="javascript:void(0)" [routerLink]="['/grn-reverse']">
-                    <i class="fa fa-truck" aria-hidden="true"></i> GRN Reverse
-                </a>-->
                     <a class="dropdown-item" href="javascript:void(0)" [routerLink]="['/purchase-invoice']">
                         <i class="fa fa-money" aria-hidden="true"></i> Purchase Invoice
                     </a>
                 </div>
             </li>
-            <!-- <li class="nav-item">
-                <a routerLink="/company" [routerLinkActive]="['router-link-active']" class="nav-link">
-                    <i class="fa fa-rupee"></i>&nbsp;Customer Invoice
-                </a>
-            </li> -->
             <li class="nav-item dropdown" ngbDropdown>
                 <a href="javascript:void(0)" class="nav-link" ngbDropdownToggle>
                     <i class="fa fa-list-alt"></i> Accounting
@@ -59,9 +50,6 @@
                     <a class="dropdown-item" href="javascript:void(0)" [routerLink]="['/stocks']">
                         <i class="fa fa-list" aria-hidden="true"></i> Stock List
                     </a>
-                    <!-- <a class="dropdown-item" href="javascript:void(0)" [routerLink]="['/stocks-transfer']">
-                        <i class="fa fa-list" aria-hidden="true"></i> Stock Transfer
-                    </a> -->
                 </div>
             </li>
             <li class="nav-item dropdown" ngbDropdown>
@@ -79,30 +67,8 @@
                     <a class="dropdown-item" href="javascript:void(0)" [routerLink]="['/reports/grn']">
                         <i class="fa fa-truck" aria-hidden="true"></i> GRN
                     </a>
-                    <!-- <a class="dropdown-item" href="javascript:void(0)">
-                        <i class="fa fa-money" aria-hidden="true"></i> Transfer Material
-                    </a> -->
                 </div>
             </li>
-            <!-- <li class="nav-item dropdown" ngbDropdown>
-                <a href="javascript:void(0)" class="nav-link" ngbDropdownToggle>
-                    <i class="fa fa-list-alt"></i> Expenses
-                    <b class="caret"></b>
-                </a>
-                <div class="dropdown-menu-right" ngbDropdownMenu>
-                    <a class="dropdown-item" href="javascript:void(0)">
-                        <i class="fa fa-list-alt" aria-hidden="true"></i> Employee Expense
-                    </a>
-                    <a class="dropdown-item" href="javascript:void(0)">
-                        <i class="fa fa-list-alt" aria-hidden="true"></i> My Expense
-                    </a>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a routerLink="/company" [routerLinkActive]="['router-link-active']" class="nav-link">
-                    <i class="fa fa-list-alt"></i>&nbsp;Transactions
-                </a>
-            </li> -->
 
             <li class="nav-item dropdown" ngbDropdown>
                 <a href="javascript:void(0)" class="nav-link" ngbDropdownToggle>
@@ -146,15 +112,12 @@
                     <a class="dropdown-item" href="javascript:void(0)" [routerLink]="['/material-group']">
                         <i class="fa fa-list" aria-hidden="true"></i> Material Group
                     </a>
+                    <a class="dropdown-item" href="javascript:void(0)" [routerLink]="['/uom']">
+                        <i class="fa fa-list" aria-hidden="true"></i> Unit of Measurement
+                    </a>
                     <a class="dropdown-item" href="javascript:void(0)" [routerLink]="['/material']">
                         <i class="fa fa-list" aria-hidden="true"></i> Material
-                    </a>                    
-                    <!--<a class="dropdown-item" href="javascript:void(0)">
-                        <i class="fa fa-list" aria-hidden="true"></i> Party Types
                     </a>
-                    <a class="dropdown-item" href="javascript:void(0)">
-                        <i class="fa fa-list" aria-hidden="true"></i> Other Party
-                    </a>-->
                 </div>
             </li>
             <li class="nav-item dropdown" ngbDropdown>
@@ -164,24 +127,8 @@
                 </a>
                 <div class="dropdown-menu-right" ngbDropdownMenu>
                     <a class="dropdown-item" href="javascript:void(0)" [routerLink]="['/company']">
-                        <i class="fa fa-university" aria-hidden="true"></i> Company
+                        <i class="fa fa-university" aria-hidden="true"></i> Company List
                     </a>
-                    <a class="dropdown-item" href="javascript:void(0)" [routerLink]="['/purchase-organization']">
-                        <i class="fa fa-university" aria-hidden="true"></i> Purchase Org
-                    </a>
-                    <a class="dropdown-item" href="javascript:void(0)" [routerLink]="['/purchase-group']">
-                        <i class="fa fa-university" aria-hidden="true"></i> Purchase Group
-                    </a>
-                    <!-- <a class="dropdown-item" href="javascript:void(0)">
-                        <i class="fa fa-university" aria-hidden="true"></i> Purchase Org Group Mapping
-                    </a> -->
-                    <a class="dropdown-item" href="javascript:void(0)" [routerLink]="['/sale-organization']">
-                        <i class="fa fa-university" aria-hidden="true"></i> Sale Org
-                    </a>
-                    <a class="dropdown-item" href="javascript:void(0)" [routerLink]="['/sale-group']">
-                        <i class="fa fa-university" aria-hidden="true"></i> Sale Group
-                    </a>
-
                 </div>
             </li>
             <li class="nav-item dropdown" ngbDropdown>
@@ -190,14 +137,9 @@
                     <b class="caret"></b>
                 </a>
                 <div class="dropdown-menu-right" ngbDropdownMenu>
-                    <!--<a class="dropdown-item" href="javascript:void(0)">
-                        <i class="fa fa-fw fa-user"></i> {{ 'Profile' | translate }}
-                    </a>-->
-
                     <a class="dropdown-item" [routerLink]="['/login']" (click)="onLoggedout()">
                         <i class="fa fa-fw fa-power-off"></i>Log Out
                     </a>
-
                 </div>
             </li>
         </ul>

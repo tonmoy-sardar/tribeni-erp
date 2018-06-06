@@ -148,16 +148,7 @@ export class CompanyService {
     })
   }
 
-  // Storage Bin Services End
-
-
-  // UOM Services Start
-  getUOMList(): Observable<any>{
-    return this.http.get(environment.apiEndpoint+'uom/', {
-      headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
-    })
-  }
-  // UOM Services End
+  // Storage Bin Services End  
 
   getCompanyBranchDropdownList(id): Observable<any>{
     return this.http.get(environment.apiEndpoint+'company_branch_dropdown/'+id+'/', {

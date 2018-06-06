@@ -1,17 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, Validators, FormBuilder, FormArray } from '@angular/forms';
-
 import { PurchaseRequisitionService } from '../../../core/services/purchase-requisition.service';
 import { CompanyService } from '../../../core/services/company.service';
-import { PurchaseOrganizationService } from '../../../core/services/purchase-organization.service';
-import { PurchaseGroupService } from '../../../core/services/purchase-group.service';
 import { MaterialService } from '../../../core/services/material.service';
+import { UomService } from '../../../core/services/uom.service';
 import { ToastrService } from 'ngx-toastr';
 import { HelpService } from '../../../core/services/help.service';
 import * as Globals from '../../../core/globals';
 import { LoadingState } from '../../../core/component/loading/loading.component';
-
 import * as _ from "lodash";
 
 @Component({
@@ -23,35 +20,27 @@ export class PurchaseRequisitionAddComponent implements OnInit {
   form: FormGroup;
   items: FormArray;
   UOMList = [];
-  purchaseGroupList = [];
-  purchaseOrganizationList = [];
-  purchaseOrganizationCompanyList = [];
-  purchaseOrganizationMaterialList = [];
+  CompanyList = [];
+  MaterialList = [];
   companyBranchDropdownList = [];
   companyStorageDropdownList = [];
   companyStoragebinDropdownList = [];
-  purchaseRequisition;
   help_heading = "";
   help_description = "";
   loading: LoadingState = LoadingState.NotReady;
   constructor(
     private purchaseRequisitionService: PurchaseRequisitionService,
     private materialService: MaterialService,
-    private purchaseOrganizationService: PurchaseOrganizationService,
-    private purchaseGroupService: PurchaseGroupService,
     private companyService: CompanyService,
     private router: Router,
     private toastr: ToastrService,
     private formBuilder: FormBuilder,
-    private helpService: HelpService
+    private helpService: HelpService,
+    private uomService: UomService
   ) { }
 
 
-  ngOnInit() {
-    this.purchaseRequisition = {
-      purchase_organization: '',
-      company: ''
-    }
+  ngOnInit() {    
     this.form = this.formBuilder.group({
       purchase_org: ['', Validators.required],
       purchase_grp: ['', Validators.required],
@@ -63,9 +52,8 @@ export class PurchaseRequisitionAddComponent implements OnInit {
 
     //
     this.getUOMList();
-    this.getPurchaseGroupActiveList();
-    this.getPurchaseOrganizationActiveList();
-
+    this.getCompanyList();
+    this.getMaterialList();
     this.getHelp();
   }
 
@@ -78,7 +66,7 @@ export class PurchaseRequisitionAddComponent implements OnInit {
 
   createRequisitionDetail() {
     return this.formBuilder.group({
-      material: ['', Validators.required],
+      material: [null, Validators.required],
       quantity: ['', Validators.required],
       uom: ['', Validators.required],
       branch: ['', Validators.required],
@@ -169,7 +157,7 @@ export class PurchaseRequisitionAddComponent implements OnInit {
   }
 
   getUOMList() {
-    this.companyService.getUOMList().subscribe(
+    this.uomService.getUomListWithoutPagination().subscribe(
       (data: any[]) => {
         this.UOMList = data['results'];
 
@@ -181,7 +169,6 @@ export class PurchaseRequisitionAddComponent implements OnInit {
     this.companyService.getCompanyBranchDropdownList(id).subscribe(
       (data: any[]) => {
         this.companyBranchDropdownList = data;
-        // console.log(this.companyBranchDropdownList)
       }
     );
   };
@@ -190,7 +177,6 @@ export class PurchaseRequisitionAddComponent implements OnInit {
     this.companyService.getCompanyStorageDropdownList(id).subscribe(
       (data: any[]) => {
         this.companyStorageDropdownList = data;
-        // console.log(this.companyStorageDropdownList)
       }
     );
   };
@@ -199,15 +185,17 @@ export class PurchaseRequisitionAddComponent implements OnInit {
     this.companyService.getCompanyStoragebinDropdownList(id).subscribe(
       (data: any[]) => {
         this.companyStoragebinDropdownList = data;
-        // console.log(this.companyStoragebinDropdownList)
       }
     );
-  };
+  };  
 
-  getPurchaseGroupActiveList() {
-    this.purchaseGroupService.getPurchaseGroupActiveList().subscribe(
+  
+
+  getCompanyList() {
+    this.companyService.getCompanyDropdownList().subscribe(
       (data: any[]) => {
-        this.purchaseGroupList = data;
+        this.CompanyList = data;
+        this.loading = LoadingState.Ready;
       },
       error => {
         this.loading = LoadingState.Ready;
@@ -218,39 +206,16 @@ export class PurchaseRequisitionAddComponent implements OnInit {
     );
   }
 
-  getPurchaseOrganizationActiveList() {
-    this.purchaseOrganizationService.getPurchaseOrganizationActiveList().subscribe(
+  getMaterialList() {
+    let params: URLSearchParams = new URLSearchParams();
+    params.set('page', '1');
+    this.materialService.getMaterialList(params).subscribe(
       (data: any[]) => {
-        this.purchaseOrganizationList = data;
-        this.loading = LoadingState.Ready;
+        this.MaterialList =data['results'];
+        // console.log(this.MaterialList);
       }
     );
-  }
-
-  getPurchaseOrganizationCompanyList(id) {
-    this.purchaseOrganizationService.getPurchaseOrganizationCompanyList(id).subscribe(
-      (data: any[]) => {
-        this.purchaseOrganizationCompanyList = data;
-        // console.log(this.purchaseOrganizationCompanyList);
-      }
-    );
-  }
-
-  getPurchaseOrganizationMaterialList(id) {
-    this.purchaseOrganizationService.getPurchaseOrganizationMaterialList(id).subscribe(
-      (data: any[]) => {
-        this.purchaseOrganizationMaterialList = data;
-        // console.log(this.purchaseOrganizationMaterialList);
-      }
-    );
-  }
-
-  changePurchaseOrganization(id) {
-    if (id > 0) {
-      this.getPurchaseOrganizationCompanyList(id);
-      this.getPurchaseOrganizationMaterialList(id);
-    }
-  }
+  }  
 
   changeCompany(id) {
     if (id > 0) {

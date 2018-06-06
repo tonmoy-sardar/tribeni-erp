@@ -26,8 +26,6 @@ export class PurchaseRequisitionDeatilsComponent implements OnInit {
     this.purchaseRequisition = {
       company: { company_name: '', id: '' },
       requisition_map: [{ id: '', requisition_no: '' }],
-      purchase_org: { id: '', name: '' },
-      purchase_grp: { id: '', name: '' },
       created_at: '',
       status: '',
       created_by: { first_name: '', id: '' },

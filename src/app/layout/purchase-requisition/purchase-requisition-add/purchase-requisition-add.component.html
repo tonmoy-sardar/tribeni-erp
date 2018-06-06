@@ -24,32 +24,11 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="form-group col-md-3">
-                                                <label>Purchase Organization</label>
-                                                <select class="form-control" formControlName="purchase_org" [ngClass]="displayFieldCss('purchase_org')" [(ngModel)]="purchaseRequisition.purchase_organization"
-                                                    name="purchase_organization" (ngModelChange)="changePurchaseOrganization(purchaseRequisition.purchase_organization)">
-                                                    <option value="">Select Purchase Organization</option>
-                                                    <option *ngFor="let purchaseOrganization of purchaseOrganizationList" value={{purchaseOrganization.id}}>{{purchaseOrganization.name}} </option>
-                                                </select>
-                                                <div class="invalid-feedback" *ngIf="form.controls['purchase_org'].hasError('required')">
-                                                    Please select purchase organization
-                                                </div>
-                                            </div>
-                                            <div class="form-group col-md-3">
-                                                <label>Purchase Group</label>
-                                                <select class="form-control" formControlName="purchase_grp" [ngClass]="displayFieldCss('purchase_grp')">
-                                                    <option value="">Select Group</option>
-                                                    <option *ngFor="let purchaseGroup of purchaseGroupList;" value={{purchaseGroup.id}}>{{purchaseGroup.name}} </option>
-                                                </select>
-                                                <div class="invalid-feedback" *ngIf="isFieldValid('purchase_grp')">
-                                                    Please select purchase group
-                                                </div>
-                                            </div>
-                                            <div class="form-group col-md-3">
                                                 <label>Company</label>
-                                                <select class="form-control" name="company" formControlName="company" [ngClass]="displayFieldCss('company')" [(ngModel)]="purchaseRequisition.company"
-                                                    name="company" (ngModelChange)="changeCompany(purchaseRequisition.company)">
+                                                <select class="form-control" name="company" formControlName="company" [ngClass]="displayFieldCss('company')" name="company"
+                                                    (change)="changeCompany($event.target.value)">
                                                     <option value="">Select Company</option>
-                                                    <option *ngFor="let purchaseOrganizationCompany of purchaseOrganizationCompanyList;" value={{purchaseOrganizationCompany.id}}>{{purchaseOrganizationCompany.company_name}} </option>
+                                                    <option *ngFor="let company of CompanyList;" [value]="company.id">{{company.company_name}} </option>
                                                 </select>
                                                 <div class="invalid-feedback" *ngIf="isFieldValid('company')">
                                                     Please select company
@@ -81,13 +60,13 @@
                                                 <div class="row">
                                                     <div class="form-group col-md-2">
                                                         <label>Material</label>
-                                                        <select class="form-control" name="material" formControlName="material" [ngClass]="{
-                                                        'is-invalid': requisition.get('material').invalid && (requisition.get('material').dirty || requisition.get('material').touched),
-                                                        'is-valid': requisition.get('material').valid && (requisition.get('material').dirty || requisition.get('material').touched)
-                                                      }">
-                                                            <option value="">Select Material</option>
-                                                            <option *ngFor="let purchaseOrganizationMaterial of purchaseOrganizationMaterialList;" value="{{purchaseOrganizationMaterial.id}}">{{purchaseOrganizationMaterial.material_fullname}}</option>
-                                                        </select>
+                                                        <ng-select class="form-control" placeholder="Select Material" [clearable]="false" name="material" formControlName="material"
+                                                            [ngClass]="{
+                                                'is-invalid': requisition.get('material').invalid && (requisition.get('material').dirty || requisition.get('material').touched),
+                                                'is-valid': requisition.get('material').valid && (requisition.get('material').dirty || requisition.get('material').touched)
+                                              }">
+                                                            <ng-option *ngFor="let mat of MaterialList;" [value]="mat.id">{{mat.material_fullname}}({{mat.material_code}})</ng-option>
+                                                        </ng-select>
                                                         <div class="invalid-feedback" *ngIf="requisition.get('material').touched && requisition.get('material').hasError('required')">
                                                             Please select material
                                                         </div>

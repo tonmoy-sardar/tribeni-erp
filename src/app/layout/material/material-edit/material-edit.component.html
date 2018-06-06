@@ -171,30 +171,6 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="form-group col-md-6">
-                                        <label>Purchase Org: </label>
-                                        <select multiple="" class="form-control" formControlName="material_purchase_org" [ngClass]="displayFieldCss('material_purchase_org')"
-                                            [(ngModel)]="material.material_purchase_org" name="material_purchase_org">
-                                            <option *ngFor="let purchaseOrganization of purchaseOrganizationList" [ngValue]="purchaseOrganization.id">{{purchaseOrganization.name}} </option>
-                                        </select>
-                                        <div class="invalid-feedback" *ngIf="form.controls['material_purchase_org'].hasError('required')">
-                                            Please select purchase org
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group col-md-6">
-                                        <label>Purchase Group: </label>
-
-                                        <select multiple="" class="form-control" formControlName="material_purchase_grp" [ngClass]="displayFieldCss('material_purchase_grp')"
-                                            [(ngModel)]="material.material_purchase_grp" name="material_purchase_grp">
-                                            <option *ngFor="let purchaseGroup of purchaseGroupList;" [ngValue]="purchaseGroup.id">{{purchaseGroup.name}} </option>
-                                        </select>
-                                        <div class="invalid-feedback" *ngIf="form.controls['material_purchase_grp'].hasError('required')">
-                                            Please select purchase group
-                                        </div>
-                                    </div>
-
                                     <div class="form-group col-md-12">
                                         <label>Description</label>
                                         <textarea class="form-control" rows="2" placeholder="Description" formControlName="description" [ngClass]="displayFieldCss('description')"

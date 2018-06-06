@@ -317,7 +317,7 @@
             "desc": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
         },
         "contractor": {
-            "heading": "Contractor",
+            "heading": "Contractor List",
             "desc": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
         },
         "contractorAdd": {
@@ -326,6 +326,18 @@
         },
         "contractorEdit": {
             "heading": "Contractor Edit",
+            "desc": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+        },
+        "uom": {
+            "heading": "Unit of Measurement List",
+            "desc": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+        },
+        "uomAdd": {
+            "heading": "Unit of Measurement Add",
+            "desc": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+        },
+        "uomEdit": {
+            "heading": "Unit of Measurement Edit",
             "desc": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
         }
 

@@ -26,11 +26,7 @@ const routes: Routes = [
       { path: 'banks', loadChildren: './banks/banks.module#BanksModule' },
       { path: 'material-group', loadChildren: './material-group/material-group.module#MaterialGroupModule' },
       { path: 'material', loadChildren: './material/material.module#MaterialModule' },
-      { path: 'transport', loadChildren: './transport/transport.module#TransportModule' },
-      { path: 'purchase-organization', loadChildren: './purchase-organization/purchase-organization.module#PurchaseOrganizationModule' },
-      { path: 'purchase-group', loadChildren: './purchase-group/purchase-group.module#PurchaseGroupModule' },
-      { path: 'sale-organization', loadChildren: './sale-organization/sale-organization.module#SaleOrganizationModule' },
-      { path: 'sale-group', loadChildren: './sale-group/sale-group.module#SaleGroupModule' },
+      { path: 'transport', loadChildren: './transport/transport.module#TransportModule' },      
       { path: 'company', loadChildren: './company/company.module#CompanyModule' },
       { path: 'purchase-requisition', loadChildren: './purchase-requisition/purchase-requisition.module#PurchaseRequisitionModule' },
       { path: 'purchase-orders', loadChildren: './purchase-orders/purchase-orders.module#PurchaseOrdersModule' },
@@ -45,7 +41,8 @@ const routes: Routes = [
       { path: 'vendor-type', loadChildren: './vendor-type/vendor-type.module#VendorTypeModule' },
       { path: 'expenses', loadChildren: './expenses/expenses.module#ExpensesModule' },
       { path: 'contractors', loadChildren: './contractors/contractors.module#ContractorsModule' },
-      { path: 'accounting', loadChildren: './accounting/accounting.module#AccountingModule' }
+      { path: 'accounting', loadChildren: './accounting/accounting.module#AccountingModule' },
+      { path: 'uom', loadChildren: './uom/uom.module#UomModule' }
     ]
   }
 

@@ -51,21 +51,7 @@ export class PurchaseRequisitionComponent implements OnInit {
         sort_type: '',
         has_tooltip: false,
         tooltip_msg: ''
-      },
-      {
-        name: "P. Org.",
-        code: "purchase_org__name",
-        sort_type: '',
-        has_tooltip: true,
-        tooltip_msg: 'Purchase Organisation'
-      },
-      {
-        name: "P. Group",
-        code: "purchase_grp__name",
-        sort_type: '',
-        has_tooltip: true,
-        tooltip_msg: 'Purchase Group'
-      },
+      },      
       {
         name: "PR Raised Date",
         code: "created_at",
@@ -135,40 +121,7 @@ export class PurchaseRequisitionComponent implements OnInit {
         });
       }
     );
-  }
-
-  changeStatus(value, id) {
-    this.loading = LoadingState.Processing;
-    let purchaseRequisition;
-    if (value != "") {
-      if (value == 0) {
-        purchaseRequisition = {
-          id: id,
-          status: false
-        };
-      }
-      else if (value == 1) {
-        purchaseRequisition = {
-          id: id,
-          status: true
-        };
-      }
-      this.purchaseRequisitionService.changeStatusPurchaseRequisition(purchaseRequisition).subscribe(
-        response => {
-          this.toastr.success('Status changed successfully', '', {
-            timeOut: 3000,
-          });
-          this.getPurchaseRequisitionList();
-        },
-        error => {
-          this.loading = LoadingState.Ready;
-          this.toastr.error('Something went wrong', '', {
-            timeOut: 3000,
-          });
-        }
-      );
-    }
-  }
+  }  
 
   changeApproveStatus(value, id) {
     if (value > 0) {

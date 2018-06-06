@@ -13,9 +13,6 @@ import { BranchEditComponent } from './branch-edit/branch-edit.component';
 import { StorageLocationListComponent } from './storage-location-list/storage-location-list.component';
 import { StorageLocationAddComponent } from './storage-location-add/storage-location-add.component';
 import { StorageLocationEditComponent } from './storage-location-edit/storage-location-edit.component';
-import { StorageBinListComponent } from './storage-bin-list/storage-bin-list.component';
-import { StorageBinAddComponent } from './storage-bin-add/storage-bin-add.component';
-import { StorageBinEditComponent } from './storage-bin-edit/storage-bin-edit.component';
 
 // core
 import {CoreModule} from "../../core/core.module";
@@ -38,10 +35,7 @@ import {CoreModule} from "../../core/core.module";
     BranchEditComponent, 
     StorageLocationListComponent, 
     StorageLocationAddComponent, 
-    StorageLocationEditComponent, 
-    StorageBinListComponent, 
-    StorageBinAddComponent, 
-    StorageBinEditComponent
+    StorageLocationEditComponent
   ],
   providers: []
 })

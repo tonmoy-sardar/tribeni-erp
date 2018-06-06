@@ -5,6 +5,8 @@ import { CompanyService } from '../../../core/services/company.service';
 import { PurchaseOrganizationService } from '../../../core/services/purchase-organization.service';
 import { PurchaseGroupService } from '../../../core/services/purchase-group.service';
 import { MaterialService } from '../../../core/services/material.service';
+import { MaterialGroupService } from '../../../core/services/material-group.service';
+import { UomService } from '../../../core/services/uom.service';
 import { ToastrService } from 'ngx-toastr';
 import { HelpService } from '../../../core/services/help.service';
 import * as Globals from '../../../core/globals';
@@ -28,13 +30,15 @@ export class MaterialAddComponent implements OnInit {
   loading: LoadingState = LoadingState.NotReady;
   constructor(
     private materialService: MaterialService,
+    private materialGroupService: MaterialGroupService,
     private purchaseOrganizationService: PurchaseOrganizationService,
     private purchaseGroupService: PurchaseGroupService,
     private companyService: CompanyService,
     private router: Router,
     private toastr: ToastrService,
     private formBuilder: FormBuilder,
-    private helpService: HelpService
+    private helpService: HelpService,
+    private uomService: UomService
   ) { }
 
   ngOnInit() {
@@ -42,8 +46,6 @@ export class MaterialAddComponent implements OnInit {
       material_type: ['', Validators.required],
       material_code: [null, Validators.required],
       material_fullname: [null, Validators.required],
-      material_purchase_org: [null, Validators.required],
-      material_purchase_grp: [null, Validators.required],
       description: [null, Validators.required],
       material_uom: this.formBuilder.array([this.createmMaterialUom(1)]),
       is_sales: [false],
@@ -152,10 +154,9 @@ export class MaterialAddComponent implements OnInit {
   }
 
   getMaterialTypeList() {
-    this.materialService.getMaterialTypeList().subscribe(
+    this.materialGroupService.getMaterialGroupListWithoutPagination().subscribe(
       (data: any[]) => {
         this.materialTypeList = data['results'];
-
       }
     );
   }
@@ -164,7 +165,7 @@ export class MaterialAddComponent implements OnInit {
   };
 
   getUOMList() {
-    this.companyService.getUOMList().subscribe(
+    this.uomService.getUomListWithoutPagination().subscribe(
       (data: any[]) => {
         this.UOMList = data['results'];
       }
@@ -208,22 +209,7 @@ export class MaterialAddComponent implements OnInit {
   addMaterial() {
     if (this.form.valid) {
       this.loading = LoadingState.Processing;
-      let material_purchase_org_arr = [];
-      this.form.value.material_purchase_org.forEach(x => {
-        material_purchase_org_arr.push({ pur_org: x });
-      })
-
-      let material_purchase_grp_arr = [];
-      this.form.value.material_purchase_grp.forEach(k => {
-        material_purchase_grp_arr.push({ pur_group: k });
-      })
-
-      this.form.value.material_purchase_org = material_purchase_org_arr;
-      this.form.value.material_purchase_grp = material_purchase_grp_arr;
-      this.form.patchValue({
-        material_purchase_org: material_purchase_org_arr,
-        material_purchase_grp: material_purchase_grp_arr
-      })
+      
       this.materialService.addNewMaterial(this.form.value).subscribe(
         response => {
           this.toastr.success('Material added successfully', '', {
