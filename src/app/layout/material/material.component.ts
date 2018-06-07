@@ -90,6 +90,7 @@ export class MaterialComponent implements OnInit {
       (data: any[]) => {
         this.totalMaterialList = data['count'];
         this.materialList = data['results'];
+       
         this.itemNo = (this.defaultPagination - 1) * this.itemPerPage;
         this.lower_count = this.itemNo + 1;
         if (this.totalMaterialList > this.itemPerPage * this.defaultPagination) {

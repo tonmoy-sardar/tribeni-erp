@@ -1,0 +1,116 @@
+<loading [state]="loading">
+  <div>
+      <div style="padding-top: 20px;">
+          <div class="col-md-6 offset-md-6 pull-right" style="text-align: right">
+              <app-help [heading]="help_heading" [description]="help_description"></app-help>
+              <button type="button" class="btn btn-primary" (click)="btnClickNav()">
+                  <i class="fa fa-arrow-left"></i> Back</button>
+          </div>
+          <div class="clearfix"></div>
+      </div>
+      <hr/>
+      <div>
+          <div class="row">
+              <div class="col-md-12">
+                  <form role="form" [formGroup]="form">
+                      <div class="card bg-light mb-3">
+                          <div class="card-header" style="background-color:#868e96; color: #fff;">Company Project Add</div>
+                          <div class="card-body">
+                              <div class="row">
+                                  <div class="form-group col-md-4">
+                                      <label>Project Name</label>
+                                      <input type="text" class="form-control" [(ngModel)]="companyProject.project_name" name="project_name" placeholder="Project Name"
+                                          formControlName="project_name" [ngClass]="displayFieldCss('project_name')">
+                                      <div class="invalid-feedback" *ngIf="isFieldValid('project_name')">
+                                          Please enter project name
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-md-4">
+                                      <label>Email</label>
+                                      <input type="email" class="form-control" [(ngModel)]="companyProject.project_email" name="project_email" placeholder="Email"
+                                          formControlName="project_email" [ngClass]="displayFieldCss('project_email')">
+                                      <div class="invalid-feedback" *ngIf="isFieldValid('project_email')">
+                                          Please enter email
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-md-4">
+                                      <label>Phone</label>
+                                      <input type="text" appOnlyNumber class="form-control" [(ngModel)]="companyProject.project_contact_no" name="project_contact_no"
+                                          placeholder="Phone" formControlName="project_contact_no" [ngClass]="displayFieldCss('project_contact_no')">
+                                      <div class="invalid-feedback" *ngIf="isFieldValid('project_contact_no')">
+                                          Please enter phone
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-md-12">
+                                      <label>Project Address</label>
+                                      <textarea class="form-control" [(ngModel)]="companyProject.project_address" name="project_address" rows="3" placeholder="Project Address"
+                                          formControlName="project_address" [ngClass]="displayFieldCss('project_address')">{{companyProject.project_address}}</textarea>
+                                      <div class="invalid-feedback" *ngIf="isFieldValid('project_address')">
+                                          Please enter project address
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-md-4">
+                                      <label>State</label>
+                                      <select class="form-control" [(ngModel)]="companyProject.project_state" name="project_state" formControlName="project_state"
+                                          [ngClass]="displayFieldCss('project_state')">
+                                          <option value="">Select State</option>
+                                          <option *ngFor="let state of stateList;" value="{{state.id}}">{{state.state_name}}</option>
+                                      </select>
+                                      <div class="invalid-feedback" *ngIf="isFieldValid('project_state')">
+                                          Please select state
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-md-4">
+                                      <label>City</label>
+                                      <input type="text" class="form-control" placeholder="City Name" [(ngModel)]="companyProject.project_city" name="project_city"
+                                          formControlName="project_city" [ngClass]="displayFieldCss('project_city')">
+                                      <div class="invalid-feedback" *ngIf="isFieldValid('project_city')">
+                                          Please enter state
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-md-4">
+                                      <label>Pin</label>
+                                      <input type="text" appOnlyNumber class="form-control" placeholder="Pin" [(ngModel)]="companyProject.project_pincode" name="project_pincode"
+                                          formControlName="project_pincode" [ngClass]="displayFieldCss('project_pincode')">
+                                      <div class="invalid-feedback" *ngIf="isFieldValid('project_pincode')">
+                                          Please enter pin
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-md-4">
+                                      <label>GSTIN</label>
+                                      <input type="text" class="form-control" placeholder="GSTIN" [(ngModel)]="companyProject.project_gstin" name="project_gstin"
+                                          formControlName="project_gstin" [ngClass]="displayFieldCss('project_gstin')">
+                                      <div class="invalid-feedback" *ngIf="isFieldValid('project_gstin')">
+                                          Please enter GSTIN
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-md-4">
+                                      <label>PAN</label>
+                                      <input type="text" class="form-control" placeholder="PAN" [(ngModel)]="companyProject.project_pan" name="project_pan" formControlName="project_pan"
+                                          [ngClass]="displayFieldCss('project_pan')">
+                                      <div class="invalid-feedback" *ngIf="isFieldValid('project_pan')">
+                                          Please enter PAN
+                                      </div>
+                                  </div>
+                                  <div class="form-group col-md-4">
+                                      <label>CIN</label>
+                                      <input type="text" class="form-control" placeholder="CIN" [(ngModel)]="companyProject.project_cin" name="project_cin" formControlName="project_cin"
+                                          [ngClass]="displayFieldCss('project_cin')">
+                                      <div class="invalid-feedback" *ngIf="isFieldValid('project_cin')">
+                                          Please enter CIN
+                                      </div>
+                                  </div>
+
+                                  <div class="form-group col-md-12" style="text-align: right">
+                                      <button type="submit" class="btn btn-primary" (click)="addNewCompanyProject()">Submit</button>
+                                      <button type="reset" class="btn btn-secondary" (click)="reSet()">Reset</button>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+</loading>

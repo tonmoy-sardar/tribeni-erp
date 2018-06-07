@@ -16,6 +16,10 @@ import { StorageLocationEditComponent } from './storage-location-edit/storage-lo
 
 // core
 import {CoreModule} from "../../core/core.module";
+import { ProjectListComponent } from './project-list/project-list.component';
+import { ProjectAddComponent } from './project-add/project-add.component';
+import { ProjectEditComponent } from './project-edit/project-edit.component';
+import { ProjectDetailsComponent } from './project-details/project-details.component';
 
 @NgModule({
   imports: [
@@ -35,7 +39,7 @@ import {CoreModule} from "../../core/core.module";
     BranchEditComponent, 
     StorageLocationListComponent, 
     StorageLocationAddComponent, 
-    StorageLocationEditComponent
+    StorageLocationEditComponent, ProjectListComponent, ProjectAddComponent, ProjectEditComponent, ProjectDetailsComponent
   ],
   providers: []
 })
