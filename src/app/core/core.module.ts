@@ -71,7 +71,6 @@ import { ContractorsService } from './services/contractors.service';
 import { WindowRefService } from './services/window-ref.service';
 import { MaterialGroupService } from './services/material-group.service';
 import { UomService } from './services/uom.service';
-import { ProjectService } from './services/project.service';
 
 @NgModule({
   imports: [
@@ -190,8 +189,7 @@ export class CoreModule {
         ContractorsService,
         WindowRefService,
         MaterialGroupService,
-        UomService,
-        ProjectService
+        UomService
       ]
     };
   }

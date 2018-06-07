@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { FormGroup, Validators, FormBuilder, FormArray } from '@angular/forms';
 import { PurchaseRequisitionService } from '../../../core/services/purchase-requisition.service';
 import { CompanyService } from '../../../core/services/company.service';
-import { ProjectService } from '../../../core/services/project.service';
 import { MaterialGroupService } from '../../../core/services/material-group.service';
 import { MaterialService } from '../../../core/services/material.service';
 import { UomService } from '../../../core/services/uom.service';
@@ -38,7 +37,6 @@ export class PurchaseRequisitionAddComponent implements OnInit {
     private purchaseRequisitionService: PurchaseRequisitionService,
     private materialService: MaterialService,
     private companyService: CompanyService,
-    private projectService: ProjectService,
     private materialGroupService: MaterialGroupService,
     private router: Router,
     private toastr: ToastrService,
@@ -91,7 +89,7 @@ export class PurchaseRequisitionAddComponent implements OnInit {
   }
 
   getProjectListBycompany(id) {
-    this.projectService.getProjectListBycompany(id).subscribe(res => {
+    this.companyService.getCompanyProjectDropdownList(id).subscribe(res => {
       this.projectList = res;
     })
   }
