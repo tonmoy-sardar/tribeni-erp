@@ -56,7 +56,7 @@ export class VendorAddComponent implements OnInit {
 
   getVendorTypeList() {
     this.vendorTypeService.getVendorTypeListWithoutPagination().subscribe(res => {
-      this.vendorTypeList = res.results;
+      this.vendorTypeList = res;
       this.loading = LoadingState.Ready;
     },
     error => {

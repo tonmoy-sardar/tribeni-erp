@@ -89,7 +89,7 @@ export class VendorEditComponent implements OnInit {
 
   getVendorTypeList() {
     this.vendorTypeService.getVendorTypeListWithoutPagination().subscribe(res => {
-      this.vendorTypeList = res.results;
+      this.vendorTypeList = res;
     })
   }
   getStateList() {
