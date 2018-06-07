@@ -22,10 +22,12 @@ export class PurchaseRequisitionAddComponent implements OnInit {
   form: FormGroup;
   items: FormArray;
   UOMList = [];
+  uomValueList: any = [];
   CompanyList = [];
   projectList: any = [];
   materialTypeList: any = [];
   MaterialList = [];
+  dynamicMaterialList = [];
   companyBranchDropdownList = [];
   companyStorageDropdownList = [];
   companyStoragebinDropdownList = [];
@@ -46,7 +48,7 @@ export class PurchaseRequisitionAddComponent implements OnInit {
   ) { }
 
 
-  ngOnInit() {    
+  ngOnInit() {
     this.form = this.formBuilder.group({
       project: ['', Validators.required],
       company: ['', Validators.required],
@@ -55,7 +57,12 @@ export class PurchaseRequisitionAddComponent implements OnInit {
       requisition_detail: this.formBuilder.array([this.createRequisitionDetail()])
     });
 
-    //
+    this.uomValueList = [
+      {
+        id: ''
+      }
+    ]
+   
     this.getUOMList();
     this.getCompanyList();
     this.getHelp();
@@ -83,37 +90,34 @@ export class PurchaseRequisitionAddComponent implements OnInit {
     );
   }
 
-  getProjectListBycompany(id){
+  getProjectListBycompany(id) {
     this.projectService.getProjectListBycompany(id).subscribe(res => {
       this.projectList = res;
-      console.log(res);
     })
   }
 
-  getMaterialTypeListByProject(id){
+  getMaterialTypeListByProject(id) {
     this.materialGroupService.getMaterialGroupListByProject(id).subscribe(res => {
       this.materialTypeList = res;
-      console.log(res)
     })
   }
 
   getUOMList() {
     this.uomService.getUomListWithoutPagination().subscribe(
       (data: any[]) => {
-        this.UOMList = data['results'];
-
+        this.UOMList = data;
       }
     );
-  };   
+  };
 
-  getMaterialListByMaterialTypeAndProject(id) {
-    this.materialService.getMaterialListByMaterialTypeAndProject(id).subscribe(
+  getMaterialListByMaterialTypeAndProject(project_id, materialType_id) {
+    this.materialService.getMaterialListByMaterialTypeAndProject(project_id, materialType_id).subscribe(
       (data: any[]) => {
         this.MaterialList = data;
-        console.log(this.MaterialList);
+        this.dynamicMaterialList.push(data)
       }
     );
-  }  
+  }
 
   changeCompany(id) {
     if (id > 0) {
@@ -121,16 +125,22 @@ export class PurchaseRequisitionAddComponent implements OnInit {
     }
   }
 
-  changePoject(id){
+  changePoject(id) {
     if (id > 0) {
       this.getMaterialTypeListByProject(id);
     }
   }
 
-  changeMaterialType(id){
+  changeMaterialType(id) {
     if (id > 0) {
-      this.getMaterialListByMaterialTypeAndProject(id);
+      this.getMaterialListByMaterialTypeAndProject(this.form.value.project, id);
     }
+  }
+
+  changeMaterial(id, i) {
+    this.materialService.getMaterialDetails(id).subscribe(res => {
+      this.uomValueList[i]['id'] = res.material_uom[0].base_uom;
+    })
   }
 
   createRequisitionDetail() {
@@ -138,22 +148,26 @@ export class PurchaseRequisitionAddComponent implements OnInit {
       material_type: ['', Validators.required],
       material: ['', Validators.required],
       quantity: ['', Validators.required],
-      uom: ['', Validators.required]
+      uom: [{ value: null, disabled: true }]
     });
   }
 
   getRequisitionDetail(form) {
     return form.get('requisition_detail').controls
   }
-  
+
   addRequisitionDetail() {
     const control = <FormArray>this.form.controls['requisition_detail'];
     control.push(this.createRequisitionDetail());
+    var d = { id: '' };
+    this.uomValueList.push(d);
   }
 
   deleteRequisitionDetail(index: number) {
     const control = <FormArray>this.form.controls['requisition_detail'];
     control.removeAt(index);
+    this.uomValueList.splice(index, 1)
+    this.dynamicMaterialList.splice(index, 1)
   }
 
   btnClickNav(toNav) {
@@ -163,13 +177,30 @@ export class PurchaseRequisitionAddComponent implements OnInit {
   addPurchaseRequisition() {
     if (this.form.valid) {
       this.loading = LoadingState.Processing;
-      var requisition_all_detail = _.cloneDeep(this.form.value.requisition_detail)
-      for (var i = 0; i < requisition_all_detail.length; i++) {
-        var form_data = _.cloneDeep(this.form.value);
-        form_data.requisition_detail = []
-        form_data.requisition_detail[0] = requisition_all_detail[i];
-        this.insertRequisition(form_data, i, requisition_all_detail.length)
+      const requisition_detail_control = <FormArray>this.form.controls['requisition_detail'];
+      for (var i = 0; i < this.uomValueList.length; i++) {
+        var x = this.uomValueList[i]
+        this.form.value.requisition_detail[i]['uom'] = x.id
       }
+      var createdAt = new Date(this.form.value.created_at.year, this.form.value.created_at.month - 1, this.form.value.created_at.day)
+      this.form.patchValue({
+        created_at: createdAt.toISOString()
+      })      
+      this.purchaseRequisitionService.addNewPurchaseRequisition(this.form.value).subscribe(
+        response => {
+          this.toastr.success('Material added successfully', '', {
+            timeOut: 3000,
+          });
+          this.loading = LoadingState.Ready;
+          this.goToList('purchase-requisition');
+        },
+        error => {
+          this.loading = LoadingState.Ready;
+          this.toastr.error('Something went wrong', '', {
+            timeOut: 3000,
+          });
+        }
+      )
 
     } else {
       this.markFormGroupTouched(this.form)
@@ -184,27 +215,7 @@ export class PurchaseRequisitionAddComponent implements OnInit {
         control.controls.forEach(c => this.markFormGroupTouched(c));
       }
     });
-  }
-
-  insertRequisition(obj, i, n) {
-    this.purchaseRequisitionService.addNewPurchaseRequisition(obj).subscribe(
-      response => {
-        if (i == n - 1) {
-          this.toastr.success('Material added successfully', '', {
-            timeOut: 3000,
-          });
-          this.loading = LoadingState.Ready;
-          this.goToList('purchase-requisition');
-        }
-      },
-      error => {
-        this.loading = LoadingState.Ready;
-        this.toastr.error('Something went wrong', '', {
-          timeOut: 3000,
-        });
-      }
-    )
-  }
+  }  
 
   goToList(toNav) {
     this.router.navigateByUrl('/' + toNav);
@@ -223,7 +234,7 @@ export class PurchaseRequisitionAddComponent implements OnInit {
     };
   }
 
-  
+
 
 
 }

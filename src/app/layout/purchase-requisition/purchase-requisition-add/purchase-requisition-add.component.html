@@ -68,7 +68,7 @@
                                             <div [formGroupName]="i" class="col-md-12">
                                                 <div class="row">
                                                     <div class="form-group col-md-3">
-                                                        <label>Material Type</label>
+                                                        <label>Material Group</label>
                                                         <select class="form-control" name="material_type" formControlName="material_type" [ngClass]="{
                                                         'is-invalid': requisition.get('material_type').invalid && (requisition.get('material_type').dirty || requisition.get('material_type').touched),
                                                         'is-valid': requisition.get('material_type').valid && (requisition.get('material_type').dirty || requisition.get('material_type').touched)
@@ -77,7 +77,7 @@
                                                             <option *ngFor="let materialType of materialTypeList;" [value]="materialType.id">{{materialType.material_type}} </option>
                                                         </select>
                                                         <div class="invalid-feedback" *ngIf="requisition.get('material_type').touched && requisition.get('material_type').hasError('required')">
-                                                            Please select material type
+                                                            Please select material Group
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-md-3">
@@ -85,9 +85,9 @@
                                                         <select class="form-control" name="material" formControlName="material" [ngClass]="{
                                                             'is-invalid': requisition.get('material').invalid && (requisition.get('material').dirty || requisition.get('material').touched),
                                                             'is-valid': requisition.get('material').valid && (requisition.get('material').dirty || requisition.get('material').touched)
-                                                          }">
+                                                          }" (change)="changeMaterial($event.target.value,i)">
                                                             <option value="">Select Material</option>
-                                                            <option *ngFor="let mat of MaterialList;" [value]="mat.id">{{mat.material_fullname}}</option>
+                                                            <option *ngFor="let mat of dynamicMaterialList[i];" [value]="mat.id">{{mat.material_fullname}}</option>
                                                         </select>
                                                         <div class="invalid-feedback" *ngIf="requisition.get('material').touched && requisition.get('material').hasError('required')">
                                                             Please select material
@@ -108,7 +108,7 @@
                                                         <select class="form-control" name="uom" formControlName="uom" [ngClass]="{
                                                         'is-invalid': requisition.get('uom').invalid && (requisition.get('uom').dirty || requisition.get('uom').touched),
                                                         'is-valid': requisition.get('uom').valid && (requisition.get('uom').dirty || requisition.get('uom').touched)
-                                                      }">
+                                                      }" [(ngModel)]="uomValueList[i]['id']">
                                                             <option value="">Select UOM</option>
                                                             <option *ngFor="let uom of UOMList;" value="{{uom.id}}">{{uom.name}}</option>
                                                         </select>

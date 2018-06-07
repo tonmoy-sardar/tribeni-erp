@@ -22,7 +22,7 @@ export class MaterialGroupService {
   }
 
   getMaterialGroupListByProject(id): Observable<any>{
-    return this.http.get(environment.apiEndpoint+'all_material_type/'+id+'/', {
+    return this.http.get(environment.apiEndpoint+'specific_project_materialtype/'+id+'/', {
       headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
     })
   }

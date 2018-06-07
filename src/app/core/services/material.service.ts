@@ -21,8 +21,8 @@ export class MaterialService {
     })
   }
 
-  getMaterialListByMaterialTypeAndProject(id): Observable<any>{
-    return this.http.get(environment.apiEndpoint+'all_material_master/'+id+'/', {
+  getMaterialListByMaterialTypeAndProject(project_id,materialType_id): Observable<any>{
+    return this.http.get(environment.apiEndpoint+'specific_project_material/'+project_id+'/'+materialType_id+'/', {
       headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
     })
   }

@@ -48,6 +48,7 @@ export class PurchaseRequisitionDeatilsComponent implements OnInit {
       (data: any[]) => {
         this.purchaseRequisition = data;
         this.loading = LoadingState.Ready;
+        // console.log(this.purchaseRequisition)
       },
       error => {
         this.loading = LoadingState.Ready;
