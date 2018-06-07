@@ -168,4 +168,43 @@ export class CompanyService {
     })
   }
 
+
+  // Project Services Start
+  getProjectList(id): Observable<any>{
+    return this.http.get(environment.apiEndpoint+'all_project/', {
+      headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
+    })
+  }
+
+  getCompanyProjectList(id,params): Observable<any>{
+    return this.http.get(environment.apiEndpoint+'company_project/'+id+'/?'+params, {
+      headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
+    })
+  }
+  
+  addNewCompanyProject(data): Observable<any>{
+    return this.http.post(environment.apiEndpoint+'all_project/', data, {
+      headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
+    })
+  }
+
+  getCompanyProjectDetails(id): Observable<any>{
+    return this.http.get(environment.apiEndpoint+'all_project/'+id+'/', {
+      headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
+    })
+  }
+
+  updateCompanyProject(data): Observable<any>{
+    return this.http.put(environment.apiEndpoint+'all_project/'+data.id+'/',data, {
+      headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
+    })
+  }
+
+  getCompanyProjectDropdownList(id): Observable<any>{
+    return this.http.get(environment.apiEndpoint+'company_project_dropdown/'+id+'/', {
+      headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
+    })
+  }
+  // Project Services End
+
 }
