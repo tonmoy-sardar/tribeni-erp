@@ -4,6 +4,7 @@ import { FormGroup, Validators, FormBuilder, FormArray } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { StatesService } from '../../../core/services/states.service';
 import { VendorService } from '../../../core/services/vendor.service';
+import { VendorTypeService } from '../../../core/services/vendor-type.service';
 import { HelpService } from '../../../core/services/help.service';
 import { LoadingState } from '../../../core/component/loading/loading.component';
 
@@ -30,6 +31,7 @@ export class VendorEditComponent implements OnInit {
     private toastr: ToastrService,
     private statesService: StatesService,
     private vendorService: VendorService,
+    private vendorTypeService:VendorTypeService,
     private helpService: HelpService
   ) { }
 
@@ -86,7 +88,7 @@ export class VendorEditComponent implements OnInit {
   }
 
   getVendorTypeList() {
-    this.vendorService.getVendorTypeList().subscribe(res => {
+    this.vendorTypeService.getVendorTypeListWithoutPagination().subscribe(res => {
       this.vendorTypeList = res.results;
     })
   }

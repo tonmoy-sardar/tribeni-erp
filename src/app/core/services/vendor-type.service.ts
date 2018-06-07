@@ -21,6 +21,12 @@ export class VendorTypeService {
     })
   }
 
+  getVendorTypeListWithoutPagination(): Observable<any>{
+    return this.http.get(environment.apiEndpoint+'all_vendor_type_dropdown/', {
+      headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
+    })
+  }
+
   getVendorTypeActiveList(): Observable<any>{
     return this.http.get(environment.apiEndpoint+'active_vendor_type/', {
       headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))

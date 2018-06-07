@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, FormArray, Validators, } from '@angular/forms';
 import { CompanyService } from '../../../core/services/company.service';
-import { PurchaseOrganizationService } from '../../../core/services/purchase-organization.service';
-import { PurchaseGroupService } from '../../../core/services/purchase-group.service';
 import { MaterialService } from '../../../core/services/material.service';
 import { MaterialGroupService } from '../../../core/services/material-group.service';
 import { UomService } from '../../../core/services/uom.service';
@@ -21,8 +19,6 @@ export class MaterialAddComponent implements OnInit {
   material;
   materialTypeList = [];
   UOMList = [];
-  purchaseGroupList = [];
-  purchaseOrganizationList = [];
   form: FormGroup;
   is_taxable_value = false;
   help_heading = "";
@@ -31,8 +27,6 @@ export class MaterialAddComponent implements OnInit {
   constructor(
     private materialService: MaterialService,
     private materialGroupService: MaterialGroupService,
-    private purchaseOrganizationService: PurchaseOrganizationService,
-    private purchaseGroupService: PurchaseGroupService,
     private companyService: CompanyService,
     private router: Router,
     private toastr: ToastrService,
@@ -55,8 +49,6 @@ export class MaterialAddComponent implements OnInit {
 
     this.getUOMList();
     this.getMaterialTypeList();
-    this.getPurchaseGroupActiveList();
-    this.getPurchaseOrganizationActiveList();
     this.getHelp();
   }
 
@@ -156,35 +148,7 @@ export class MaterialAddComponent implements OnInit {
   getMaterialTypeList() {
     this.materialGroupService.getMaterialGroupListWithoutPagination().subscribe(
       (data: any[]) => {
-        this.materialTypeList = data['results'];
-      }
-    );
-  }
-  btnClickNav(toNav) {
-    this.router.navigateByUrl('/' + toNav);
-  };
-
-  getUOMList() {
-    this.uomService.getUomListWithoutPagination().subscribe(
-      (data: any[]) => {
-        this.UOMList = data['results'];
-      }
-    );
-  };
-
-  getPurchaseGroupActiveList() {
-    this.purchaseGroupService.getPurchaseGroupActiveList().subscribe(
-      (data: any[]) => {
-        this.purchaseGroupList = data;
-
-      }
-    );
-  }
-
-  getPurchaseOrganizationActiveList() {
-    this.purchaseOrganizationService.getPurchaseOrganizationActiveList().subscribe(
-      (data: any[]) => {
-        this.purchaseOrganizationList = data;
+        this.materialTypeList = data;
         this.loading = LoadingState.Ready;
       },
       error => {
@@ -195,6 +159,18 @@ export class MaterialAddComponent implements OnInit {
       }
     );
   }
+  btnClickNav(toNav) {
+    this.router.navigateByUrl('/' + toNav);
+  };
+
+  getUOMList() {
+    this.uomService.getUomListWithoutPagination().subscribe(
+      (data: any[]) => {
+        this.UOMList = data;
+      }
+    );
+  };
+
 
   getIgst(i) {
     const material_tax_control = <FormArray>this.form.controls['material_tax'];
@@ -209,7 +185,7 @@ export class MaterialAddComponent implements OnInit {
   addMaterial() {
     if (this.form.valid) {
       this.loading = LoadingState.Processing;
-      
+
       this.materialService.addNewMaterial(this.form.value).subscribe(
         response => {
           this.toastr.success('Material added successfully', '', {

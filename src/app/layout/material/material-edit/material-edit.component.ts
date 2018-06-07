@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, FormArray, Validators, } from '@angular/forms';
 import { CompanyService } from '../../../core/services/company.service';
-import { PurchaseOrganizationService } from '../../../core/services/purchase-organization.service';
-import { PurchaseGroupService } from '../../../core/services/purchase-group.service';
 import { MaterialService } from '../../../core/services/material.service';
 import { MaterialGroupService } from '../../../core/services/material-group.service';
 import { UomService } from '../../../core/services/uom.service';
@@ -21,8 +19,6 @@ export class MaterialEditComponent implements OnInit {
   material;
   materialTypeList = [];
   UOMList = [];
-  purchaseGroupList = [];
-  purchaseOrganizationList = [];
   form: FormGroup;
   is_taxable_value = false;
   visible_key: boolean;
@@ -32,8 +28,6 @@ export class MaterialEditComponent implements OnInit {
   constructor(
     private materialService: MaterialService,
     private materialGroupService: MaterialGroupService,
-    private purchaseOrganizationService: PurchaseOrganizationService,
-    private purchaseGroupService: PurchaseGroupService,
     private companyService: CompanyService,
     private router: Router,
     private route: ActivatedRoute,
@@ -58,8 +52,6 @@ export class MaterialEditComponent implements OnInit {
     this.getMaterialDetails(this.route.snapshot.params['id']);
     this.getUOMList();
     this.getMaterialTypeList();
-    this.getPurchaseGroupActiveList();
-    this.getPurchaseOrganizationActiveList();
     this.getHelp();
   }
 
@@ -75,7 +67,7 @@ export class MaterialEditComponent implements OnInit {
       (data: any[]) => {
         this.material = data;
         this.visible_key = true
-        console.log(this.material);
+        // console.log(this.material);
         if (this.material.is_sales) {
           this.addMaterialUom(2);
         }
@@ -222,7 +214,7 @@ export class MaterialEditComponent implements OnInit {
   getMaterialTypeList() {
     this.materialGroupService.getMaterialGroupListWithoutPagination().subscribe(
       (data: any[]) => {
-        this.materialTypeList = data['results'];
+        this.materialTypeList = data;
       }
     );
   }
@@ -233,28 +225,12 @@ export class MaterialEditComponent implements OnInit {
   getUOMList() {
     this.uomService.getUomListWithoutPagination().subscribe(
       (data: any[]) => {
-        this.UOMList = data['results'];
-
+        this.UOMList = data;
       }
     );
   };
 
-  getPurchaseGroupActiveList() {
-    this.purchaseGroupService.getPurchaseGroupActiveList().subscribe(
-      (data: any[]) => {
-        this.purchaseGroupList = data;
-
-      }
-    );
-  }
-
-  getPurchaseOrganizationActiveList() {
-    this.purchaseOrganizationService.getPurchaseOrganizationActiveList().subscribe(
-      (data: any[]) => {
-        this.purchaseOrganizationList = data;
-      }
-    );
-  }
+  
 
   getIgst(i) {
     console.log(i)
