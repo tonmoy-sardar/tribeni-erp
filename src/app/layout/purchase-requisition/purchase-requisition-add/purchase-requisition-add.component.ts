@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { FormGroup, Validators, FormBuilder, FormArray } from '@angular/forms';
 import { PurchaseRequisitionService } from '../../../core/services/purchase-requisition.service';
 import { CompanyService } from '../../../core/services/company.service';
+import { ProjectService } from '../../../core/services/project.service';
+import { MaterialGroupService } from '../../../core/services/material-group.service';
 import { MaterialService } from '../../../core/services/material.service';
 import { UomService } from '../../../core/services/uom.service';
 import { ToastrService } from 'ngx-toastr';
@@ -21,6 +23,8 @@ export class PurchaseRequisitionAddComponent implements OnInit {
   items: FormArray;
   UOMList = [];
   CompanyList = [];
+  projectList: any = [];
+  materialTypeList: any = [];
   MaterialList = [];
   companyBranchDropdownList = [];
   companyStorageDropdownList = [];
@@ -32,6 +36,8 @@ export class PurchaseRequisitionAddComponent implements OnInit {
     private purchaseRequisitionService: PurchaseRequisitionService,
     private materialService: MaterialService,
     private companyService: CompanyService,
+    private projectService: ProjectService,
+    private materialGroupService: MaterialGroupService,
     private router: Router,
     private toastr: ToastrService,
     private formBuilder: FormBuilder,
@@ -42,8 +48,7 @@ export class PurchaseRequisitionAddComponent implements OnInit {
 
   ngOnInit() {    
     this.form = this.formBuilder.group({
-      purchase_org: ['', Validators.required],
-      purchase_grp: ['', Validators.required],
+      project: ['', Validators.required],
       company: ['', Validators.required],
       created_at: ['', Validators.required],
       special_note: ['', Validators.required],
@@ -53,7 +58,6 @@ export class PurchaseRequisitionAddComponent implements OnInit {
     //
     this.getUOMList();
     this.getCompanyList();
-    this.getMaterialList();
     this.getHelp();
   }
 
@@ -64,22 +68,85 @@ export class PurchaseRequisitionAddComponent implements OnInit {
     })
   }
 
+  getCompanyList() {
+    this.companyService.getCompanyDropdownList().subscribe(
+      (data: any[]) => {
+        this.CompanyList = data;
+        this.loading = LoadingState.Ready;
+      },
+      error => {
+        this.loading = LoadingState.Ready;
+        this.toastr.error('Something went wrong', '', {
+          timeOut: 3000,
+        });
+      }
+    );
+  }
+
+  getProjectListBycompany(id){
+    this.projectService.getProjectListBycompany(id).subscribe(res => {
+      this.projectList = res;
+      console.log(res);
+    })
+  }
+
+  getMaterialTypeListByProject(id){
+    this.materialGroupService.getMaterialGroupListByProject(id).subscribe(res => {
+      this.materialTypeList = res;
+      console.log(res)
+    })
+  }
+
+  getUOMList() {
+    this.uomService.getUomListWithoutPagination().subscribe(
+      (data: any[]) => {
+        this.UOMList = data['results'];
+
+      }
+    );
+  };   
+
+  getMaterialListByMaterialTypeAndProject(id) {
+    this.materialService.getMaterialListByMaterialTypeAndProject(id).subscribe(
+      (data: any[]) => {
+        this.MaterialList = data;
+        console.log(this.MaterialList);
+      }
+    );
+  }  
+
+  changeCompany(id) {
+    if (id > 0) {
+      this.getProjectListBycompany(id);
+    }
+  }
+
+  changePoject(id){
+    if (id > 0) {
+      this.getMaterialTypeListByProject(id);
+    }
+  }
+
+  changeMaterialType(id){
+    if (id > 0) {
+      this.getMaterialListByMaterialTypeAndProject(id);
+    }
+  }
+
   createRequisitionDetail() {
     return this.formBuilder.group({
-      material: [null, Validators.required],
+      material_type: ['', Validators.required],
+      material: ['', Validators.required],
       quantity: ['', Validators.required],
-      uom: ['', Validators.required],
-      branch: ['', Validators.required],
-      storage_location: ['', Validators.required],
-      storage_bin: ['', Validators.required]
+      uom: ['', Validators.required]
     });
   }
 
   getRequisitionDetail(form) {
     return form.get('requisition_detail').controls
   }
+  
   addRequisitionDetail() {
-
     const control = <FormArray>this.form.controls['requisition_detail'];
     control.push(this.createRequisitionDetail());
   }
@@ -156,74 +223,7 @@ export class PurchaseRequisitionAddComponent implements OnInit {
     };
   }
 
-  getUOMList() {
-    this.uomService.getUomListWithoutPagination().subscribe(
-      (data: any[]) => {
-        this.UOMList = data['results'];
-
-      }
-    );
-  };
-
-  getCompanyBranchDropdownList(id) {
-    this.companyService.getCompanyBranchDropdownList(id).subscribe(
-      (data: any[]) => {
-        this.companyBranchDropdownList = data;
-      }
-    );
-  };
-
-  getCompanyStorageDropdownList(id) {
-    this.companyService.getCompanyStorageDropdownList(id).subscribe(
-      (data: any[]) => {
-        this.companyStorageDropdownList = data;
-      }
-    );
-  };
-
-  getCompanyStoragebinDropdownList(id) {
-    this.companyService.getCompanyStoragebinDropdownList(id).subscribe(
-      (data: any[]) => {
-        this.companyStoragebinDropdownList = data;
-      }
-    );
-  };  
-
   
-
-  getCompanyList() {
-    this.companyService.getCompanyDropdownList().subscribe(
-      (data: any[]) => {
-        this.CompanyList = data;
-        this.loading = LoadingState.Ready;
-      },
-      error => {
-        this.loading = LoadingState.Ready;
-        this.toastr.error('Something went wrong', '', {
-          timeOut: 3000,
-        });
-      }
-    );
-  }
-
-  getMaterialList() {
-    let params: URLSearchParams = new URLSearchParams();
-    params.set('page', '1');
-    this.materialService.getMaterialList(params).subscribe(
-      (data: any[]) => {
-        this.MaterialList =data['results'];
-        // console.log(this.MaterialList);
-      }
-    );
-  }  
-
-  changeCompany(id) {
-    if (id > 0) {
-      this.getCompanyBranchDropdownList(id);
-      this.getCompanyStorageDropdownList(id);
-      this.getCompanyStoragebinDropdownList(id)
-    }
-  }
 
 
 }

@@ -21,6 +21,12 @@ export class MaterialGroupService {
     })
   }
 
+  getMaterialGroupListByProject(id): Observable<any>{
+    return this.http.get(environment.apiEndpoint+'all_material_type/'+id+'/', {
+      headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
+    })
+  }
+
   getMaterialGroupListWithoutPagination(): Observable<any>{
     return this.http.get(environment.apiEndpoint+'all_material_type_dropdown/', {
       headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))

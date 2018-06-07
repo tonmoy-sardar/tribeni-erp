@@ -25,13 +25,22 @@
                                         <div class="row">
                                             <div class="form-group col-md-3">
                                                 <label>Company</label>
-                                                <select class="form-control" name="company" formControlName="company" [ngClass]="displayFieldCss('company')" name="company"
-                                                    (change)="changeCompany($event.target.value)">
+                                                <select class="form-control" name="company" formControlName="company" [ngClass]="displayFieldCss('company')" (change)="changeCompany($event.target.value)">
                                                     <option value="">Select Company</option>
                                                     <option *ngFor="let company of CompanyList;" [value]="company.id">{{company.company_name}} </option>
                                                 </select>
                                                 <div class="invalid-feedback" *ngIf="isFieldValid('company')">
                                                     Please select company
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label>Project</label>
+                                                <select class="form-control" name="project" formControlName="project" [ngClass]="displayFieldCss('project')" (change)="changePoject($event.target.value)">
+                                                    <option value="">Select Project</option>
+                                                    <option *ngFor="let project of projectList;" [value]="project.id">{{project.project_name}} </option>
+                                                </select>
+                                                <div class="invalid-feedback" *ngIf="isFieldValid('project')">
+                                                    Please select project
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-3">
@@ -58,20 +67,33 @@
                                         <div class="row" formArrayName="requisition_detail" *ngFor="let requisition of getRequisitionDetail(form); let i = index;">
                                             <div [formGroupName]="i" class="col-md-12">
                                                 <div class="row">
-                                                    <div class="form-group col-md-2">
+                                                    <div class="form-group col-md-3">
+                                                        <label>Material Type</label>
+                                                        <select class="form-control" name="material_type" formControlName="material_type" [ngClass]="{
+                                                        'is-invalid': requisition.get('material_type').invalid && (requisition.get('material_type').dirty || requisition.get('material_type').touched),
+                                                        'is-valid': requisition.get('material_type').valid && (requisition.get('material_type').dirty || requisition.get('material_type').touched)
+                                                      }" (change)="changeMaterialType($event.target.value)">
+                                                            <option value="">Select Material Type</option>
+                                                            <option *ngFor="let materialType of materialTypeList;" [value]="materialType.id">{{materialType.material_type}} </option>
+                                                        </select>
+                                                        <div class="invalid-feedback" *ngIf="requisition.get('material_type').touched && requisition.get('material_type').hasError('required')">
+                                                            Please select material type
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-3">
                                                         <label>Material</label>
-                                                        <ng-select class="form-control" placeholder="Select Material" [clearable]="false" name="material" formControlName="material"
-                                                            [ngClass]="{
-                                                'is-invalid': requisition.get('material').invalid && (requisition.get('material').dirty || requisition.get('material').touched),
-                                                'is-valid': requisition.get('material').valid && (requisition.get('material').dirty || requisition.get('material').touched)
-                                              }">
-                                                            <ng-option *ngFor="let mat of MaterialList;" [value]="mat.id">{{mat.material_fullname}}({{mat.material_code}})</ng-option>
-                                                        </ng-select>
+                                                        <select class="form-control" name="material" formControlName="material" [ngClass]="{
+                                                            'is-invalid': requisition.get('material').invalid && (requisition.get('material').dirty || requisition.get('material').touched),
+                                                            'is-valid': requisition.get('material').valid && (requisition.get('material').dirty || requisition.get('material').touched)
+                                                          }">
+                                                            <option value="">Select Material</option>
+                                                            <option *ngFor="let mat of MaterialList;" [value]="mat.id">{{mat.material_fullname}}</option>
+                                                        </select>
                                                         <div class="invalid-feedback" *ngIf="requisition.get('material').touched && requisition.get('material').hasError('required')">
                                                             Please select material
                                                         </div>
                                                     </div>
-                                                    <div class="form-group col-md-1">
+                                                    <div class="form-group col-md-2">
                                                         <label>Quantity</label>
                                                         <input appOnlyNumber class="form-control" placeholder="Quantity" name="quantity" formControlName="quantity" [ngClass]="{
                                                         'is-invalid': requisition.get('quantity').invalid && (requisition.get('quantity').dirty || requisition.get('quantity').touched),
@@ -92,45 +114,6 @@
                                                         </select>
                                                         <div class="invalid-feedback" *ngIf="requisition.get('uom').touched && requisition.get('uom').hasError('required')">
                                                             Please select UMO
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group col-md-2">
-                                                        <label>Branch</label>
-                                                        <select class="form-control" name="branch" formControlName="branch" [ngClass]="{
-                                                        'is-invalid': requisition.get('branch').invalid && (requisition.get('branch').dirty || requisition.get('branch').touched),
-                                                        'is-valid': requisition.get('branch').valid && (requisition.get('branch').dirty || requisition.get('branch').touched)
-                                                      }">
-                                                            <option value="">Select Branch</option>
-                                                            <option *ngFor="let companyBranch of companyBranchDropdownList;" value="{{companyBranch.id}}">{{companyBranch.branch_name}}</option>
-                                                        </select>
-                                                        <div class="invalid-feedback" *ngIf="requisition.get('branch').touched && requisition.get('branch').hasError('required')">
-                                                            Please select branch
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group col-md-2">
-                                                        <label>Storage</label>
-                                                        <select class="form-control" name="storage_location" formControlName="storage_location" [ngClass]="{
-                                                        'is-invalid': requisition.get('storage_location').invalid && (requisition.get('storage_location').dirty || requisition.get('storage_location').touched),
-                                                        'is-valid': requisition.get('storage_location').valid && (requisition.get('storage_location').dirty || requisition.get('storage_location').touched)
-                                                      }">
-                                                            <option value="">Select Storage</option>
-                                                            <option *ngFor="let companyStorage of companyStorageDropdownList;" value="{{companyStorage.id}}">{{companyStorage.storage_address}}</option>
-                                                        </select>
-                                                        <div class="invalid-feedback" *ngIf="requisition.get('storage_location').touched && requisition.get('storage_location').hasError('required')">
-                                                            Please select storage
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group col-md-2">
-                                                        <label>Bin</label>
-                                                        <select class="form-control" name="storage_bin" formControlName="storage_bin" [ngClass]="{
-                                                        'is-invalid': requisition.get('storage_bin').invalid && (requisition.get('storage_bin').dirty || requisition.get('storage_bin').touched),
-                                                        'is-valid': requisition.get('storage_bin').valid && (requisition.get('storage_bin').dirty || requisition.get('storage_bin').touched)
-                                                      }">
-                                                            <option value="">Select Bin</option>
-                                                            <option *ngFor="let companyStoragebin of companyStoragebinDropdownList;" value="{{companyStoragebin.id}}">{{companyStoragebin.bin_no}}</option>
-                                                        </select>
-                                                        <div class="invalid-feedback" *ngIf="requisition.get('storage_bin').touched && requisition.get('storage_bin').hasError('required')">
-                                                            Please select bin
                                                         </div>
                                                     </div>
 

@@ -21,8 +21,8 @@ export class ProjectService {
     })
   }
 
-  getProjectListWithoutPagination(): Observable<any> {
-    return this.http.get(environment.apiEndpoint + 'company_project_dropdown/', {
+  getProjectListBycompany(id): Observable<any> {
+    return this.http.get(environment.apiEndpoint + 'company_project_dropdown/' + id +'/', {
       headers: new HttpHeaders().set('Authorization', 'Token ' + localStorage.getItem('logedUserToken'))
     })
   }

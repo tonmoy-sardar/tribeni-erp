@@ -20,6 +20,12 @@ export class MaterialService {
       headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
     })
   }
+
+  getMaterialListByMaterialTypeAndProject(id): Observable<any>{
+    return this.http.get(environment.apiEndpoint+'all_material_master/'+id+'/', {
+      headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
+    })
+  }
   
   getMaterialDetails(id): Observable<any>{
     return this.http.get(environment.apiEndpoint+'material_master/'+id+'/', {
