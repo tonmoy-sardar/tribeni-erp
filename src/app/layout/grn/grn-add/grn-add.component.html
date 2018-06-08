@@ -27,7 +27,7 @@
                                                 <select class="form-control" (change)="purchaseOrderChange($event.target.value)" name="po_order" formControlName="po_order"
                                                     [ngClass]="displayFieldCss('po_order')">
                                                     <option value="">Select Po</option>
-                                                    <option value="{{po.id}}" *ngFor="let po of purchaseOrderList">{{po.purchase_order_map[0].purchase_order_no}}</option>
+                                                    <option value="{{po.id}}" *ngFor="let po of purchaseOrderList">{{po.purchase_order_no}}</option>
                                                 </select>
                                                 <div class="invalid-feedback" *ngIf="form.controls['po_order'].hasError('required')">
                                                     Please select PO
@@ -43,9 +43,8 @@
                                             <table class="card-body table table-sm ">
                                                 <thead>
                                                     <tr>
-                                                        <th>Purchase Organization</th>
-                                                        <th>Purchase Group</th>
-                                                        <th>PurchaseCompany</th>
+                                                        <th>Company</th>
+                                                        <th>Project</th>
                                                         <th>PO Date</th>
                                                         <th>Vendor</th>
                                                         <th>Vendor Address</th>
@@ -53,8 +52,7 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <td>{{purchase_order_details.pur_org.name}}</td>
-                                                        <td>{{purchase_order_details.pur_grp.name}}</td>
+                                                        <td>{{purchase_order_details.company.company_name}}</td>
                                                         <td>{{purchase_order_details.company.company_name}}</td>
                                                         <td>{{purchase_order_details.created_at | date:'dd-MM-yyyy'}}</td>
                                                         <td>{{purchase_order_details.vendor.vendor_fullname}}</td>
@@ -72,6 +70,7 @@
                                             <table class="card-body table table-sm ">
                                                 <thead>
                                                     <tr>
+                                                        <th>Material Group</th>
                                                         <th>Material</th>
                                                         <th>PO. Qty.</th>
                                                         <th>Qty. Taken</th>
@@ -82,7 +81,8 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr *ngFor="let grn of previous_grn_list">
-                                                        <td>{{grn.grn_detail[0].material.material_code}}</td>
+                                                        <td>{{grn.grn_detail[0].material.material_fullname}}</td>
+                                                        <td>{{grn.grn_detail[0].material.material_fullname}} ( {{grn.grn_detail[0].material.material_code}} )</td>
                                                         <td>{{grn.grn_detail[0].order_quantity}}</td>
                                                         <td>{{grn.grn_detail[0].receive_quantity}}</td>
                                                         <td>{{total_rest_quantity}}</td>
@@ -102,12 +102,10 @@
                                                 <thead>
                                                     <tr>
                                                         <th></th>
+                                                        <th>Material Group</th>
                                                         <th>Material</th>
                                                         <th>Po. Quantity</th>
                                                         <th>UOM</th>
-                                                        <th>Plant</th>
-                                                        <th>Storage</th>
-                                                        <th>Bin</th>
                                                         <th>GRN Quantity</th>
                                                     </tr>
                                                 </thead>
@@ -120,12 +118,10 @@
                                                                 </label>
                                                             </div>
                                                         </td>
-                                                        <td>{{mat.material.material_fullname}}</td>
+                                                        <th>{{mat.material.material_type.material_type}}</th>
+                                                        <td>{{mat.material.material_fullname}} ({{mat.material.material_code}})</td>
                                                         <td>{{mat.order_quantity}}</td>
-                                                        <td>CFT</td>
-                                                        <td>{{mat.company_branch.branch_address}}</td>
-                                                        <td>{{mat.storage_location.storage_address}}</td>
-                                                        <td>{{mat.storage_bin.bin_no}}</td>
+                                                        <td>{{mat.uom.name}}</td>
                                                         <td>
                                                             <input appOnlyNumber type="text" class="form-control" placeholder="GRN Quantity" [(ngModel)]="material_details_list[k].receive_quantity"
                                                                 [ngModelOptions]="{standalone: true}" (keyup)="GnrQuantity(material_details_list[k].receive_quantity, k)">

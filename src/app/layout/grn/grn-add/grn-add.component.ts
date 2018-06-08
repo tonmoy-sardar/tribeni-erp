@@ -38,8 +38,7 @@ export class GrnAddComponent implements OnInit {
   ngOnInit() {
     this.form = this.formBuilder.group({
       po_order: ['', Validators.required],
-      pur_org: ['', Validators.required],
-      pur_grp: ['', Validators.required],
+      company_project: ['', Validators.required],
       company: ['', Validators.required],
       vendor: ['', Validators.required],
       vendor_address: ['', Validators.required],
@@ -97,24 +96,20 @@ export class GrnAddComponent implements OnInit {
       this.visible_key = false;
       this.purchaseOrdersService.getPurchaseOrderDetails(id).subscribe(res => {
         this.purchase_order_details = res;
-        // console.log(res)
+
+        console.log(this.purchase_order_details)
         this.getPrevGrnList(id)
         this.purchase_order_details.purchase_order_detail.forEach(x => {
           var Mdtl = {
             material: x.material.id,
             uom: x.uom,
             order_quantity: x.order_quantity,
-            receive_quantity: '',
-            company_branch: x.company_branch.id,
-            storage_location: x.storage_location.id,
-            storage_bin: x.storage_bin.id
+            receive_quantity: ''
           }
           this.material_details_list.push(Mdtl)
         })
         this.form.patchValue({
           po_order: this.purchase_order_details.id,
-          pur_org: this.purchase_order_details.pur_org.id,
-          pur_grp: this.purchase_order_details.pur_grp.id,
           company: this.purchase_order_details.company.id,
           vendor: this.purchase_order_details.vendor.id,
           vendor_address: this.purchase_order_details.vendor_address.id,
@@ -140,9 +135,7 @@ export class GrnAddComponent implements OnInit {
   // gnr deatils
   create_grn_detail(mat) {
     return this.formBuilder.group({
-      company_branch: [mat.company_branch.id, Validators.required],
-      storage_location: [mat.storage_location.id, Validators.required],
-      storage_bin: [mat.storage_bin.id, Validators.required],
+      company_project: [mat.company_project.id, Validators.required],
       material: [mat.material.id, Validators.required],
       uom: [mat.uom, Validators.required],
       receive_quantity: ['', Validators.required],
@@ -198,9 +191,7 @@ export class GrnAddComponent implements OnInit {
           material: x.material,
           order_quantity: x.order_quantity,
           receive_quantity: x.receive_quantity,
-          company_branch: x.company_branch,
-          storage_location: x.storage_location,
-          storage_bin: x.storage_bin
+          company_project: x.company_project
         });
       }
     })
