@@ -17,7 +17,7 @@
       <div class="row">
         <div class="col-md-12">
           <div class="card bg-light mb-3">
-            <div class="card-header" style="background-color:#868e96; color: #fff;">Purchase Order Number : {{purchaseOrder.purchase_order_map[0].purchase_order_no}} </div>
+            <div class="card-header" style="background-color:#868e96; color: #fff;">Purchase Order Number : {{purchaseOrder.purchase_order_no}} </div>
             <div class="card-body">
               <div class="row">
                 <div class="col-md-12">
@@ -29,7 +29,7 @@
                           <label>PO Number : </label>
                         </td>
                         <td>
-                          <label>{{purchaseOrder.purchase_order_map[0].purchase_order_no}}</label>
+                          <label>{{purchaseOrder.purchase_order_no}}</label>
                         </td>
                         <td>
                           <label>PR Number : </label>
@@ -38,20 +38,6 @@
                           <label>{{purchaseOrder.requisition_no[0].requisition_no}}</label>
                         </td>
 
-                      </tr>
-                      <tr>
-                        <td>
-                          <label>Purchase Org : </label>
-                        </td>
-                        <td>
-                          <label>{{purchaseOrder.pur_org.name}}</label>
-                        </td>
-                        <td>
-                          <label>Purchase Group : </label>
-                        </td>
-                        <td>
-                          <label>{{purchaseOrder.pur_grp.name}}</label>
-                        </td>
                       </tr>
                       <tr>
                         <td>

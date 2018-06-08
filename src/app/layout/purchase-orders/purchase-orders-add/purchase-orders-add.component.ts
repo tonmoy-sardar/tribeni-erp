@@ -88,13 +88,13 @@ export class PurchaseOrdersAddComponent implements OnInit {
     this.purchaseRequisitionService.getPurchaseRequisitionOrderList(id).subscribe(res => {
       this.previous_purchase_list = res;
       console.log(this.previous_purchase_list)
-      const order_freight_control = <FormArray>this.form.controls['purchase_order_freight'];      
+      const order_freight_control = <FormArray>this.form.controls['purchase_order_freight'];
       if (this.previous_purchase_list.length > 0) {
         this.requisition_details.requisition_detail.forEach(x => {
           var sum = 0;
-          this.previous_purchase_list.forEach(y => {            
+          this.previous_purchase_list.forEach(y => {
             var obj = y.purchase_order_detail.filter(z => z.material.id == x.material.id && z.material.material_type_id == x.material.material_type_id)
-            if(obj.length>0){
+            if (obj.length > 0) {
               sum += Math.round(obj[0]['order_quantity'])
             }
           })
@@ -121,8 +121,10 @@ export class PurchaseOrdersAddComponent implements OnInit {
       }
       else {
         this.requisition_details.requisition_detail.forEach(x => {
+          console.log(x)
           var Mdtl = {
             material: x.material.id,
+            taken_qtn: 0,
             gst_amount: '',
             order_quantity: '',
             rate: '',
@@ -427,10 +429,22 @@ export class PurchaseOrdersAddComponent implements OnInit {
           delivery_date: myDate.toISOString()
         });
       }
-    })    
+    })
     if (this.form.valid) {
-      if (Math.round(this.form.value.purchase_order_detail[0].order_quantity) == this.total_rest_quantity) {
-        // this.requisitionFinalize()
+      var prv_tkn_qtn = 0;
+      var po_qtn = 0;
+      var pr_qtn = 0;
+      this.form.value.purchase_order_detail.forEach(o => {
+        po_qtn += Math.round(o.order_quantity)
+        pr_qtn += Math.round(o.requisition_quantity)
+      })
+      this.previous_purchase_list.forEach(r => {
+        r.purchase_order_detail.forEach(k => {
+          prv_tkn_qtn += Math.round(k.order_quantity)
+        })
+      })
+      if (pr_qtn == (prv_tkn_qtn + po_qtn)) {
+        this.requisitionFinalize()
       }
       this.loading = LoadingState.Processing;
       var QtnDate = new Date(this.form.value.quotation_date.year, this.form.value.quotation_date.month - 1, this.form.value.quotation_date.day)
