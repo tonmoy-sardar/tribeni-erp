@@ -20,16 +20,15 @@ import * as _ from "lodash";
 export class PurchaseRequisitionAddComponent implements OnInit {
   form: FormGroup;
   items: FormArray;
-  UOMList = [];
+  UOMList: any = [];
   uomValueList: any = [];
-  CompanyList = [];
+  CompanyList: any = [];
   projectList: any = [];
   materialTypeList: any = [];
-  MaterialList = [];
-  dynamicMaterialList = [];
-  companyBranchDropdownList = [];
-  companyStorageDropdownList = [];
-  companyStoragebinDropdownList = [];
+  projectMaterialList: any = []
+  dynamicMaterialList: any = [];
+  projectSpcQuantity: any = [];
+  prevPurchaseRequisition: any = [];
   help_heading = "";
   help_description = "";
   loading: LoadingState = LoadingState.NotReady;
@@ -60,7 +59,16 @@ export class PurchaseRequisitionAddComponent implements OnInit {
         id: ''
       }
     ]
-   
+
+    this.projectSpcQuantity = [
+      {
+        mat_id: '',
+        spc_qtn: '',
+        avl_qtn: '',
+        qtn: ''
+      }
+    ]
+
     this.getUOMList();
     this.getCompanyList();
     this.getHelp();
@@ -108,13 +116,31 @@ export class PurchaseRequisitionAddComponent implements OnInit {
     );
   };
 
-  getMaterialListByMaterialTypeAndProject(project_id, materialType_id) {
+  getMaterialListByMaterialTypeAndProject(project_id, materialType_id, i) {
     this.materialService.getMaterialListByMaterialTypeAndProject(project_id, materialType_id).subscribe(
       (data: any[]) => {
-        this.MaterialList = data;
-        this.dynamicMaterialList.push(data)
+        var projectDetailArr = this.projectSpcQuantity;
+        var filteredData = data.filter(data_el => {
+          return projectDetailArr.filter(project_details_el => {
+            return project_details_el.mat_id == data_el.id;
+          }).length == 0
+        });
+        this.dynamicMaterialList.splice(i, 1, filteredData)
       }
     );
+  }
+
+  getPreviousPurchaseRequisition(id) {
+    this.purchaseRequisitionService.getPreviousPurchaseRequisitionListByProject(id).subscribe(res => {
+      this.prevPurchaseRequisition = res;
+      this.loading = LoadingState.Ready;
+    },
+      error => {
+        this.loading = LoadingState.Ready;
+        this.toastr.error('Something went wrong', '', {
+          timeOut: 3000,
+        });
+      })
   }
 
   changeCompany(id) {
@@ -125,26 +151,66 @@ export class PurchaseRequisitionAddComponent implements OnInit {
 
   changePoject(id) {
     if (id > 0) {
+      this.loading = LoadingState.Processing;
+      this.companyService.getCompanyProjectDetails(id).subscribe(res => {
+        this.projectMaterialList = res.project_details;
+        this.getPreviousPurchaseRequisition(id);
+      })
       this.getMaterialTypeListByProject(id);
     }
   }
 
-  changeMaterialType(id) {
+  changeMaterialType(id, i) {
     if (id > 0) {
-      this.getMaterialListByMaterialTypeAndProject(this.form.value.project, id);
+      this.getMaterialListByMaterialTypeAndProject(this.form.value.project, id, i);
+      this.projectSpcQuantity[i]['mat_id'] = '';
+      this.projectSpcQuantity[i]['spc_qtn'] = '';
+      this.projectSpcQuantity[i]['avl_qtn'] = '';
+      this.projectSpcQuantity[i]['qtn'] = '';
     }
   }
 
   changeMaterial(id, i) {
-    this.materialService.getMaterialDetails(id).subscribe(res => {
-      this.uomValueList[i]['id'] = res.material_uom[0].base_uom;
-    })
+    if (id > 0) {
+      this.materialService.getMaterialDetails(id).subscribe(res => {
+        this.uomValueList[i]['id'] = res.material_uom[0].base_uom;
+      })
+      var material_type = this.form.value.requisition_detail[i].material_type;
+      var material = this.form.value.requisition_detail[i].material;
+      var sum = 0;
+      var spcf_qtn = 0;
+      var d;
+      if (material_type != '' && material != '') {
+        if (this.prevPurchaseRequisition.length > 0) {
+
+          this.prevPurchaseRequisition.forEach(x => {
+            var obj = x.requisition_detail.filter(y => y.material.id == material && y.material.material_type_id == material_type)
+            obj.forEach(z => {
+              sum += Math.round(z.quantity)
+              spcf_qtn = z.project_material_quantity[0].quantity
+            })
+          })
+          d = { mat_id: material, spc_qtn: spcf_qtn, avl_qtn: spcf_qtn - sum, qtn: '' }
+          this.projectSpcQuantity.splice(i, 1, d);
+        }
+        else {
+          var obj = this.projectMaterialList.filter(x => x.material == material && x.materialtype == material_type)
+          if (obj != undefined) {
+            d = { mat_id: material, spc_qtn: obj[0].quantity, avl_qtn: obj[0].quantity, qtn: '' }
+            this.projectSpcQuantity.splice(i, 1, d);
+          }
+        }
+
+      }
+    }
   }
 
   createRequisitionDetail() {
     return this.formBuilder.group({
       material_type: ['', Validators.required],
       material: ['', Validators.required],
+      spc_quantity: [{ value: null, disabled: true }],
+      avl_qtn: [{ value: null, disabled: true }],
       quantity: ['', Validators.required],
       uom: [{ value: null, disabled: true }]
     });
@@ -159,6 +225,8 @@ export class PurchaseRequisitionAddComponent implements OnInit {
     control.push(this.createRequisitionDetail());
     var d = { id: '' };
     this.uomValueList.push(d);
+    var q = { mat_id: '', spc_qtn: '', avl_qtn: '', qtn: '' }
+    this.projectSpcQuantity.push(q);
   }
 
   deleteRequisitionDetail(index: number) {
@@ -166,11 +234,22 @@ export class PurchaseRequisitionAddComponent implements OnInit {
     control.removeAt(index);
     this.uomValueList.splice(index, 1)
     this.dynamicMaterialList.splice(index, 1)
+    this.projectSpcQuantity.splice(index, 1)
   }
 
   btnClickNav(toNav) {
     this.router.navigateByUrl('/' + toNav);
   };
+
+  getExactQuantity(val, i) {
+    var avl_val = Math.round(this.projectSpcQuantity[i]['avl_qtn'])
+    if (val > avl_val) {
+      this.projectSpcQuantity[i]['qtn'] = avl_val
+      this.toastr.error('Quantity should not be more than Available Quantity', '', {
+        timeOut: 3000,
+      });
+    }
+  }
 
   addPurchaseRequisition() {
     if (this.form.valid) {
@@ -183,7 +262,7 @@ export class PurchaseRequisitionAddComponent implements OnInit {
       var createdAt = new Date(this.form.value.created_at.year, this.form.value.created_at.month - 1, this.form.value.created_at.day)
       this.form.patchValue({
         created_at: createdAt.toISOString()
-      })      
+      })
       this.purchaseRequisitionService.addNewPurchaseRequisition(this.form.value).subscribe(
         response => {
           this.toastr.success('Material added successfully', '', {
@@ -213,7 +292,7 @@ export class PurchaseRequisitionAddComponent implements OnInit {
         control.controls.forEach(c => this.markFormGroupTouched(c));
       }
     });
-  }  
+  }
 
   goToList(toNav) {
     this.router.navigateByUrl('/' + toNav);

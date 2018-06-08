@@ -22,14 +22,9 @@
                                 <div class="row">
                                     <div class="form-group col-md-3">
                                         <label>Requisition No.</label>
-                                        <!-- <select class="form-control" (change)="requisitionChange($event.target.value)" name="requisition" formControlName="requisition"
-                                        [ngClass]="displayFieldCss('requisition')">
-                                        <option value="">Select Requisition</option>
-                                        <option value="{{requisition.id}}" *ngFor="let requisition of requisition_list">{{requisition.requisition_map[0].requisition_no}}</option>
-                                    </select> -->
                                         <ng-select class="form-control" placeholder="Select Requisition" (change)="requisitionChange($event)" [clearable]="false"
                                             name="requisition" formControlName="requisition" [ngClass]="displayFieldCss('requisition')">
-                                            <ng-option *ngFor="let requisition of requisition_list" [value]="requisition.id">{{requisition.requisition_map[0].requisition_no}}</ng-option>
+                                            <ng-option *ngFor="let requisition of requisition_list" [value]="requisition.id">{{requisition.requisition_no}}</ng-option>
                                         </ng-select>
                                         <div class="invalid-feedback" *ngIf="form.controls['requisition'].hasError('required')">
                                             Please select requisition
@@ -85,18 +80,18 @@
                                             <table class="card-body table table-sm ">
                                                 <thead>
                                                     <tr>
-                                                        <th>Purchase Organization</th>
-                                                        <th>Purchase Group</th>
                                                         <th>Company</th>
+                                                        <th>Project</th>
+                                                        <th>Special Note</th>
                                                         <th>PR Date</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <td>{{requisition_details.purchase_org.name}}</td>
-                                                        <td>{{requisition_details.purchase_grp.name}}</td>
                                                         <td>{{requisition_details.company.company_name}}</td>
-                                                        <td>{{requisition_details.created_at | date:'dd-MM-yyyy'}}</td>
+                                                        <td>{{requisition_details.project.project_name}}</td>
+                                                        <td>{{requisition_details.special_note}}</td>
+                                                        <td width="170">{{requisition_details.created_at | date:'dd-MM-yyyy'}}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -104,31 +99,36 @@
                                     </div>
                                 </div>
                                 <div class="card bg-light mb-3" *ngIf="visible_key && previous_purchase_list.length > 0">
-                                    <div class="card-header">Previous Purchase</div>
+                                    <div class="card-header">Previous Purchase Order</div>
                                     <div class="card-body">
-                                        <div class="row">
-                                            <table class="card-body table table-sm ">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Material</th>
-                                                        <th>PR. Qty.</th>
-                                                        <th>Qty. Taken</th>
-                                                        <th>Qty. Rest</th>
-                                                        <th>UOM</th>
-                                                        <th>Average Rate</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr *ngFor="let prevOrder of previous_purchase_list">
-                                                        <td>{{prevOrder.purchase_order_detail[0].material.material_code}}</td>
-                                                        <td>{{prevOrder.purchase_order_detail[0].requisition_quantity}}</td>
-                                                        <td>{{prevOrder.purchase_order_detail[0].order_quantity}}</td>
-                                                        <td>{{total_rest_quantity}}</td>
-                                                        <td>{{prevOrder.purchase_order_detail[0].uom}}</td>
-                                                        <td>{{prevOrder.purchase_order_detail[0].rate}}</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                        <div class="card bg-light mb-3" *ngFor="let prevOrder of previous_purchase_list">
+                                            <div class="card-header">Purchase Order No ({{prevOrder.purchase_order_no}})</div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <table class="card-body table table-sm ">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Material</th>
+                                                                <th>PR. Qty.</th>
+                                                                <th>Qty. Taken</th>
+                                                                <th>Qty. Rest</th>
+                                                                <th>UOM</th>
+                                                                <th>Average Rate</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr *ngFor="let prevOrderDetail of prevOrder.purchase_order_detail">
+                                                                <td>{{prevOrderDetail.material.material_code}}</td>
+                                                                <td>{{prevOrderDetail.requisition_quantity}}</td>
+                                                                <td>{{prevOrderDetail.order_quantity}}</td>
+                                                                <td>{{prevOrderDetail.requisition_quantity - prevOrderDetail.order_quantity}}</td>
+                                                                <td>{{prevOrderDetail.uom}}</td>
+                                                                <td>{{prevOrderDetail.rate}}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -141,10 +141,8 @@
                                                     <th></th>
                                                     <th>Material</th>
                                                     <th>PR. Quantity</th>
+                                                    <th>Project Specific Rate</th>
                                                     <th>UOM</th>
-                                                    <th>Plant</th>
-                                                    <th>Storage</th>
-                                                    <th>Bin</th>
                                                     <th>HSN/SAC</th>
                                                     <th>IGST(%)</th>
                                                     <th>CGST(%)</th>
@@ -164,10 +162,8 @@
                                                     </th>
                                                     <td>{{mat.material.material_code}}({{mat.material.material_fullname}})</td>
                                                     <td>{{mat.quantity}}</td>
+                                                    <td>{{mat.material_rate[0].rate}}</td>
                                                     <td>{{mat.uom.name}}</td>
-                                                    <td>{{mat.branch.branch_name}}</td>
-                                                    <td>{{mat.storage_location.storage_address}}</td>
-                                                    <td>{{mat.storage_bin.bin_no}}</td>
                                                     <td>{{mat.material.material_tax[0].hsn}}</td>
                                                     <td>{{mat.material.material_tax[0].igst}}</td>
                                                     <td>{{mat.material.material_tax[0].cgst}}</td>

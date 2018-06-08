@@ -46,21 +46,6 @@
                     <i class="fa fa-chevron-down inactive-color" [ngClass]="{'active-color':headerTh.sort_type=='desc'}"></i>
                   </span>
                 </th>
-                <!-- <th>PO. No.
-                <span class="info" ngbTooltip="Purchase Order Number">i</span>
-              </th>
-              <th>PR. No.</th>
-              <th>Po Amount
-                <span class="info" ngbTooltip="Purchase Order Amount">i</span>
-              </th>
-              <th>Company</th>
-              <th>Branch</th>
-              <th>Storage</th>
-              <th>Bin</th>
-              <th>Po Raised Date
-                <span class="info" ngbTooltip="Purchase Order Raised Date">i</span>
-              </th> -->
-                <!-- <th>Status</th> -->
                 <th>Is approved</th>
                 <th>Action</th>
               </tr>
@@ -68,24 +53,11 @@
             <tbody>
               <tr *ngFor="let purchaseOrder of purchaseOrderList ; let i = index">
                 <th scope="row">{{itemNo + i +1}}</th>
-                <td>{{purchaseOrder.purchase_order_map[0].purchase_order_no}}</td>
+                <td>{{purchaseOrder.purchase_order_no}}</td>
                 <td>{{purchaseOrder.requisition_no[0].requisition_no}}</td>
                 <td>{{purchaseOrder.grand_total}}</td>
                 <td>{{purchaseOrder.company.company_name}}</td>
-                <td>{{purchaseOrder.purchase_order_detail[0].company_branch.branch_address}}</td>
-                <td>{{purchaseOrder.purchase_order_detail[0].storage_location.storage_address}}</td>
-                <td>{{purchaseOrder.purchase_order_detail[0].storage_bin.bin_no}}</td>
                 <td>{{purchaseOrder.quotation_date | date:'dd-MM-yyyy'}}</td>
-                <!-- <td>
-                <label *ngIf="purchaseOrder.is_finalised == 1">Finalised</label>
-                <label *ngIf="purchaseOrder.status && purchaseOrder.is_finalised == 0">Active</label>
-                <label *ngIf="!purchaseOrder.status && purchaseOrder.is_finalised == 0">Inactive</label>
-                <select *ngIf="purchaseOrder.is_finalised == 0" class="form-control" name="status" (change)="changeStatus($event.target.value,purchaseOrder.id)">
-                  <option value=''>Change Status</option>
-                  <option value='0'>Cancel</option>
-                  <option value='1'>Active</option>
-                </select>
-              </td> -->
                 <td>
                   <label *ngIf="purchaseOrder.is_finalised == 1">Finalised</label>
                   <label *ngIf="purchaseOrder.is_approve == 0 && purchaseOrder.is_finalised == 0">None</label>
