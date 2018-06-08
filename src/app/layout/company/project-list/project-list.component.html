@@ -56,7 +56,7 @@
                   <td>{{companyProject.project_pan}}</td>
                   <td>{{companyProject.project_cin}}</td>
                   <td>
-                    <a href="javascript:void(0);" class="anchor-action" title="Edit" name="Edit" (click)="showProjectEdit(companyProject.id)">
+                    <a href="javascript:void(0);" class="anchor-action" title="Edit" name="Edit" (click)="showProjectDetails(companyProject.id)">
                       <i class="fa fa-edit"></i>
                     </a>
                   </td>
@@ -86,8 +86,8 @@
     <div *ngIf="companyProjectCompShow.showAdd==true">
      <app-project-add (showProjectList)="reloadProjectList($event)"></app-project-add>
     </div>
-    <div *ngIf="companyProjectCompShow.showEdit==true">
-      <!-- <app-project-edit [companyProjectId]=companyProjectId (showProjectList)="reloadProjectList($event)"></app-project-edit> -->
+    <div *ngIf="companyProjectCompShow.showDetails==true">
+      <app-project-details [companyProjectId]=companyProjectId (showProjectList)="reloadProjectList($event)"></app-project-details>
     </div>
   </div>
 </loading>

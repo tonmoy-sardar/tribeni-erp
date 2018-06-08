@@ -183,13 +183,13 @@ export class CompanyService {
   }
   
   addNewCompanyProject(data): Observable<any>{
-    return this.http.post(environment.apiEndpoint+'all_project/', data, {
+    return this.http.post(environment.apiEndpoint+'all_company_project/', data, {
       headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
     })
   }
 
   getCompanyProjectDetails(id): Observable<any>{
-    return this.http.get(environment.apiEndpoint+'all_project/'+id+'/', {
+    return this.http.get(environment.apiEndpoint+'all_company_project/'+id+'/', {
       headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
     })
   }
