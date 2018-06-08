@@ -93,7 +93,7 @@
                                                                     Please select material Group
                                                                 </div>
                                                             </div>
-                                                            <div class="form-group col-md-3">
+                                                            <div class="form-group col-md-2">
                                                                 <label>Material</label>
                                                                 <select class="form-control" name="material" formControlName="material" [ngClass]="{
                                                             'is-invalid': projectObj.get('material').invalid && (projectObj.get('material').dirty || projectObj.get('material').touched),
@@ -116,6 +116,7 @@
                                                                     Please enter quantity
                                                                 </div>
                                                             </div>
+                                                            
                                                             <div class="form-group col-md-2">
                                                                 <label>UOM</label>
                                                                 <select class="form-control" name="uom" formControlName="uom" [ngClass]="{
@@ -127,6 +128,27 @@
                                                                 </select>
                                                                 <div class="invalid-feedback" *ngIf="projectObj.get('uom').touched && projectObj.get('uom').hasError('required')">
                                                                     Please select UMO
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group col-md-1">
+                                                                <label>Rate</label>
+                                                                <input appOnlyNumber class="form-control" placeholder="Rate" name="rate" formControlName="rate" [ngClass]="{
+                                                        'is-invalid': projectObj.get('rate').invalid && (projectObj.get('rate').dirty || projectObj.get('rate').touched),
+                                                        'is-valid': projectObj.get('rate').valid && (projectObj.get('rate').dirty || projectObj.get('rate').touched)
+                                                      }" [(ngModel)]="companyProject.project_details[i].rate">
+                                                                <div class="invalid-feedback" *ngIf="projectObj.get('rate').touched && projectObj.get('rate').hasError('required')">
+                                                                    Please enter rate
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group col-md-1">
+                                                                <label>BOQ Ref</label>
+                                                                <input appOnlyNumber class="form-control" placeholder="BOQ Ref" name="boq_ref" formControlName="boq_ref" [ngClass]="{
+                                                        'is-invalid': projectObj.get('boq_ref').invalid && (projectObj.get('boq_ref').dirty || projectObj.get('boq_ref').touched),
+                                                        'is-valid': projectObj.get('boq_ref').valid && (projectObj.get('boq_ref').dirty || projectObj.get('boq_ref').touched)
+                                                      }" [(ngModel)]="companyProject.project_details[i].boq_ref">
+                                                                <div class="invalid-feedback" *ngIf="projectObj.get('boq_ref').touched && projectObj.get('boq_ref').hasError('required')">
+                                                                    Please enter BOQ Ref
                                                                 </div>
                                                             </div>
 

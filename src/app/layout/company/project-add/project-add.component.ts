@@ -74,6 +74,8 @@ export class ProjectAddComponent implements OnInit {
           material_type: '',
           material: '',
           quantity: '',
+          rate: '',
+          boq_ref: '',
           uom: ''
         }
       ]
@@ -117,7 +119,9 @@ export class ProjectAddComponent implements OnInit {
       material_type: ['', Validators.required],
       material: ['', Validators.required],
       quantity: ['', Validators.required],
-      uom: [{ value: null, disabled: true }]
+      uom: [{ value: null, disabled: true }],
+      rate: ['', Validators.required],
+      boq_ref: ['', Validators.required],
     });
   }
 
@@ -127,6 +131,8 @@ export class ProjectAddComponent implements OnInit {
       material_type: '',
       material: '',
       quantity: '',
+      rate:'',
+      boq_ref:'',
       uom: ''
     }
     this.companyProject.project_details.push(project_details_obj)
@@ -164,6 +170,8 @@ export class ProjectAddComponent implements OnInit {
       (data: any[]) => {
         this.companyProject.project_details[i].material='';
         this.companyProject.project_details[i].quantity='';
+        this.companyProject.project_details[i].rate='';
+        this.companyProject.project_details[i].boq_ref='';
        
         var projectDetailArr =  this.companyProject.project_details;
               
