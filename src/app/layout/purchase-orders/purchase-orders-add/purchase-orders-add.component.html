@@ -111,7 +111,6 @@
                                                                 <th>Material</th>
                                                                 <th>PR. Qty.</th>
                                                                 <th>Qty. Taken</th>
-                                                                <th>Qty. Rest</th>
                                                                 <th>UOM</th>
                                                                 <th>Average Rate</th>
                                                             </tr>
@@ -121,8 +120,7 @@
                                                                 <td>{{prevOrderDetail.material.material_code}}</td>
                                                                 <td>{{prevOrderDetail.requisition_quantity}}</td>
                                                                 <td>{{prevOrderDetail.order_quantity}}</td>
-                                                                <td>{{prevOrderDetail.requisition_quantity - prevOrderDetail.order_quantity}}</td>
-                                                                <td>{{prevOrderDetail.uom}}</td>
+                                                                <td>{{prevOrderDetail.uom.name}}</td>
                                                                 <td>{{prevOrderDetail.rate}}</td>
                                                             </tr>
                                                         </tbody>
@@ -141,6 +139,7 @@
                                                     <th></th>
                                                     <th>Material</th>
                                                     <th>PR. Quantity</th>
+                                                    <th>Rest Quantity</th>
                                                     <th>Project Specific Rate</th>
                                                     <th>UOM</th>
                                                     <th>HSN/SAC</th>
@@ -162,6 +161,7 @@
                                                     </th>
                                                     <td>{{mat.material.material_code}}({{mat.material.material_fullname}})</td>
                                                     <td>{{mat.quantity}}</td>
+                                                    <td>{{mat.quantity - material_details_list[k].taken_qtn}}</td>
                                                     <td>{{mat.material_rate[0].rate}}</td>
                                                     <td>{{mat.uom.name}}</td>
                                                     <td>{{mat.material.material_tax[0].hsn}}</td>

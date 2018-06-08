@@ -87,8 +87,61 @@ export class PurchaseOrdersAddComponent implements OnInit {
   getRequisitionPurchaseOrderList(id) {
     this.purchaseRequisitionService.getPurchaseRequisitionOrderList(id).subscribe(res => {
       this.previous_purchase_list = res;
-      console.log(res)
-      var sum = 0;
+      console.log(this.previous_purchase_list)
+      const order_freight_control = <FormArray>this.form.controls['purchase_order_freight'];      
+      if (this.previous_purchase_list.length > 0) {
+        this.requisition_details.requisition_detail.forEach(x => {
+          var sum = 0;
+          this.previous_purchase_list.forEach(y => {            
+            var obj = y.purchase_order_detail.filter(z => z.material.id == x.material.id && z.material.material_type_id == x.material.material_type_id)
+            if(obj.length>0){
+              sum += Math.round(obj[0]['order_quantity'])
+            }
+          })
+          var Mdtl = {
+            material: x.material.id,
+            taken_qtn: sum,
+            gst_amount: '',
+            order_quantity: '',
+            rate: '',
+            discount_percent: '',
+            delivery_date: '',
+            sub_total: ''
+          }
+          this.material_details_list.push(Mdtl)
+        })
+        this.form.patchValue({
+          company: this.requisition_details.company.id
+        })
+        if (this.requisition_details.requisition_detail.length > 0) {
+          order_freight_control.push(this.create_purchase_order_freight());
+          this.visible_key = true;
+          this.loading = LoadingState.Ready;
+        }
+      }
+      else {
+        this.requisition_details.requisition_detail.forEach(x => {
+          var Mdtl = {
+            material: x.material.id,
+            gst_amount: '',
+            order_quantity: '',
+            rate: '',
+            discount_percent: '',
+            delivery_date: '',
+            sub_total: ''
+          }
+          this.material_details_list.push(Mdtl)
+        })
+        this.form.patchValue({
+          company: this.requisition_details.company.id
+        })
+        if (this.requisition_details.requisition_detail.length > 0) {
+          order_freight_control.push(this.create_purchase_order_freight());
+          this.visible_key = true;
+          this.loading = LoadingState.Ready;
+        }
+      }
+
       // for (var i = 0; i < this.requisition_details.requisition_detail.length; i++) {
       //   var x = this.requisition_details.requisition_detail[i]
       //   if (this.previous_purchase_list.length > 0) {
@@ -157,27 +210,7 @@ export class PurchaseOrdersAddComponent implements OnInit {
       this.purchaseRequisitionService.getPurchaseRequisitionDetails(id).subscribe(res => {
         this.requisition_details = res;
         this.getRequisitionPurchaseOrderList(id);
-        console.log(this.requisition_details)
-        this.requisition_details.requisition_detail.forEach(x => {
-          var Mdtl = {
-            material: x.material.id,
-            gst_amount: '',
-            order_quantity: '',
-            rate: '',
-            discount_percent: '',
-            delivery_date: '',
-            sub_total: ''
-          }
-          this.material_details_list.push(Mdtl)
-        })
-        this.form.patchValue({
-          company: this.requisition_details.company.id
-        })
-        if (this.requisition_details.requisition_detail.length > 0) {
-          order_freight_control.push(this.create_purchase_order_freight());
-          this.visible_key = true;
-          this.loading = LoadingState.Ready;
-        }
+        // console.log(this.requisition_details)        
       })
     }
     else {
@@ -247,10 +280,10 @@ export class PurchaseOrdersAddComponent implements OnInit {
     })
   }
   getSubTotal(quantity, rate, discount, i) {
-    // console.log(this.previous_purchase_list[i].order_quantity)
-    if (Math.round(quantity) > Math.round(this.requisition_details.requisition_detail[i].quantity)) {
-      this.material_details_list[i].order_quantity = Math.round(this.requisition_details.requisition_detail[i].quantity)
-      this.toastr.error('Quantity should not be more than PR Quantity', '', {
+    var avl_qtn = Math.round(this.requisition_details.requisition_detail[i].quantity - this.material_details_list[i].taken_qtn)
+    if (Math.round(quantity) > avl_qtn) {
+      this.material_details_list[i].order_quantity = avl_qtn
+      this.toastr.error('Quantity should not be more than Rest Quantity', '', {
         timeOut: 3000,
       });
     }
@@ -373,15 +406,16 @@ export class PurchaseOrdersAddComponent implements OnInit {
     }
     const order_detail_control = <FormArray>this.form.controls['purchase_order_detail'];
     this.material_details_list.forEach(x => {
-      if (x.gst_amount == "" || x.rate == "" || x.discount_percent == "" || x.delivery_date == "") {
-        this.toastr.error('All fields are required in every row ', '', {
-          timeOut: 3000,
-        });
-        return;
-      }
-      var myDate = new Date(x.delivery_date.year, x.delivery_date.month - 1, x.delivery_date.day)
       var Mindex = this.form.value.purchase_order_detail.findIndex(p => p.material == x.material)
       if (Mindex > -1) {
+        var obj = this.material_details_list.filter(k => k.material == x.material)
+        if (obj[0].gst_amount == "" || obj[0].rate == "" || obj[0].discount_percent == "" || obj[0].delivery_date == "") {
+          this.toastr.error('All fields are required in every row ', '', {
+            timeOut: 3000,
+          });
+          return;
+        }
+        var myDate = new Date(x.delivery_date.year, x.delivery_date.month - 1, x.delivery_date.day)
         order_detail_control.at(Mindex).patchValue({
           gst_amount: x.gst_amount,
           rate: x.rate,
@@ -393,7 +427,7 @@ export class PurchaseOrdersAddComponent implements OnInit {
           delivery_date: myDate.toISOString()
         });
       }
-    })
+    })    
     if (this.form.valid) {
       if (Math.round(this.form.value.purchase_order_detail[0].order_quantity) == this.total_rest_quantity) {
         // this.requisitionFinalize()
