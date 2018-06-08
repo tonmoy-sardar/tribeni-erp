@@ -70,27 +70,6 @@ export class PurchaseOrdersComponent implements OnInit {
         tooltip_msg:''
       },
       {  
-        name: "Branch",
-        code: "purchase_order_detail__company_branch__branch_address",
-        sort_type:'',
-        has_tooltip:false,
-        tooltip_msg:''
-      },
-      {  
-        name: "Storage",
-        code: "purchase_order_detail__storage_location__storage_address",
-        sort_type:'',
-        has_tooltip:false,
-        tooltip_msg:''
-      },
-      {  
-        name: "Bin",
-        code: "purchase_order_detail__storage_bin__bin_no",
-        sort_type:'',
-        has_tooltip:false,
-        tooltip_msg:''
-      },
-      {  
         name: "PO. Raised Date",
         code: "quotation_date",
         sort_type:'',

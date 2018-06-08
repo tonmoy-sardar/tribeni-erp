@@ -20,7 +20,13 @@ export class PurchaseRequisitionService {
       headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
     })
   }
-
+  
+  getPreviousPurchaseRequisitionListByProject(id): Observable<any>{
+    return this.http.get(environment.apiEndpoint+'purchase_requistion_by_project/'+id+'/', {
+      headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
+    })
+  }
+  
   getPurchaseRequisitionListWithoutPagination(): Observable<any>{
     return this.http.get(environment.apiEndpoint+'purchase_requistion_dropdown/', {
       headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))

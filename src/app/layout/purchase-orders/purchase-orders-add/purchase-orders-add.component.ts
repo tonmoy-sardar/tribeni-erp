@@ -61,8 +61,6 @@ export class PurchaseOrdersAddComponent implements OnInit {
       requisition: [null, Validators.required],
       quotation_no: ['', Validators.required],
       quotation_date: ['', Validators.required],
-      pur_org: ['', Validators.required],
-      pur_grp: ['', Validators.required],
       company: ['', Validators.required],
       vendor: ['', Validators.required],
       vendor_address: ['', Validators.required],
@@ -89,16 +87,24 @@ export class PurchaseOrdersAddComponent implements OnInit {
   getRequisitionPurchaseOrderList(id) {
     this.purchaseRequisitionService.getPurchaseRequisitionOrderList(id).subscribe(res => {
       this.previous_purchase_list = res;
-      var sum = 0
-      this.previous_purchase_list.forEach(x => {
-        sum += Math.round(x.purchase_order_detail[0].order_quantity)
-      })
-      this.total_rest_quantity = Math.round(this.requisition_details.requisition_detail[0].quantity) - sum
-      // console.log(this.total_rest_quantity)
-      // console.log(res)
+      console.log(res)
+      var sum = 0;
+      // for (var i = 0; i < this.requisition_details.requisition_detail.length; i++) {
+      //   var x = this.requisition_details.requisition_detail[i]
+      //   if (this.previous_purchase_list.length > 0) {
+
+      //   }
+      //   else {
+
+      //   }
+      // }
+      // this.previous_purchase_list.forEach(x => {
+      //   sum += Math.round(x.order_quantity)
+      // })
+      // this.total_rest_quantity = Math.round(this.requisition_details.requisition_detail[0].quantity) - sum;
     })
   }
-  
+
   getGstRatesList() {
     this.gstRatesService.getGSTListWithoutPagination().subscribe(res => {
       this.gst_rates_list = res;
@@ -107,7 +113,6 @@ export class PurchaseOrdersAddComponent implements OnInit {
   getTermsConditionList() {
     this.termsConditionService.getTermsListWithoutPagination().subscribe(res => {
       this.terms_condition_list = res;
-      // console.log(this.terms_condition_list)
     })
   }
   getVendorList() {
@@ -120,12 +125,12 @@ export class PurchaseOrdersAddComponent implements OnInit {
       this.requisition_list = res;
       this.loading = LoadingState.Ready;
     },
-    error => {
-      this.loading = LoadingState.Ready;
-      this.toastr.error('Something went wrong', '', {
-        timeOut: 3000,
-      });
-    })
+      error => {
+        this.loading = LoadingState.Ready;
+        this.toastr.error('Something went wrong', '', {
+          timeOut: 3000,
+        });
+      })
   }
   btnClickNav = function (toNav) {
     this.router.navigateByUrl('/' + toNav);
@@ -141,7 +146,7 @@ export class PurchaseOrdersAddComponent implements OnInit {
     const order_detail_control = <FormArray>this.form.controls['purchase_order_detail'];
     const order_terms_control = <FormArray>this.form.controls['purchase_order_terms'];
     if (id) {
-      this.visible_key = false;      
+      this.visible_key = false;
       this.clearFormArray(order_freight_control)
       this.requisition_details = '';
       this.material_details_list = [];
@@ -152,7 +157,7 @@ export class PurchaseOrdersAddComponent implements OnInit {
       this.purchaseRequisitionService.getPurchaseRequisitionDetails(id).subscribe(res => {
         this.requisition_details = res;
         this.getRequisitionPurchaseOrderList(id);
-        // console.log(this.requisition_details)
+        console.log(this.requisition_details)
         this.requisition_details.requisition_detail.forEach(x => {
           var Mdtl = {
             material: x.material.id,
@@ -166,9 +171,7 @@ export class PurchaseOrdersAddComponent implements OnInit {
           this.material_details_list.push(Mdtl)
         })
         this.form.patchValue({
-          company: this.requisition_details.company.id,
-          pur_org: this.requisition_details.purchase_grp.id,
-          pur_grp: this.requisition_details.purchase_org.id
+          company: this.requisition_details.company.id
         })
         if (this.requisition_details.requisition_detail.length > 0) {
           order_freight_control.push(this.create_purchase_order_freight());
@@ -196,9 +199,6 @@ export class PurchaseOrdersAddComponent implements OnInit {
   // order deatils
   create_purchase_order_detail(mat) {
     return this.formBuilder.group({
-      company_branch: [mat.branch.id, Validators.required],
-      storage_location: [mat.storage_location.id, Validators.required],
-      storage_bin: [mat.storage_bin.id, Validators.required],
       material: [mat.material.id, Validators.required],
       uom: [mat.uom.id, Validators.required],
       requisition_quantity: [mat.quantity, Validators.required],
@@ -247,9 +247,17 @@ export class PurchaseOrdersAddComponent implements OnInit {
     })
   }
   getSubTotal(quantity, rate, discount, i) {
-    if (Math.round(quantity) > Math.round(this.total_rest_quantity)) {
-      this.material_details_list[i].order_quantity = Math.round(this.total_rest_quantity)
+    // console.log(this.previous_purchase_list[i].order_quantity)
+    if (Math.round(quantity) > Math.round(this.requisition_details.requisition_detail[i].quantity)) {
+      this.material_details_list[i].order_quantity = Math.round(this.requisition_details.requisition_detail[i].quantity)
       this.toastr.error('Quantity should not be more than PR Quantity', '', {
+        timeOut: 3000,
+      });
+    }
+    var project_Spc_rate = Math.round(this.requisition_details.requisition_detail[i].material_rate[0].rate);
+    if (Math.round(rate) > project_Spc_rate) {
+      this.material_details_list[i].rate = project_Spc_rate
+      this.toastr.error('Rate should not be more than Project Specific Rate', '', {
         timeOut: 3000,
       });
     }
@@ -387,8 +395,8 @@ export class PurchaseOrdersAddComponent implements OnInit {
       }
     })
     if (this.form.valid) {
-      if(Math.round(this.form.value.purchase_order_detail[0].order_quantity) == this.total_rest_quantity){
-        this.requisitionFinalize()
+      if (Math.round(this.form.value.purchase_order_detail[0].order_quantity) == this.total_rest_quantity) {
+        // this.requisitionFinalize()
       }
       this.loading = LoadingState.Processing;
       var QtnDate = new Date(this.form.value.quotation_date.year, this.form.value.quotation_date.month - 1, this.form.value.quotation_date.day)
@@ -416,7 +424,7 @@ export class PurchaseOrdersAddComponent implements OnInit {
     }
   }
 
-  requisitionFinalize(){
+  requisitionFinalize() {
     let d;
     d = {
       id: this.requisition_details.id,
@@ -427,10 +435,10 @@ export class PurchaseOrdersAddComponent implements OnInit {
         console.log(response)
       },
       error => {
-        console.log('error', error)
-        // this.toastr.error('everything is broken', '', {
-        //   timeOut: 3000,
-        // });
+        this.loading = LoadingState.Ready;
+        this.toastr.error('Something went wrong', '', {
+          timeOut: 3000,
+        });
       }
     );
   }

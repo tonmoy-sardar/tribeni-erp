@@ -189,7 +189,7 @@ export class CompanyService {
   }
 
   getCompanyProjectDetails(id): Observable<any>{
-    return this.http.get(environment.apiEndpoint+'all_project/'+id+'/', {
+    return this.http.get(environment.apiEndpoint+'all_company_project/'+id+'/', {
       headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
     })
   }
