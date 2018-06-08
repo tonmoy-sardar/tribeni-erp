@@ -183,7 +183,7 @@ export class CompanyService {
   }
   
   addNewCompanyProject(data): Observable<any>{
-    return this.http.post(environment.apiEndpoint+'all_project/', data, {
+    return this.http.post(environment.apiEndpoint+'all_company_project/', data, {
       headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
     })
   }

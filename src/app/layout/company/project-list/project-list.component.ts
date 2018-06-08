@@ -81,7 +81,8 @@ export class ProjectListComponent implements OnInit {
     this.companyProjectCompShow = {
       showList: true,
       showAdd: false,
-      showEdit: false
+      showEdit: false,
+      showDetails: false
     };
 
     this.getCompanyProjectList(this.route.snapshot.params['id']);
@@ -103,7 +104,8 @@ export class ProjectListComponent implements OnInit {
     this.companyProjectCompShow = {
       showList: false,
       showAdd: true,
-      showEdit: false
+      showEdit: false,
+      showDetails: false
     };
   };
 
@@ -112,7 +114,18 @@ export class ProjectListComponent implements OnInit {
     this.companyProjectCompShow = {
       showList: false,
       showAdd: false,
-      showEdit: true
+      showEdit: true,
+      showDetails: false
+    };
+  };
+
+  showProjectDetails(id) {
+    this.companyProjectId = id;
+    this.companyProjectCompShow = {
+      showList: false,
+      showAdd: false,
+      showEdit: false,
+      showDetails: true
     };
   };
 
@@ -120,7 +133,8 @@ export class ProjectListComponent implements OnInit {
     this.companyProjectCompShow = {
       showList: true,
       showAdd: false,
-      showEdit: false
+      showEdit: false,
+      showDetails: false
     };
 
     this.getCompanyProjectList(this.route.snapshot.params['id']);
@@ -146,7 +160,7 @@ export class ProjectListComponent implements OnInit {
       (data: any[]) => {
         this.totalCompanyProjectList = data['count'];
         this.companyProjectList = data['results'];
-
+        console.log(this.companyProjectList);
         this.itemNo = (this.defaultPagination - 1) * this.itemPerPage;
         this.lower_count = this.itemNo + 1;
 
