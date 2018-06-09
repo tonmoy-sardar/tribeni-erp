@@ -20,6 +20,7 @@ export class ReportsPurchaseRequisitionComponent implements OnInit {
   help_description = "";
   requisition_list: any[] = [];
   company_list: any[] = [];
+  project_list: any[] = [];
   vendor_list: any[] = [];
   defaultPagination: number;
   SearchRequisitionList: any[] = [];
@@ -34,6 +35,7 @@ export class ReportsPurchaseRequisitionComponent implements OnInit {
   requisitionDetails: any;
   requisition_details_key: boolean;
   company: number;
+  project: number;
   status = '';
   approve = '';
   requisition_date: any;
@@ -57,6 +59,7 @@ export class ReportsPurchaseRequisitionComponent implements OnInit {
     this.itemPerPage = Globals.itemPerPage;
     this.getRequisitionList();
     this.getCompanyList();
+    this.getCompanyProjectList();
     this.getHelp();
   }
 
@@ -105,6 +108,12 @@ export class ReportsPurchaseRequisitionComponent implements OnInit {
     })
   }  
 
+  getCompanyProjectList() {
+    this.companyService.getAllCompanyProjectDropdownList().subscribe(res => {
+      this.project_list = res;
+    })
+  }  
+
   search() {
     this.getSearchRequisitionList();
   }
@@ -124,6 +133,9 @@ export class ReportsPurchaseRequisitionComponent implements OnInit {
     params.set('page', this.defaultPagination.toString());
     if (this.company > 0) {
       params.set('company', this.company.toString());
+    }
+    if (this.project > 0) {
+      params.set('project', this.project.toString());
     }
     if (this.status != "") {
       params.set('status', this.status.toString());

@@ -40,7 +40,7 @@ export class PurchaseRequisitionComponent implements OnInit {
     this.headerThOption = [
       {
         name: "PR No.",
-        code: "requisition_map__requisition_no",
+        code: "requisition_no",
         sort_type: '',
         has_tooltip: true,
         tooltip_msg: 'Purchase Requisition Number'

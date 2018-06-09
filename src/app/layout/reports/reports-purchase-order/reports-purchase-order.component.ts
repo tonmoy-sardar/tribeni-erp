@@ -23,6 +23,7 @@ export class ReportsPurchaseOrderComponent implements OnInit {
   order_list: any[] = [];
   company_list: any[] = [];
   vendor_list: any[] = [];
+  project_list: any[] = [];
   defaultPagination: number;
   SearchOrderList: any[] = [];
   totalSearchOrderList: number;
@@ -36,6 +37,7 @@ export class ReportsPurchaseOrderComponent implements OnInit {
   orderDetails: any;
   order_details_key: boolean;
   company: number;
+  project: number;
   vendor: number;
   status = '';
   approve = '';
@@ -61,6 +63,7 @@ export class ReportsPurchaseOrderComponent implements OnInit {
     this.getOrderList();
     this.getCompanyList();
     this.getVendorList();
+    this.getCompanyProjectList();
     this.getHelp();
   }
 
@@ -115,6 +118,12 @@ export class ReportsPurchaseOrderComponent implements OnInit {
     })
   }
 
+  getCompanyProjectList() {
+    this.companyService.getAllCompanyProjectDropdownList().subscribe(res => {
+      this.project_list = res;
+    })
+  }  
+
   getVendorList() {
     this.vendorService.getVendorListWithoutPagination().subscribe(res => {
       this.vendor_list = res;
@@ -140,6 +149,9 @@ export class ReportsPurchaseOrderComponent implements OnInit {
     params.set('page', this.defaultPagination.toString());
     if (this.company > 0) {
       params.set('company', this.company.toString());
+    }
+    if (this.project > 0) {
+      params.set('project', this.project.toString());
     }
     if (this.status != "") {
       params.set('status', this.status.toString());

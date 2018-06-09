@@ -35,9 +35,23 @@
                           <label>PR Number : </label>
                         </td>
                         <td>
-                          <label>{{purchaseOrder.requisition_no[0].requisition_no}}</label>
+                          <label>{{purchaseOrder.requisition.requisition_number}}</label>
                         </td>
 
+                      </tr>
+                      <tr>
+                        <td>
+                          <label>Company : </label>
+                        </td>
+                        <td>
+                          <label>{{purchaseOrder.company.company_name}}</label>
+                        </td>
+                        <td>
+                          <label>Project : </label>
+                        </td>
+                        <td>
+                          <label>{{purchaseOrder.requisition.project_name}}</label>
+                        </td>
                       </tr>
                       <tr>
                         <td>
@@ -64,7 +78,7 @@
                           <label>PR Raised Date : </label>
                         </td>
                         <td>
-                          <label>{{getRequisitionDate(purchaseOrder.requisition_no[0].requisition_no)}}</label>
+                          <label>{{getRequisitionDate(purchaseOrder.requisition.requisition_number)}}</label>
                         </td>
                       </tr>
                       <tr>
@@ -89,7 +103,10 @@
                     <thead>
                       <tr>
                         <th>
-                          <label>Item</label>
+                          <label>Material Group</label>
+                        </th>
+                        <th>
+                          <label>Material</label>
                         </th>
                         <th>
                           <label>Quantity</label>
@@ -126,7 +143,10 @@
                     <tbody>
                       <tr *ngFor="let item of purchaseOrder.purchase_order_detail">
                         <td>
-                          <label>{{item.material.material_fullname}}</label>
+                          <label>{{item.material.material_type.material_type}}</label>
+                        </td>
+                        <td>
+                          <label>{{item.material.material_fullname}} ({{item.material.material_code}})</label>
                         </td>
                         <td>
                           <label>{{item.order_quantity}}</label>

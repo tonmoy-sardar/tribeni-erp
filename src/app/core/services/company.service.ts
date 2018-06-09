@@ -205,6 +205,12 @@ export class CompanyService {
       headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
     })
   }
+
+  getAllCompanyProjectDropdownList(): Observable<any>{
+    return this.http.get(environment.apiEndpoint+'all_company_project_dropdown/', {
+      headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
+    })
+  }
   // Project Services End
 
 }

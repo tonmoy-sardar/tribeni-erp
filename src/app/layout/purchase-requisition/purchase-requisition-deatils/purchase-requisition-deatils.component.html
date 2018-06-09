@@ -37,6 +37,12 @@
                                                 <td>
                                                     <label>{{purchaseRequisition.company.company_name}}</label>
                                                 </td>
+                                                <td>
+                                                    <label>Project : </label>
+                                                </td>
+                                                <td>
+                                                    <label>{{purchaseRequisition.project.project_name}}</label>
+                                                </td>
 
                                             </tr>
                                             <tr>
@@ -53,16 +59,14 @@
                                                     <label *ngIf="purchaseRequisition.status">Active</label>
                                                     <label *ngIf="!purchaseRequisition.status">Inactive</label>
                                                 </td>
-                                            </tr>
-                                            <tr>
                                                 <td>
                                                     <label>Raised Date :</label>
                                                 </td>
                                                 <td>
                                                     <label>{{purchaseRequisition.created_at | date: 'dd-MM-yyyy'}}</label>
                                                 </td>
-
                                             </tr>
+
                                         </tbody>
 
                                     </table>
@@ -76,27 +80,36 @@
                                         <thead>
                                             <tr>
                                                 <th>
-                                                    <label>Material</label>
+                                                    <label>Material Group</label>
                                                 </th>
                                                 <th>
-                                                    <label>UOM</label>
+                                                    <label>Material</label>
                                                 </th>
                                                 <th>
                                                     <label>Quantity</label>
                                                 </th>
+                                                <th>
+                                                    <label>UOM</label>
+                                                </th>
+
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="let requisition_detail of purchaseRequisition.requisition_detail ; let i = index">
                                                 <td>
-                                                    <label>{{requisition_detail.material.material_code}} - {{requisition_detail.material.material_fullname}}</label>
+                                                    <label>{{requisition_detail.material.material_type.material_type}}</label>
                                                 </td>
                                                 <td>
-                                                    <label>{{requisition_detail.uom.name}}</label>
+                                                    <label>{{requisition_detail.material.material_fullname}} ( {{requisition_detail.material.material_code}}
+                                                        )</label>
                                                 </td>
                                                 <td>
                                                     <label>{{requisition_detail.quantity}}</label>
                                                 </td>
+                                                <td>
+                                                    <label>{{requisition_detail.uom.name}}</label>
+                                                </td>
+
                                             </tr>
                                         </tbody>
                                     </table>
