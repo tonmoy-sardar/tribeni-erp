@@ -163,8 +163,6 @@ export class PurchaseInvoiceAddComponent implements OnInit {
       total_gst: gst_sum,
       total_amount: amount_sum
     })
-   
-    console.log((this.form.value)
 
     if (this.form.valid) {
       this.loading = LoadingState.Processing;
