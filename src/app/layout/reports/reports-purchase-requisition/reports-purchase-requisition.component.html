@@ -26,7 +26,7 @@
                         <ng-select class="form-control" placeholder="Select Requisition" (change)="requisitionChange($event)" [clearable]="false"
                           name="requisition">
                           <ng-option [value]="''">Select Requisition</ng-option>
-                          <ng-option *ngFor="let requisition of requisition_list" [value]="requisition.id">{{requisition.requisition_map[0].requisition_no}}</ng-option>
+                          <ng-option *ngFor="let requisition of requisition_list" [value]="requisition.id">{{requisition.requisition_no}}</ng-option>
                         </ng-select>
                       </div>
                       <div class="form-group col-md-3">
@@ -63,10 +63,17 @@
                         </div>
                       </div>
                       <div class="form-group col-md-3">
-                        <label>Purchase Requisition By Company.</label>
+                        <label>By Company</label>
                         <ng-select class="form-control" placeholder="Select Company" [clearable]="false" name="company" [(ngModel)]="company">
                           <ng-option [value]="''">Select Company</ng-option>
                           <ng-option *ngFor="let company of company_list" [value]="company.id">{{company.company_name}}</ng-option>
+                        </ng-select>
+                      </div>
+                      <div class="form-group col-md-3">
+                        <label>By Project</label>
+                        <ng-select class="form-control" placeholder="Select Project" [clearable]="false" name="project" [(ngModel)]="project">
+                          <ng-option [value]="''">Select Project</ng-option>
+                          <ng-option *ngFor="let project of project_list" [value]="project.id">{{project.project_name}}</ng-option>
                         </ng-select>
                       </div>
                       <div class="form-group col-md-3">
@@ -85,10 +92,10 @@
                           <option value="2">Dis-approved</option>
                         </select>
                       </div>
-                      <div class="form-group col-md-3">
+                      <div class="form-group col-md-12">
                         <label>&nbsp;&nbsp;&nbsp;</label>
                         <div class="clearfix"></div>
-                        <button type="submit" class="btn btn-primary" (click)="search()" [disabled]="requisition_details_key">Search</button>
+                        <button type="submit" class="btn btn-primary pull-right" (click)="search()" [disabled]="requisition_details_key">Search</button>
                       </div>
                     </div>
                   </div>
@@ -116,11 +123,8 @@
                               <span class="info" ngbTooltip="Purchase Requisition Number">i</span>
                             </th>
                             <th>Company</th>
-                            <th>P. Org.
+                            <th>Project
                               <span class="info" ngbTooltip="Purchase Organisation">i</span>
-                            </th>
-                            <th>P. Group
-                              <span class="info" ngbTooltip="Purchase Group">i</span>
                             </th>
                             <th>PR Raised Date
                               <span class="info" ngbTooltip="Purchase Requisition Raised Date">i</span>
@@ -135,10 +139,9 @@
                         <tbody>
                           <tr *ngFor="let report of SearchRequisitionList ; let i = index">
                             <th scope="row">{{itemNo + i +1}}</th>
-                            <td>{{report.requisition_map[0].requisition_no}}</td>
+                            <td>{{report.requisition_no}}</td>
                             <td>{{report.company.company_name}}</td>
-                            <td>{{report.purchase_org.name}}</td>
-                            <td>{{report.purchase_grp.name}}</td>
+                            <td>{{report.project.project_name}}</td>
                             <td>{{report.created_at | date:'dd-MM-yyyy'}}</td>
                             <td>{{report.created_by.first_name}}</td>
                             <td>
@@ -173,7 +176,7 @@
                   <div class="card-header">
                     <div class="row">
                       <div class="col-md-9">
-                        <h5>Purchase Requisition Number : {{requisitionDetails.requisition_map[0].requisition_no}}</h5>
+                        <h5>Purchase Requisition Number : {{requisitionDetails.requisition_no}}</h5>
                       </div>
                       <div class="col-md-3 text-right">
                         <!-- <button type="submit" class="btn btn-default">Excel</button> -->
@@ -192,7 +195,7 @@
                                 <label>Purchase Requisition Number : </label>
                               </td>
                               <td>
-                                <label>{{requisitionDetails.requisition_map[0].requisition_no}}</label>
+                                <label>{{requisitionDetails.requisition_no}}</label>
                               </td>
                               <td>
                                 <label>Company : </label>
@@ -200,21 +203,14 @@
                               <td>
                                 <label>{{requisitionDetails.company.company_name}}</label>
                               </td>
-                            </tr>
-                            <tr>
                               <td>
-                                <label>Purchase Org : </label>
+                                <label>Project : </label>
                               </td>
                               <td>
-                                <label>{{requisitionDetails.purchase_org.name}}</label>
-                              </td>
-                              <td>
-                                <label>Purchase Group : </label>
-                              </td>
-                              <td>
-                                <label>{{requisitionDetails.purchase_grp.name}}</label>
+                                <label>{{requisitionDetails.project.project_name}}</label>
                               </td>
                             </tr>
+
                             <tr>
                               <td>
                                 <label>Raised By : </label>
@@ -229,8 +225,6 @@
                                 <label *ngIf="requisitionDetails.status">Active</label>
                                 <label *ngIf="!requisitionDetails.status">Inactive</label>
                               </td>
-                            </tr>
-                            <tr>
                               <td>
                                 <label>Raised Date :</label>
                               </td>
@@ -238,6 +232,7 @@
                                 <label>{{requisitionDetails.created_at | date: 'dd-MM-yyyy'}}</label>
                               </td>
                             </tr>
+
                           </tbody>
                         </table>
                       </div>
@@ -250,20 +245,28 @@
                           <thead>
                             <tr>
                               <th>
+                                <label>Material Group</label>
+                              </th>
+                              <th>
                                 <label>Material</label>
                               </th>
                               <th>
-                                <label>UOM</label>
+                                <label>Quantity</label>
                               </th>
                               <th>
-                                <label>Quantity</label>
+                                <label>UOM</label>
                               </th>
                             </tr>
                           </thead>
                           <tbody>
                             <tr *ngFor="let requisition_detail of requisitionDetails.requisition_detail ; let i = index">
                               <td>
-                                <label>{{requisition_detail.material.material_code}} - {{requisition_detail.material.material_fullname}}</label>
+                                <label>{{requisition_detail.material.material_type.material_type}}</label>
+                              </td>
+                              <td>
+                                <label>{{requisition_detail.material.material_fullname}} ( {{requisition_detail.material.material_code}}
+                                  )
+                                </label>
                               </td>
                               <td>
                                 <label>{{requisition_detail.uom.name}}</label>

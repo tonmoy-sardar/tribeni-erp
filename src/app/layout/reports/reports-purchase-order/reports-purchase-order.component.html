@@ -25,7 +25,7 @@
                         <label>Purchase Order no.</label>
                         <ng-select class="form-control" placeholder="Select Order" (change)="orderChange($event)" [clearable]="false" name="order">
                           <ng-option [value]="''">Select Order</ng-option>
-                          <ng-option *ngFor="let order of order_list" [value]="order.id">{{order.purchase_order_map[0].purchase_order_no}}</ng-option>
+                          <ng-option *ngFor="let order of order_list" [value]="order.id">{{order.purchase_order_no}}</ng-option>
                         </ng-select>
                       </div>
                       <div class="form-group col-md-3">
@@ -62,20 +62,27 @@
                         </div>
                       </div>
                       <div class="form-group col-md-3">
-                        <label>Purchase Order By Company.</label>
+                        <label>By Company.</label>
                         <ng-select class="form-control" placeholder="Select Company" [clearable]="false" name="company" [(ngModel)]="company">
                           <ng-option [value]="''">Select Company</ng-option>
                           <ng-option *ngFor="let company of company_list" [value]="company.id">{{company.company_name}}</ng-option>
                         </ng-select>
                       </div>
                       <div class="form-group col-md-3">
-                        <label>Purchase Order By Vendor</label>
+                        <label>By Project</label>
+                        <ng-select class="form-control" placeholder="Select Project" [clearable]="false" name="project" [(ngModel)]="project">
+                          <ng-option [value]="''">Select Project</ng-option>
+                          <ng-option *ngFor="let project of project_list" [value]="project.id">{{project.project_name}}</ng-option>
+                        </ng-select>
+                      </div>
+                      <div class="form-group col-md-2">
+                        <label>By Vendor</label>
                         <ng-select class="form-control" placeholder="Select Vendor" [clearable]="false" name="vendor" [(ngModel)]="vendor">
                           <ng-option [value]="''">Select Vendor</ng-option>
                           <ng-option *ngFor="let vendor of vendor_list" [value]="vendor.id">{{vendor.vendor_fullname}}</ng-option>
                         </ng-select>
                       </div>
-                      <div class="form-group col-md-3">
+                      <div class="form-group col-md-2">
                         <label>By Staus</label>
                         <select class="form-control" name="status" [(ngModel)]="status">
                           <option value="">Select Staus</option>
@@ -83,7 +90,7 @@
                           <option value="0">Inactive</option>
                         </select>
                       </div>
-                      <div class="form-group col-md-3">
+                      <div class="form-group col-md-2">
                         <label>By Approval</label>
                         <select class="form-control" name="approve" [(ngModel)]="approve">
                           <option value="">Select Approval</option>
@@ -91,14 +98,15 @@
                           <option value="2">Dis-approved</option>
                         </select>
                       </div>
+                      <div class="form-group col-md-12">
+                          <label>&nbsp;&nbsp;&nbsp;</label>
+                          <div class="clearfix"></div>
+                          <button type="submit" class="btn btn-primary pull-right" (click)="search()" [disabled]="order_details_key">Search</button>
+                        </div>
                     </div>
                   </div>
                 </div>
-                <div class="row">
-                  <div class="form-group col-md-12" style="text-align: right">
-                    <button type="submit" class="btn btn-primary" (click)="search()" [disabled]="order_details_key">Search</button>
-                  </div>
-                </div>
+                
                 <div class="card bg-light mb-3" *ngIf="Search_order_list_key">
                   <div class="card-header">
                     <div class="row">
@@ -122,12 +130,7 @@
                               <span class="info" ngbTooltip="Purchase Order Number">i</span>
                             </th>
                             <th>Company</th>
-                            <th>P. Org.
-                              <span class="info" ngbTooltip="Purchase Organisation">i</span>
-                            </th>
-                            <th>P. Group
-                              <span class="info" ngbTooltip="Purchase Group">i</span>
-                            </th>
+                            <th>Project</th>
                             <th>Vendor</th>
                             <th>PO Raised Date
                               <span class="info" ngbTooltip="Purchase Order Raised Date">i</span>
@@ -142,10 +145,9 @@
                         <tbody>
                           <tr *ngFor="let report of SearchOrderList ; let i = index">
                             <th scope="row">{{itemNo + i +1}}</th>
-                            <td>{{report.purchase_order_map[0].purchase_order_no}}</td>
+                            <td>{{report.purchase_order_no}}</td>
                             <td>{{report.company.company_name}}</td>
-                            <td>{{report.pur_org.name}}</td>
-                            <td>{{report.pur_grp.name}}</td>
+                            <td>{{report.requisition.project_name}}</td>
                             <td>{{report.vendor.vendor_fullname}}</td>
                             <td>{{report.created_at | date:'dd-MM-yyyy'}}</td>
                             <td>{{report.created_by.first_name}}</td>
@@ -182,7 +184,7 @@
                   <div class="card-header">
                     <div class="row">
                       <div class="col-md-9">
-                        <h5>Purchase Order Number : {{orderDetails.purchase_order_map[0].purchase_order_no}}</h5>
+                        <h5>Purchase Order Number : {{orderDetails.purchase_order_no}}</h5>
                       </div>
                       <div class="col-md-3 text-right">
                         <!-- <button type="submit" class="btn btn-default">Excel</button> -->
@@ -201,27 +203,27 @@
                                 <label>PO Number : </label>
                               </td>
                               <td>
-                                <label>{{orderDetails.purchase_order_map[0].purchase_order_no}}</label>
+                                <label>{{orderDetails .purchase_order_no}}</label>
                               </td>
                               <td>
                                 <label>PR Number : </label>
                               </td>
                               <td>
-                                <label>{{orderDetails.requisition_no[0].requisition_no}}</label>
+                                <label>{{orderDetails.requisition.requisition_number}}</label>
                               </td>
                             </tr>
                             <tr>
                               <td>
-                                <label>Purchase Org : </label>
+                                <label>Company : </label>
                               </td>
                               <td>
-                                <label>{{orderDetails.pur_org.name}}</label>
+                                <label>{{orderDetails.company.company_name}}</label>
                               </td>
                               <td>
-                                <label>Purchase Group : </label>
+                                <label>Project : </label>
                               </td>
                               <td>
-                                <label>{{orderDetails.pur_grp.name}}</label>
+                                <label>{{orderDetails.requisition.project_name}}</label>
                               </td>
                             </tr>
                             <tr>
@@ -249,7 +251,7 @@
                                 <label>PR Raised Date : </label>
                               </td>
                               <td>
-                                <label>{{getRequisitionDate(orderDetails.requisition_no[0].requisition_no)}}</label>
+                                <label>{{getRequisitionDate(orderDetails.requisition.requisition_number)}}</label>
                               </td>
                             </tr>
                             <tr>
@@ -272,7 +274,10 @@
                           <thead>
                             <tr>
                               <th>
-                                <label>Item</label>
+                                <label>Material Group</label>
+                              </th>
+                              <th>
+                                <label>Material</label>
                               </th>
                               <th>
                                 <label>Quantity</label>
@@ -309,7 +314,10 @@
                           <tbody>
                             <tr *ngFor="let item of orderDetails.purchase_order_detail">
                               <td>
-                                <label>{{item.material.material_fullname}}</label>
+                                <label>{{item.material.material_type.material_type}}</label>
+                              </td>
+                              <td>
+                                <label>{{item.material.material_fullname}} ({{item.material.material_code}})</label>
                               </td>
                               <td>
                                 <label>{{item.order_quantity}}</label>
@@ -343,12 +351,12 @@
                               </td>
                             </tr>
                             <tr>
-                              <td colspan="9"></td>
+                              <td colspan="10"></td>
                               <td>Grand Total</td>
                               <td>{{orderDetails.grand_total}}</td>
                             </tr>
                             <tr>
-                              <td colspan="11">Amount in words :
+                              <td colspan="12">Amount in words :
                                 <strong>{{orderDetails.grand_total_words}}</strong>
                               </td>
                             </tr>

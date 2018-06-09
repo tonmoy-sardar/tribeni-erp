@@ -43,14 +43,14 @@ export class PurchaseOrdersComponent implements OnInit {
     this.headerThOption = [
       {  
         name: "PO. No.",
-        code: "purchase_order_map__purchase_order_no",
+        code: "purchase_order_no",
         sort_type:'',
         has_tooltip:true,
         tooltip_msg:'Purchase Order Number'
       },
       {  
         name: "PR. No.",
-        code: "requisition__requisition_map__requisition_no",
+        code: "requisition__requisition_no",
         sort_type:'',
         has_tooltip:true,
         tooltip_msg:'Purchase Requisition Number'

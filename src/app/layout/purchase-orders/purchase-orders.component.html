@@ -54,7 +54,7 @@
               <tr *ngFor="let purchaseOrder of purchaseOrderList ; let i = index">
                 <th scope="row">{{itemNo + i +1}}</th>
                 <td>{{purchaseOrder.purchase_order_no}}</td>
-                <td>{{purchaseOrder.requisition_no[0].requisition_no}}</td>
+                <td>{{purchaseOrder.requisition.requisition_number}}</td>
                 <td>{{purchaseOrder.grand_total}}</td>
                 <td>{{purchaseOrder.company.company_name}}</td>
                 <td>{{purchaseOrder.quotation_date | date:'dd-MM-yyyy'}}</td>

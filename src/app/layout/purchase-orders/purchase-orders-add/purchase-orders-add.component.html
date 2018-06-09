@@ -137,10 +137,11 @@
                                             <thead>
                                                 <tr>
                                                     <th></th>
+                                                    <th>Material Group</th>
                                                     <th>Material</th>
                                                     <th>PR. Quantity</th>
                                                     <th>Rest Quantity</th>
-                                                    <th>Project Specific Rate</th>
+                                                    <th>Project Rate</th>
                                                     <th>UOM</th>
                                                     <th>HSN/SAC</th>
                                                     <th>IGST(%)</th>
@@ -159,7 +160,8 @@
                                                     <th scope="row" width="20px">
                                                         <input type="checkbox" (change)="matCheck($event, mat)">
                                                     </th>
-                                                    <td>{{mat.material.material_code}}({{mat.material.material_fullname}})</td>
+                                                    <td>{{mat.material.material_type.material_type}}</td>
+                                                    <td>{{mat.material.material_fullname}}({{mat.material.material_code}})</td>
                                                     <td>{{mat.quantity}}</td>
                                                     <td>{{mat.quantity - material_details_list[k].taken_qtn}}</td>
                                                     <td>{{mat.material_rate[0].rate}}</td>
