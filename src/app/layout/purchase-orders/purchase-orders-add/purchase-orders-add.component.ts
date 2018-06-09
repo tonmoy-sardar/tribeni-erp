@@ -38,7 +38,6 @@ export class PurchaseOrdersAddComponent implements OnInit {
   material_details_list: any[] = [];
   sum: number = 0;
   previous_purchase_list: any[] = [];
-  total_rest_quantity: number = 0;
   help_heading = "";
   help_description = "";
   loading: LoadingState = LoadingState.NotReady;
@@ -87,7 +86,7 @@ export class PurchaseOrdersAddComponent implements OnInit {
   getRequisitionPurchaseOrderList(id) {
     this.purchaseRequisitionService.getPurchaseRequisitionOrderList(id).subscribe(res => {
       this.previous_purchase_list = res;
-      console.log(this.previous_purchase_list)
+      // console.log(this.previous_purchase_list)
       const order_freight_control = <FormArray>this.form.controls['purchase_order_freight'];
       if (this.previous_purchase_list.length > 0) {
         this.requisition_details.requisition_detail.forEach(x => {
@@ -143,20 +142,6 @@ export class PurchaseOrdersAddComponent implements OnInit {
           this.loading = LoadingState.Ready;
         }
       }
-
-      // for (var i = 0; i < this.requisition_details.requisition_detail.length; i++) {
-      //   var x = this.requisition_details.requisition_detail[i]
-      //   if (this.previous_purchase_list.length > 0) {
-
-      //   }
-      //   else {
-
-      //   }
-      // }
-      // this.previous_purchase_list.forEach(x => {
-      //   sum += Math.round(x.order_quantity)
-      // })
-      // this.total_rest_quantity = Math.round(this.requisition_details.requisition_detail[0].quantity) - sum;
     })
   }
 

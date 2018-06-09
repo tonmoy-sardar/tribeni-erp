@@ -46,31 +46,18 @@
                     <i class="fa fa-chevron-down inactive-color" [ngClass]="{'active-color':headerTh.sort_type=='desc'}"></i>
                   </span>
                 </th>
-                <!-- <th>Status</th> -->
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let grn of grnList ; let i = index">
                 <th scope="row">{{itemNo + i + 1}}</th>
-                <td>{{grn.grn_map[0].grn_no}}</td>
-                <td>{{grn.purchase_order_no[0].purchase_order_no}}</td>
+                <td>{{grn.grn_no}}</td>
+                <td>{{grn.purchase_order_no}}</td>
                 <td>{{grn.company.company_name}}</td>
-                <td>{{grn.pur_org.name}}</td>
-                <td>{{grn.pur_grp.name}}</td>
                 <td>{{grn.vendor.vendor_fullname}}</td>
                 <td>{{grn.vendor_address.address}}</td>
                 <td>{{grn.created_at | date:'dd-MM-yyyy'}}</td>
-                <!-- <td>
-                <label *ngIf="grn.is_finalised == 1">Finalised</label>
-                <label *ngIf="grn.status && grn.is_finalised == 0">Active</label>
-                <label *ngIf="!grn.status && grn.is_finalised == 0">Inactive</label>
-                <select *ngIf="grn.is_finalised == 0" class="form-control" name="status" (change)="changeStatus($event.target.value,grn.id)">
-                  <option value=''>Change Status</option>
-                  <option value='0'>Cancel</option>
-                  <option value='1'>Active</option>
-                </select>
-              </td> -->
                 <td>
                   <label *ngIf="grn.is_finalised == 1">Finalised</label>
                   <label *ngIf="grn.is_approve == 0 && grn.is_finalised == 0">None</label>
