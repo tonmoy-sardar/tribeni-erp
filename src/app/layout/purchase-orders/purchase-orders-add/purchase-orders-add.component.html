@@ -212,35 +212,6 @@
                                         <div class="row" formArrayName="purchase_order_freight" *ngFor="let freight of getPurchaseOrderFreight(form); let i = index;">
                                             <div [formGroupName]="i" class="col-md-12">
                                                 <div class="row">
-                                                    <!-- <div class="form-group col-md-2">
-                                                    <label>Freight Option</label>
-                                                    <div class="input-group">
-                                                        <label class="radio-inline">
-                                                            <input type="radio" name="freight" value="vendor"> Vendor</label>
-                                                        <label class="radio-inline">
-                                                            <input type="radio" name="freight" value="own"> Own</label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group col-md-3">
-                                                    <label>Freight Vendor</label>
-                                                    <select class="form-control">
-                                                        <option value="">Select Transporter</option>
-                                                        <option>ATC</option>
-                                                        <option>Test Transporter name</option>
-                                                        <option>ATC</option>
-                                                        <option>Test Transporter name</option>
-                                                    </select>
-                                                </div> -->
-                                                    <!-- <div class="form-group col-md-2">
-                                                    <label>Rate </label>
-                                                    <input type="number" class="form-control" name="freight_rate" formControlName="freight_rate" [ngClass]="{
-                                                        'is-invalid': freight.get('freight_rate').invalid && (freight.get('freight_rate').dirty || freight.get('freight_rate').touched),
-                                                        'is-valid': freight.get('freight_rate').valid && (freight.get('freight_rate').dirty || freight.get('freight_rate').touched)
-                                                      }" (keyup)="getFreightTotal(freight.get('freight_rate').value, freight.get('freight_amount').value, freight.get('freight_gst_rate').value, i)">
-                                                    <div class="invalid-feedback" *ngIf="freight.get('freight_rate').touched && freight.get('freight_rate').hasError('required')">
-                                                        Please enter rate
-                                                    </div>
-                                                </div> -->
                                                     <div class="form-group col-md-2">
                                                         <label>Freight Amount </label>
                                                         <input appOnlyNumber type="text" class="form-control" name="freight_amount" formControlName="freight_amount" [ngClass]="{
