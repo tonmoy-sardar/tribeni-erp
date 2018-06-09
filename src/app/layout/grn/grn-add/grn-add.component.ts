@@ -268,27 +268,27 @@ export class GrnAddComponent implements OnInit {
       //   console.log("kkk")
       // }
       console.log(this.form.value)
-      // this.loading = LoadingState.Processing;
-      // var challanDate = new Date(this.form.value.challan_date.year, this.form.value.challan_date.month - 1, this.form.value.challan_date.day)
-      // this.form.patchValue({
-      //   challan_date: challanDate.toISOString()
-      // })
-      // // console.log(this.form.value)
-      // this.grnService.addNewGrn(this.form.value).subscribe(
-      //   response => {
-      //     this.toastr.success('GNR added successfully', '', {
-      //       timeOut: 3000,
-      //     });
-      //     this.loading = LoadingState.Ready;
-      //     this.goToList('grn');
-      //   },
-      //   error => {
-      //     this.loading = LoadingState.Ready;
-      //     this.toastr.error('Something went wrong', '', {
-      //       timeOut: 3000,
-      //     });
-      //   }
-      // );
+      this.loading = LoadingState.Processing;
+      var challanDate = new Date(this.form.value.challan_date.year, this.form.value.challan_date.month - 1, this.form.value.challan_date.day)
+      this.form.patchValue({
+        challan_date: challanDate.toISOString()
+      })
+      // console.log(this.form.value)
+      this.grnService.addNewGrn(this.form.value).subscribe(
+        response => {
+          this.toastr.success('GNR added successfully', '', {
+            timeOut: 3000,
+          });
+          this.loading = LoadingState.Ready;
+          this.goToList('grn');
+        },
+        error => {
+          this.loading = LoadingState.Ready;
+          this.toastr.error('Something went wrong', '', {
+            timeOut: 3000,
+          });
+        }
+      );
     } else {
       this.markFormGroupTouched(this.form)
     }
