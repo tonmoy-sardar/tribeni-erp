@@ -52,14 +52,14 @@ export class GrnComponent implements OnInit {
     this.headerThOption = [
       {  
         name: "GRN. No.",
-        code: "grn_map__grn_no",
+        code: "grn_no",
         sort_type:'',
         has_tooltip:false,
         tooltip_msg:''
       },
       {  
         name: "PO. No.",
-        code: "po_order__purchase_order_map__purchase_order_no",
+        code: "po_order__purchase_order_no",
         sort_type:'',
         has_tooltip:true,
         tooltip_msg:'Purchase Order Number'
@@ -70,20 +70,6 @@ export class GrnComponent implements OnInit {
         sort_type:'',
         has_tooltip:false,
         tooltip_msg:''
-      },
-      {  
-        name: "P. Org.",
-        code: "pur_org__name",
-        sort_type:'',
-        has_tooltip:true,
-        tooltip_msg:'Purchase Organisation'
-      },
-      {  
-        name: "P. Group",
-        code: "pur_grp__name",
-        sort_type:'',
-        has_tooltip:true,
-        tooltip_msg:'Purchase Group'
       },
       {  
         name: "Vendor",

@@ -25,7 +25,7 @@
                         <label>GRN no.</label>
                         <ng-select class="form-control" placeholder="Select GRN" (change)="grnChange($event)" [clearable]="false" name="grn">
                           <ng-option [value]="''">Select GRN</ng-option>
-                          <ng-option *ngFor="let grn of grn_list" [value]="grn.id">{{grn.grn_map[0].grn_no}}</ng-option>
+                          <ng-option *ngFor="let grn of grn_list" [value]="grn.id">{{grn.grn_no}}</ng-option>
                         </ng-select>
                       </div>
                       <div class="form-group col-md-3">
@@ -91,14 +91,13 @@
                           <option value="2">Dis-approved</option>
                         </select>
                       </div>
+                      <div class="form-group col-md-12">
+                          <button type="submit" class="btn btn-primary pull-right" (click)="search()" [disabled]="grn_details_key">Search</button>
+                        </div>
                     </div>
                   </div>
                 </div>
-                <div class="row">
-                  <div class="form-group col-md-12" style="text-align: right">
-                    <button type="submit" class="btn btn-primary" (click)="search()" [disabled]="grn_details_key">Search</button>
-                  </div>
-                </div>
+                
                 <div class="card bg-light mb-3" *ngIf="Search_grn_list_key">
                   <div class="card-header">
                     <div class="row">
@@ -123,12 +122,6 @@
                               <span class="info" ngbTooltip="Purchase Order Number">i</span>
                             </th>
                             <th>Company</th>
-                            <th>P Org
-                              <span class="info" ngbTooltip="Purchase Organisation">i</span>
-                            </th>
-                            <th>P Group
-                              <span class="info" ngbTooltip="Purchase Group">i</span>
-                            </th>
                             <th>Vendor</th>
                             <th>Vendor Address</th>
                             <th>GRN Raised Date</th>
@@ -140,10 +133,8 @@
                           <tr *ngFor="let report of SearchGrnList ; let i = index">
                             <th scope="row">{{itemNo + i +1}}</th>
                             <td>{{report.grn_no}}</td>
-                            <td>{{report.purchase_order_no[0].purchase_order_no}}</td>
+                            <td>{{report.purchase_order_no}}</td>
                             <td>{{report.company.company_name}}</td>
-                            <td>{{report.pur_org.name}}</td>
-                            <td>{{report.pur_grp.name}}</td>
                             <td>{{report.vendor.vendor_fullname}}</td>
                             <td>{{report.vendor_address.address}}</td>
                             <td>{{report.created_at | date:'dd-MM-yyyy'}}</td>
@@ -180,7 +171,7 @@
                   <div class="card-header">
                     <div class="row">
                       <div class="col-md-9">
-                        <h5>GRN Number : {{grnDetails.grn_map[0].grn_no}}</h5>
+                        <h5>GRN Number : {{grnDetails.grn_no}}</h5>
                       </div>
                       <div class="col-md-3 text-right">
                         <!-- <button type="submit" class="btn btn-default">Excel</button> -->
@@ -199,29 +190,16 @@
                                 <label>GRN Number : </label>
                               </td>
                               <td>
-                                <label>{{grnDetails.grn_map[0].grn_no}}</label>
+                                <label>{{grnDetails.grn_no}}</label>
                               </td>
                               <td>
                                 <label>PO Number : </label>
                               </td>
                               <td>
-                                <label>{{grnDetails.purchase_order_no[0].purchase_order_no}}</label>
+                                <label>{{grnDetails.purchase_order_no}}</label>
                               </td>
                             </tr>
-                            <tr>
-                              <td>
-                                <label>Purchase Org : </label>
-                              </td>
-                              <td>
-                                <label>{{grnDetails.pur_org.name}}</label>
-                              </td>
-                              <td>
-                                <label>Purchase Group : </label>
-                              </td>
-                              <td>
-                                <label>{{grnDetails.pur_grp.name}}</label>
-                              </td>
-                            </tr>
+                            
                             <tr>
                               <td>
                                 <label>Vendor Name : </label>
@@ -284,9 +262,11 @@
                           <thead>
                             <tr>
                               <th></th>
+                              <th>Material Group</th>
                               <th>Material</th>
                               <th>Rate</th>
                               <th>Quantity</th>
+                              <th>UOM</th>
                               <th>Discount (%)</th>
                               <th>Discount amount</th>
                               <th>IGST (%)</th>
@@ -302,9 +282,11 @@
                               <td>
                                 {{ k + 1}}
                               </td>
-                              <td>{{grnDetails.grn_detail[k].material.material_fullname}}</td>
+                              <td>{{grnDetails.grn_detail[k].material.material_type.material_type}}</td>
+                              <td>{{grnDetails.grn_detail[k].material.material_fullname}} ({{grnDetails.grn_detail[k].material.material_code}})</td>
                               <td>{{mat.rate}}</td>
                               <td>{{mat.quantity}}</td>
+                              <td>{{grnDetails.grn_detail[k].material_uom}}</td>
                               <td>{{mat.discount_per}}</td>
                               <td>{{mat.discount_amount}}</td>
                               <td>{{mat.igst}}</td>
