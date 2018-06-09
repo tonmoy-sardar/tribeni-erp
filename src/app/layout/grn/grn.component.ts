@@ -27,9 +27,6 @@ export class GrnComponent implements OnInit {
   stock = {
     grn: '',
     company: '',
-    branch: '',
-    storage_location: '',
-    storage_bin: '',
     material: '',
     rate: '',
     quantity: ''
@@ -197,9 +194,6 @@ export class GrnComponent implements OnInit {
       this.stock = {
         grn: res.id,
         company: res.company.id,
-        branch: res.grn_detail[0].company_branch.id,
-        storage_location: res.grn_detail[0].storage_location.id,
-        storage_bin: res.grn_detail[0].storage_bin.id,
         material: res.grn_detail[0].material.id,
         rate: res.po_order.purchase_order_detail[0].rate,
         quantity: res.grn_detail[0].receive_quantity

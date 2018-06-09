@@ -48,7 +48,7 @@ export class AccountingComponent implements OnInit {
       },
       {  
         name: "Payment No",
-        code: "payment_map__payment_no",
+        code: "payment_no",
         sort_type:'',
         has_tooltip:false,
         tooltip_msg:''

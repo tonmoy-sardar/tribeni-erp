@@ -38,7 +38,7 @@ export class PurchaseInvoiceComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
+    
     this.headerThOption = [
       {  
         name: "Company",
@@ -48,22 +48,29 @@ export class PurchaseInvoiceComponent implements OnInit {
         tooltip_msg:''
       },
       {  
+        name: "Project",
+        code: "grn__po_order__requisition__project__project_name",
+        sort_type:'',
+        has_tooltip:false,
+        tooltip_msg:''
+      },
+      {  
         name: "PO. INV. No.",
-        code: "pur_invoice_map__purchase_inv_no",
+        code: "purchase_inv_no",
         sort_type:'',
         has_tooltip:true,
         tooltip_msg:'Purchase Order Invoice Number'
       },
       {  
         name: "GRN No.",
-        code: "grn__grn_map__grn_no",
+        code: "grn__grn_no",
         sort_type:'',
         has_tooltip:false,
         tooltip_msg:''
       },
       {  
         name: "PO. No.",
-        code: "po_order__purchase_order_map__purchase_order_no",
+        code: "grn__po_order__purchase_order_no",
         sort_type:'',
         has_tooltip:true,
         tooltip_msg:'Purchase Order Number'
@@ -216,15 +223,8 @@ export class PurchaseInvoiceComponent implements OnInit {
 
   paymentCreation(pInvoice) {
     var payment = {
-      company: pInvoice.company.id,
       pur_inv: pInvoice.id,
-      total_amount: pInvoice.total_amount,
-      po_order: pInvoice.po_order_no[0].id,
-      po_order_no: pInvoice.po_order_no[0].purchase_order_no,
-      purchase_inv_date: pInvoice.created_at,
-      purchase_inv_no: pInvoice.pur_invoice_map[0].purchase_inv_no,
-      vendor: pInvoice.vendor.id,
-      vendor_address: pInvoice.vendor_address.id
+      total_amount: pInvoice.total_amount
     };
 
     this.paymentService.addNewPayment(payment).subscribe(

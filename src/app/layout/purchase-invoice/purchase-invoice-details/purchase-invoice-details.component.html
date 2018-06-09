@@ -17,7 +17,7 @@
       <div class="row">
         <div class="col-md-12">
           <div class="card bg-light mb-3">
-            <div class="card-header" style="background-color:#868e96; color: #fff;">Purchase Invoice Number : {{purchaseInvoice.pur_invoice_map[0].purchase_inv_no}} </div>
+            <div class="card-header" style="background-color:#868e96; color: #fff;">Purchase Invoice Number : {{purchaseInvoice.purchase_inv_no}} </div>
             <div class="card-body">
               <div class="row">
                 <div class="col-md-12">
@@ -29,45 +29,29 @@
                           <label>Invoice Number : </label>
                         </td>
                         <td>
-                          <label>{{purchaseInvoice.pur_invoice_map[0].purchase_inv_no}}</label>
+                          <label>{{purchaseInvoice.purchase_inv_no}}</label>
                         </td>
                         <td>
                           <label>PO Number : </label>
                         </td>
                         <td>
-                          <label>{{purchaseInvoice.po_order_no[0].purchase_order_no}}</label>
+                          <label>{{purchaseInvoice.po_order_no}}</label>
                         </td>
-
-                      </tr>
-                      <tr>
                         <td>
                           <label>GRN Number : </label>
                         </td>
                         <td>
-                          <label>{{purchaseInvoice.grn_number[0].grn_no}}</label>
-                        </td>
-                        <td>
-                          <label>Purchase Org : </label>
-                        </td>
-                        <td>
-                          <label>{{purchaseInvoice.pur_org.name}}</label>
+                          <label>{{purchaseInvoice.grn_number}}</label>
                         </td>
                       </tr>
                       <tr>
-                        <td>
-                          <label>Purchase Group : </label>
-                        </td>
-                        <td>
-                          <label>{{purchaseInvoice.pur_grp.name}}</label>
-                        </td>
+
                         <td>
                           <label>Vendor Name : </label>
                         </td>
                         <td>
                           <label>{{purchaseInvoice.vendor.vendor_fullname}}</label>
                         </td>
-                      </tr>
-                      <tr>
                         <td>
                           <label>Vendor Address : </label>
                         </td>
@@ -75,6 +59,7 @@
                           <label>{{purchaseInvoice.vendor_address.address}}</label>
                         </td>
                       </tr>
+
                     </tbody>
 
                   </table>
@@ -88,7 +73,10 @@
                     <thead>
                       <tr>
                         <th>
-                          <label>Item</label>
+                          <label>Material Group</label>
+                        </th>
+                        <th>
+                          <label>Material</label>
                         </th>
                         <th>
                           <label>Quantity</label>
@@ -125,7 +113,10 @@
                     <tbody>
                       <tr *ngFor="let item of purchaseInvoice.pur_invoice_detail">
                         <td>
-                          <label>{{item.material.material_fullname}}</label>
+                          <label>{{item.material.material_type.material_type}}</label>
+                        </td>
+                        <td>
+                          <label>{{item.material.material_fullname}} ({{item.material.material_code}})</label>
                         </td>
                         <td>
                           <label>{{item.quantity}}</label>
@@ -159,7 +150,7 @@
                         </td>
                       </tr>
                       <tr>
-                        <td colspan="9"></td>
+                        <td colspan="10"></td>
                         <td>Grand Total</td>
                         <td>{{purchaseInvoice.total_amount}}</td>
                       </tr>

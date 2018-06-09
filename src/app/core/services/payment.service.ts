@@ -34,7 +34,7 @@ export class PaymentService {
   }
   
   getPaymentDetails(id): Observable<any>{
-    return this.http.get(environment.apiEndpoint+'payment/'+id+'/', {
+    return this.http.get(environment.apiEndpoint+'all_payment/'+id+'/', {
       headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
     })
   }

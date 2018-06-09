@@ -34,10 +34,8 @@ export class PurchaseInvoiceAddComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.formBuilder.group({
+      purchase_inv_no: ['', Validators.required],
       grn: ['', Validators.required],
-      po_order: ['', Validators.required],
-      pur_org: ['', Validators.required],
-      pur_grp: ['', Validators.required],
       total_gst: ['', Validators.required],
       total_amount: ['', Validators.required],
       vendor: ['', Validators.required],
@@ -90,9 +88,9 @@ export class PurchaseInvoiceAddComponent implements OnInit {
               igst: Math.round(PoDetails.igst),
               cgst: Math.round(PoDetails.cgst),
               sgst: Math.round(PoDetails.sgst),
-              total_gst: total_gst,
+              total_gst: Math.round(total_gst),
               material_value: material_value,
-              material_amount_pay: material_amount_pay
+              material_amount_pay: Math.round(material_amount_pay)
             }
             this.material_details_list.push(Mdtl)
           }
@@ -100,9 +98,6 @@ export class PurchaseInvoiceAddComponent implements OnInit {
         // console.log(this.material_details_list)
         this.form.patchValue({
           grn: this.grn_details.id,
-          po_order: this.grn_details.purchase_order_no[0].id,
-          pur_org: this.grn_details.pur_org.id,
-          pur_grp: this.grn_details.pur_grp.id,
           vendor: this.grn_details.vendor.id,
           vendor_address: this.grn_details.vendor_address.id,
           company: this.grn_details.company.id,
@@ -157,6 +152,8 @@ export class PurchaseInvoiceAddComponent implements OnInit {
   addPurchaseInvoice() {
     var amount_sum = 0;
     var gst_sum = 0;
+
+    console.log(this.material_details_list);
     this.material_details_list.forEach(x => {
       this.add_pur_invoice_detail(x)
       amount_sum += x.material_amount_pay
@@ -166,19 +163,16 @@ export class PurchaseInvoiceAddComponent implements OnInit {
       total_gst: gst_sum,
       total_amount: amount_sum
     })
+   
+    console.log((this.form.value)
+
     if (this.form.valid) {
       this.loading = LoadingState.Processing;
-      console.log(this.form.value)
       this.purchaseInvoiceService.addNewPurchaseInvoice(this.form.value).subscribe(
         response => {
-          // console.log(response)
           this.grnFinalize();
         },
         error => {
-          console.log('error', error)
-          // this.toastr.error('everything is broken', '', {
-          //   timeOut: 3000,
-          // });
         }
       );
     } else {

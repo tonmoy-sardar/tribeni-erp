@@ -70,14 +70,20 @@ export class PayComponent implements OnInit {
 
   getPaymentDetails(id){
     this.paymentService.getPaymentDetails(id).subscribe(res => {
-      // console.log(res)
+      console.log(res)
       this.payment = res;
+
+      this.payment.company = res.company.id;
+      this.payment.pur_inv = res.pur_inv_no.id;
+
       var date = new Date(this.payment.created_at)
       this.payment.created_at = {
         year: date.getFullYear(),
         month: date.getMonth() + 1,
         day: date.getDate()
       }
+      console.log( this.payment)
+
       this.getCompanyInvoiceList(this.payment.company);
       this.getCompanyBankList(this.payment.company);
       this.loading = LoadingState.Ready;
@@ -156,7 +162,7 @@ export class PayComponent implements OnInit {
   purchaseInvoiceFinalize() {
     let d;
     d = {
-      id: this.payment.pur_inv,
+      id: this.payment.pur_inv_no.id,
       is_finalised: 1
     };
     this.purchaseInvoiceService.finalizePurchaseInvoice(d).subscribe(
@@ -165,7 +171,7 @@ export class PayComponent implements OnInit {
           timeOut: 3000,
         });
         this.loading = LoadingState.Ready;
-        this.goToList('payment');
+        this.goToList('accounting');
       },
       error => {
         this.loading = LoadingState.Ready;

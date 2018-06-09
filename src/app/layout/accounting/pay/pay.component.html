@@ -31,7 +31,7 @@
                                         <label>Select PO INV</label>
                                         <select class="form-control" [(ngModel)]="payment.pur_inv" name="pur_inv" formControlName="pur_inv">
                                             <option value="null">Select PO INV</option>
-                                            <option *ngFor="let invoiceObj of invoiceList ;" value="{{invoiceObj.id}}">{{invoiceObj.pur_invoice_map[0].purchase_inv_no}}</option>
+                                            <option *ngFor="let invoiceObj of invoiceList ;" value="{{invoiceObj.id}}">{{invoiceObj.purchase_inv_no}}</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-md-3">

@@ -25,7 +25,7 @@
                         <label>Payment no.</label>
                         <ng-select class="form-control" placeholder="Select Payment" (change)="paymentChange($event)" [clearable]="false" name="payment">
                           <ng-option [value]="''">Select Payment</ng-option>
-                          <ng-option *ngFor="let payment of payment_list" [value]="payment.id">{{payment.payment_map[0].payment_no}}</ng-option>
+                          <ng-option *ngFor="let payment of payment_list" [value]="payment.id">{{payment.payment_no}}</ng-option>
                         </ng-select>
                       </div>
                       <div class="form-group col-md-3">
@@ -118,8 +118,8 @@
                           <tr *ngFor="let report of SearchPaymentList ; let i = index">
                             <th scope="row">{{itemNo + i +1}}</th>
                             <td>{{report.company.company_name}}</td>
-                            <td>{{report.payment_map[0].payment_no}}</td>
-                            <td>{{report.purchase_inv_no}}</td>
+                            <td>{{report.payment_no}}</td>
+                            <td>{{report.pur_inv_no.inv_no}}</td>
                             <td>{{report.po_order_no}}</td>
                             <td>{{report.company.company_name}}</td>
                             <td>{{report.created_at | date: 'dd-MM-yyyy'}}</td>
@@ -154,7 +154,7 @@
                   <div class="card-header">
                     <div class="row">
                       <div class="col-md-9">
-                        <h5>Payment Number : {{paymentDetails.payment_map[0].payment_no}}</h5>
+                        <h5>Payment Number : {{paymentDetails.payment_no}}</h5>
                       </div>
                       <div class="col-md-3 text-right">
                         <!-- <button type="submit" class="btn btn-default">Excel</button> -->
@@ -173,7 +173,7 @@
                                 <label>Payment Number : </label>
                               </td>
                               <td>
-                                <label>{{paymentDetails.payment_map[0].payment_no}}</label>
+                                <label>{{paymentDetails.payment_no}}</label>
                               </td>
                               <td>
                                 <label>Company : </label>
@@ -187,27 +187,13 @@
                                 <label>Purchase Invoice Number : </label>
                               </td>
                               <td>
-                                <label>{{paymentDetails.purchase_inv_no}}</label>
+                                <label>{{paymentDetails.pur_inv_no.inv_no}}</label>
                               </td>
                               <td>
                                 <label>Purchase Invoice Date : </label>
                               </td>
                               <td>
-                                <label>{{paymentDetails.purchase_inv_date | date:'dd-MM-yyyy'}}</label>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <label>Vendor Name : </label>
-                              </td>
-                              <td>
-                                <label>{{paymentDetails.vendor.vendor_fullname}}</label>
-                              </td>
-                              <td>
-                                <label>Vendor Address : </label>
-                              </td>
-                              <td>
-                                <label>{{paymentDetails.vendor_address.address}}</label>
+                                <label>{{paymentDetails.pur_inv_no.date | date:'dd-MM-yyyy'}}</label>
                               </td>
                             </tr>
                             <tr>
@@ -218,27 +204,35 @@
                                 <label>{{paymentDetails.po_order_no}}</label>
                               </td>
                               <td>
+                                <label>Vendor Name : </label>
+                              </td>
+                              <td>
+                                <label>{{paymentDetails.vendor_name}}</label>
+                              </td>
+                            </tr>
+                            <tr>
+
+                              <td>
                                 <label>Payment Mode : </label>
                               </td>
                               <td>
                                 <label>{{paymentDetails.payment_mode}}</label>
                               </td>
-                            </tr>
-                            <tr>
                               <td>
                                 <label>Payment Refrence : </label>
                               </td>
                               <td>
                                 <label>{{paymentDetails.payment_refrence}}</label>
                               </td>
+                            </tr>
+                            <tr>
+
                               <td>
                                 <label>Indent Raised By :</label>
                               </td>
                               <td>
                                 <label>{{paymentDetails.created_by.first_name}}</label>
                               </td>
-                            </tr>
-                            <tr>
                               <td>
                                 <label>Special Note :</label>
                               </td>
@@ -246,6 +240,7 @@
                                 <label>{{paymentDetails.special_note}}</label>
                               </td>
                             </tr>
+
                           </tbody>
                         </table>
                       </div>

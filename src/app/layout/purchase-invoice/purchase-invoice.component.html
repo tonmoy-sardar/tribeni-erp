@@ -55,9 +55,10 @@
               <tr *ngFor="let pInvoice of purchaseInvoiceList ; let i = index">
                 <th scope="row">{{itemNo + i + 1}}</th>
                 <td>{{pInvoice.company.company_name}}</td>
-                <td>{{pInvoice.pur_invoice_map[0].purchase_inv_no}}</td>
-                <td>{{pInvoice.grn_number[0].grn_no}}</td>
-                <td>{{pInvoice.po_order_no[0].purchase_order_no}}</td>
+                <td>{{pInvoice.project_name}}</td>
+                <td>{{pInvoice.purchase_inv_no}}</td>
+                <td>{{pInvoice.grn_number}}</td>
+                <td>{{pInvoice.po_order_no}}</td>
                 <td>{{pInvoice.grn.created_at | date:'dd-MM-yyyy'}}</td>
                 <td>{{pInvoice.grn.created_by.first_name}}</td>
                 <!-- <td>
