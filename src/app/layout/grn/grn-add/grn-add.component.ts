@@ -22,7 +22,6 @@ export class GrnAddComponent implements OnInit {
   material_details_list: any[] = [];
   purchase_order_details: any;
   previous_grn_list: any[] = [];
-  total_rest_quantity: number = 0;
   help_heading = "";
   help_description = "";
   loading: LoadingState = LoadingState.NotReady;
@@ -38,7 +37,6 @@ export class GrnAddComponent implements OnInit {
   ngOnInit() {
     this.form = this.formBuilder.group({
       po_order: ['', Validators.required],
-      company_project: ['', Validators.required],
       company: ['', Validators.required],
       vendor: ['', Validators.required],
       vendor_address: ['', Validators.required],
@@ -63,47 +61,21 @@ export class GrnAddComponent implements OnInit {
   getPrevGrnList(id) {
     this.grnService.getPrevGrnList(id).subscribe(res => {
       this.previous_grn_list = res;
-      var sum = 0
-      this.previous_grn_list.forEach(x => {
-        sum += Math.round(x.grn_detail[0].receive_quantity)
-      })
-      this.total_rest_quantity = Math.round(this.purchase_order_details.purchase_order_detail[0].order_quantity) - sum
-      // console.log(this.total_rest_quantity)
-      // console.log(res)
-    })
-  }
-
-  getPurchaseOrderList() {
-    this.purchaseOrdersService.getPurchaseOrderListWithoutPagination().subscribe(res => {
-      this.purchaseOrderList = res;
-      this.loading = LoadingState.Ready;
-    },
-    error => {
-      this.loading = LoadingState.Ready;
-      this.toastr.error('Something went wrong', '', {
-        timeOut: 3000,
-      });
-    })
-  }
-
-  purchaseOrderChange(id) {
-    this.loading = LoadingState.Processing;
-    const grn_detail_control = <FormArray>this.form.controls['grn_detail'];
-    if (id) {
-      this.clearFormArray(grn_detail_control)
-      this.purchase_order_details = '';
-      this.material_details_list = [];
-      this.visible_key = false;
-      this.purchaseOrdersService.getPurchaseOrderDetails(id).subscribe(res => {
-        this.purchase_order_details = res;
-
-        console.log(this.purchase_order_details)
-        this.getPrevGrnList(id)
+      if (this.previous_grn_list.length > 0) {
         this.purchase_order_details.purchase_order_detail.forEach(x => {
+          var sum = 0;
+          this.previous_grn_list.forEach(y => {
+            var obj = y.grn_detail.filter(z => z.material.id == x.material.id && z.material.material_type_id == x.material.material_type_id)
+            if (obj.length > 0) {
+              sum += Math.round(obj[0]['receive_quantity'])
+            }
+          })
           var Mdtl = {
             material: x.material.id,
             uom: x.uom,
             order_quantity: x.order_quantity,
+            rest_quantity: x.order_quantity - sum,
+            margin: x.material.margin,
             receive_quantity: ''
           }
           this.material_details_list.push(Mdtl)
@@ -116,7 +88,69 @@ export class GrnAddComponent implements OnInit {
         })
         this.visible_key = true;
         this.loading = LoadingState.Ready;
+      }
+      else {
+        this.purchase_order_details.purchase_order_detail.forEach(x => {
+          var Mdtl = {
+            material: x.material.id,
+            uom: x.uom,
+            order_quantity: x.order_quantity,
+            rest_quantity: x.order_quantity,
+            margin: x.material.margin,
+            receive_quantity: ''
+          }
+          this.material_details_list.push(Mdtl)
+        })
+        this.form.patchValue({
+          po_order: this.purchase_order_details.id,
+          company: this.purchase_order_details.company.id,
+          vendor: this.purchase_order_details.vendor.id,
+          vendor_address: this.purchase_order_details.vendor_address.id,
+        })
+        this.visible_key = true;
+        this.loading = LoadingState.Ready;
+      }
+    },
+      error => {
+        this.loading = LoadingState.Ready;
+        this.toastr.error('Something went wrong', '', {
+          timeOut: 3000,
+        });
       })
+  }
+
+  getPurchaseOrderList() {
+    this.purchaseOrdersService.getPurchaseOrderListWithoutPagination().subscribe(res => {
+      this.purchaseOrderList = res;
+      this.loading = LoadingState.Ready;
+    },
+      error => {
+        this.loading = LoadingState.Ready;
+        this.toastr.error('Something went wrong', '', {
+          timeOut: 3000,
+        });
+      })
+  }
+
+  purchaseOrderChange(id) {
+    this.loading = LoadingState.Processing;
+    const grn_detail_control = <FormArray>this.form.controls['grn_detail'];
+    if (id) {
+      this.clearFormArray(grn_detail_control)
+      this.purchase_order_details = '';
+      this.material_details_list = [];
+      this.visible_key = false;
+      this.purchaseOrdersService.getPurchaseOrderDetails(id).subscribe(res => {
+        this.purchase_order_details = res;
+        console.log(this.purchase_order_details)
+        this.getPrevGrnList(id);
+      },
+        error => {
+          this.loading = LoadingState.Ready;
+          this.toastr.error('Something went wrong', '', {
+            timeOut: 3000,
+          });
+        })
     }
     else {
       this.clearFormArray(grn_detail_control);
@@ -135,7 +169,6 @@ export class GrnAddComponent implements OnInit {
   // gnr deatils
   create_grn_detail(mat) {
     return this.formBuilder.group({
-      company_project: [mat.company_project.id, Validators.required],
       material: [mat.material.id, Validators.required],
       uom: [mat.uom, Validators.required],
       receive_quantity: ['', Validators.required],
@@ -162,15 +195,18 @@ export class GrnAddComponent implements OnInit {
     }
   }
 
-  GnrQuantity(receive_quantity, i){
-    if (Math.round(receive_quantity) > Math.round(this.total_rest_quantity)) {
-      this.material_details_list[i].receive_quantity = Math.round(this.total_rest_quantity)
-      this.toastr.error('Quantity should not be more than PO quantity', '', {
+  GnrQuantity(receive_quantity, i) {
+    var rest_qtn = Math.round(this.material_details_list[i].rest_quantity)
+    var margn = Math.round(this.material_details_list[i].margin)
+    var expected_qtn = Math.round(rest_qtn + (rest_qtn * margn / 100))
+    if (Math.round(receive_quantity) > expected_qtn) {
+      this.material_details_list[i].receive_quantity = expected_qtn
+      this.toastr.error('Quantity should not be more than Rest quantity', '', {
         timeOut: 3000,
       });
     }
   }
-  addGrn(){
+  addGrn() {
     if (this.form.value.grn_detail.length == 0) {
       this.toastr.error('Check atleast one item from list of item/s', '', {
         timeOut: 3000,
@@ -179,35 +215,67 @@ export class GrnAddComponent implements OnInit {
     }
     const grn_detail_control = <FormArray>this.form.controls['grn_detail'];
     this.material_details_list.forEach(x => {
-      if(x.receive_quantity == ""){
-        this.toastr.error('GRN quantity is required in every selected row ', '', {
-          timeOut: 3000,
-        });
-        return;
-      }      
       var Mindex = this.form.value.grn_detail.findIndex(p => p.material == x.material)
       if (Mindex > -1) {
+        var obj = this.material_details_list.filter(k => k.material == x.material);
+        if (obj[0].receive_quantity == "") {
+          this.toastr.error('GRN quantity is required in every selected row ', '', {
+            timeOut: 3000,
+          });
+          return;
+        }
         grn_detail_control.at(Mindex).patchValue({
           material: x.material,
           order_quantity: x.order_quantity,
-          receive_quantity: x.receive_quantity,
-          company_project: x.company_project
+          receive_quantity: x.receive_quantity
         });
       }
     })
+
     if (this.form.valid) {
-      if(Math.round(this.form.value.grn_detail[0].receive_quantity) == this.total_rest_quantity){
-        this.orderFinalize()
-      }
+      var prv_tkn_qtn = 0;
+      var grn_qtn = 0;
+      var po_qtn = 0;
+      var mrng_qtn = 0;
+      this.form.value.grn_detail.forEach(g => {
+        console.log(g)
+
+        // grn_qtn += Math.round(g.receive_quantity)
+      })
+      // this.purchase_order_details.purchase_order_detail.forEach(o => {
+      //   po_qtn += Math.round(o.order_quantity)
+      // })
+      // this.previous_grn_list.forEach(p => {
+      //   p.grn_detail.forEach(k => {
+      //     prv_tkn_qtn += Math.round(k.receive_quantity)
+      //   })
+      // })
+      this.material_details_list.forEach(m => {
+        console.log(m)
+        if (m.rest_quantity > 0) {
+          var obj = this.form.value.grn_detail.filter(k => k.material == m.material)
+          console.log(obj)
+        }
+
+        // mrng_qtn += Math.round((m.margin * m.rest_quantity / 100))
+      })
+      // console.log("min"+(po_qtn - mrng_qtn))
+      // console.log("max"+(po_qtn + mrng_qtn))
+      // console.log("Qtn"+(prv_tkn_qtn + grn_qtn))
+
+      // if ((po_qtn - mrng_qtn) <= (prv_tkn_qtn + grn_qtn) && (po_qtn + mrng_qtn) >= (prv_tkn_qtn + grn_qtn)) {
+      //   // this.orderFinalize()
+      //   console.log("kkk")
+      // }
+      console.log(this.form.value)
       this.loading = LoadingState.Processing;
-      var challanDate = new Date(this.form.value.challan_date.year,this.form.value.challan_date.month-1,this.form.value.challan_date.day)
+      var challanDate = new Date(this.form.value.challan_date.year, this.form.value.challan_date.month - 1, this.form.value.challan_date.day)
       this.form.patchValue({
         challan_date: challanDate.toISOString()
       })
       // console.log(this.form.value)
       this.grnService.addNewGrn(this.form.value).subscribe(
         response => {
-          // console.log(response)
           this.toastr.success('GNR added successfully', '', {
             timeOut: 3000,
           });
@@ -222,11 +290,11 @@ export class GrnAddComponent implements OnInit {
         }
       );
     } else {
-      this.markFormGroupTouched(this.form)      
+      this.markFormGroupTouched(this.form)
     }
   }
 
-  orderFinalize(){
+  orderFinalize() {
     let d;
     d = {
       id: this.purchase_order_details.id,

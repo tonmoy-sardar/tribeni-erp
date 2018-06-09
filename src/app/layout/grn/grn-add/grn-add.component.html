@@ -53,7 +53,7 @@
                                                 <tbody>
                                                     <tr>
                                                         <td>{{purchase_order_details.company.company_name}}</td>
-                                                        <td>{{purchase_order_details.company.company_name}}</td>
+                                                        <td>{{purchase_order_details.requisition.project_name}}</td>
                                                         <td>{{purchase_order_details.created_at | date:'dd-MM-yyyy'}}</td>
                                                         <td>{{purchase_order_details.vendor.vendor_fullname}}</td>
                                                         <td>{{purchase_order_details.vendor_address.address}}</td>
@@ -66,31 +66,35 @@
                                 <div class="card bg-light mb-3" *ngIf="visible_key && previous_grn_list.length > 0">
                                     <div class="card-header">Previous GRN</div>
                                     <div class="card-body">
-                                        <div class="row">
-                                            <table class="card-body table table-sm ">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Material Group</th>
-                                                        <th>Material</th>
-                                                        <th>PO. Qty.</th>
-                                                        <th>Qty. Taken</th>
-                                                        <th>Qty. Rest</th>
-                                                        <th>UOM</th>
-                                                        <th>Recieved At</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr *ngFor="let grn of previous_grn_list">
-                                                        <td>{{grn.grn_detail[0].material.material_fullname}}</td>
-                                                        <td>{{grn.grn_detail[0].material.material_fullname}} ( {{grn.grn_detail[0].material.material_code}} )</td>
-                                                        <td>{{grn.grn_detail[0].order_quantity}}</td>
-                                                        <td>{{grn.grn_detail[0].receive_quantity}}</td>
-                                                        <td>{{total_rest_quantity}}</td>
-                                                        <td>{{grn.grn_detail[0].uom.name}}</td>
-                                                        <td>{{grn.created_at | date:'dd-MM-yyyy'}}</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                        <div class="card bg-light mb-3" *ngFor="let prevGrn of previous_grn_list">
+                                            <div class="card-header">GRN No ({{prevGrn.grn_no}})</div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <table class="card-body table table-sm ">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Material Group</th>
+                                                                <th>Material</th>
+                                                                <th>PO. Qty.</th>
+                                                                <th>Qty. Taken</th>
+                                                                <th>UOM</th>
+                                                                <th>Recieved At</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr *ngFor="let grn of prevGrn.grn_detail">
+                                                                <td>{{grn.material.material_type.material_type}}</td>
+                                                                <td>{{grn.material.material_fullname}} ( {{grn.material.material_code}}
+                                                                    )</td>
+                                                                <td>{{grn.order_quantity}}</td>
+                                                                <td>{{grn.receive_quantity}}</td>
+                                                                <td></td>
+                                                                <td>{{prevGrn.created_at | date:'dd-MM-yyyy'}}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -105,6 +109,8 @@
                                                         <th>Material Group</th>
                                                         <th>Material</th>
                                                         <th>Po. Quantity</th>
+                                                        <th>Rest Quantity</th>
+                                                        <th>Margin(%)</th>
                                                         <th>UOM</th>
                                                         <th>GRN Quantity</th>
                                                     </tr>
@@ -112,7 +118,7 @@
                                                 <tbody>
                                                     <tr *ngFor="let mat of purchase_order_details.purchase_order_detail; let k = index">
                                                         <td>
-                                                            <div class="checkbox">
+                                                            <div class="checkbox" *ngIf="material_details_list[k].rest_quantity > 0">
                                                                 <label>
                                                                     <input type="checkbox" (change)="matCheck($event, mat)">
                                                                 </label>
@@ -121,10 +127,12 @@
                                                         <th>{{mat.material.material_type.material_type}}</th>
                                                         <td>{{mat.material.material_fullname}} ({{mat.material.material_code}})</td>
                                                         <td>{{mat.order_quantity}}</td>
+                                                        <td><span *ngIf="material_details_list[k].rest_quantity > 0">{{material_details_list[k].rest_quantity}}</span><span *ngIf="material_details_list[k].rest_quantity <= 0">0</span></td>
+                                                        <td>{{material_details_list[k].margin}}</td>
                                                         <td>{{mat.uom.name}}</td>
-                                                        <td>
+                                                        <td width="200">
                                                             <input appOnlyNumber type="text" class="form-control" placeholder="GRN Quantity" [(ngModel)]="material_details_list[k].receive_quantity"
-                                                                [ngModelOptions]="{standalone: true}" (keyup)="GnrQuantity(material_details_list[k].receive_quantity, k)">
+                                                                [ngModelOptions]="{standalone: true}" (keyup)="GnrQuantity(material_details_list[k].receive_quantity, k)" *ngIf="material_details_list[k].rest_quantity > 0">
                                                         </td>
                                                     </tr>
                                                 </tbody>

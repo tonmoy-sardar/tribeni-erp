@@ -139,6 +139,7 @@ export class GrnComponent implements OnInit {
       (data: any[]) => {
         this.totalGrnList = data['count'];
         this.grnList = data['results'];
+        console.log(this.grnList)
         this.itemNo = (this.defaultPagination - 1) * this.itemPerPage;
         this.lower_count = this.itemNo + 1;
         if(this.totalGrnList > this.itemPerPage*this.defaultPagination){
@@ -156,40 +157,7 @@ export class GrnComponent implements OnInit {
         });
       }
     );
-  }
-
-  changeStatus(value, id) {
-    this.loading = LoadingState.Processing;
-    let grn;
-    if (value != "") {
-      if (value == 0) {
-        grn = {
-          id: id,
-          status: false
-        };
-      }
-      else if (value == 1) {
-        grn = {
-          id: id,
-          status: true
-        };
-      }
-      this.grnService.activeInactiveGrn(grn).subscribe(
-        response => {
-          this.toastr.success('Status changed successfully', '', {
-            timeOut: 3000,
-          });
-          this.getGrnList();
-        },
-        error => {
-          this.loading = LoadingState.Ready;
-          this.toastr.error('Something went wrong', '', {
-            timeOut: 3000,
-          });
-        }
-      );
-    }
-  }
+  }  
 
   changeApproveStatus(value, id) {    
     if (value > 0) {
