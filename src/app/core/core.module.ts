@@ -48,11 +48,9 @@ import { GrnReverseService } from './services/grn-reverse.service';
 import { GstRatesService } from './services/gst-rates.service';
 import { MaterialService } from './services/material.service';
 import { PaymentService } from './services/payment.service';
-import { PurchaseGroupService } from './services/purchase-group.service';
 import { PurchaseInvoiceService } from './services/purchase-invoice.service';
 import { PurchaseRequisitionService } from './services/purchase-requisition.service';
 import { PurchaseOrdersService } from './services/purchase-orders.service';
-import { PurchaseOrganizationService } from './services/purchase-organization.service';
 import { SaleGroupService } from './services/sale-group.service';
 import { SaleOrganizationService } from './services/sale-organization.service';
 import { StatesService } from './services/states.service';
@@ -167,11 +165,9 @@ export class CoreModule {
         GstRatesService,
         MaterialService,
         PaymentService,
-        PurchaseGroupService,
         PurchaseInvoiceService,
         PurchaseRequisitionService,
         PurchaseOrdersService,
-        PurchaseOrganizationService,
         SaleGroupService,
         SaleOrganizationService,
         StatesService,
