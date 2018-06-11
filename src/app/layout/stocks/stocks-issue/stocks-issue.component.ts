@@ -39,6 +39,7 @@ export class StocksIssueComponent implements OnInit {
       note: ['', Validators.required],
       from_project: ['', Validators.required],
       to_project: ['', Validators.required],
+      type: ['', Validators.required],
       contractor: ['', Validators.required]
     });
     this.getStockDetails(this.route.snapshot.params['id']);
@@ -67,24 +68,24 @@ export class StocksIssueComponent implements OnInit {
       this.visible_key = true;
       this.loading = LoadingState.Ready;
     },
-    error => {
-      this.loading = LoadingState.Ready;
-      this.toastr.error('Something went wrong', '', {
-        timeOut: 3000,
-      });
-    })
+      error => {
+        this.loading = LoadingState.Ready;
+        this.toastr.error('Something went wrong', '', {
+          timeOut: 3000,
+        });
+      })
   }
 
   getStockDetails(id) {
     this.stocksService.getStockDetails(id).subscribe(
       (data: any[]) => {
         this.stockDetails = data;
-        this.getCompanyProject(this.stockDetails.company.id)        
+        this.getCompanyProject(this.stockDetails.company.id)
         // console.log(this.stockDetails)
         this.form.patchValue({
           stock: this.stockDetails.id,
           from_project: this.stockDetails.company_project.id
-        })        
+        })
       },
       error => {
         this.loading = LoadingState.Ready;
@@ -111,7 +112,7 @@ export class StocksIssueComponent implements OnInit {
     }
   }
 
-  stockIssue() {    
+  stockIssue() {
     if (this.form.valid) {
       this.loading = LoadingState.Processing;
       this.stocksService.addNewStockIssue(this.form.value).subscribe(res => {
