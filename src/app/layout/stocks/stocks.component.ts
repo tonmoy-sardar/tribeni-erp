@@ -47,10 +47,15 @@ export class StocksComponent implements OnInit {
         name: "Project",
         code: "company_project__project_name",
         sort_type:''
-      },      
+      },     
       {  
         name: "Material",
         code: "material__material_fullname",
+        sort_type:''
+      },
+      {  
+        name: "Material Group",
+        code: "material_type__material_type",
         sort_type:''
       },
       {  

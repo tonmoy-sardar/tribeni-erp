@@ -50,8 +50,9 @@
                 <th scope="row">{{itemNo + i +1}}</th>
                 <td>{{stock.company.company_name}}</td>
                 <td>{{stock.company_project.project_name}}</td>
-                <td>{{stock.material.material_fullname}}</td>
-                <td>{{stock.quantity}}</td>
+                <td>{{stock.material.material_fullname}}({{stock.material.material_code}})</td>
+                <td>{{stock.material_type.material_type}}</td>
+                <td>{{stock.quantity}}({{stock.material_uom}})</td>
                 <td>
                   <a href="javascript:void(0);" class="anchor-action" title="Issue" name="Issue" [routerLink]="['/stocks/issue', stock.id]">
                     <i class="fa fa-random"></i>
