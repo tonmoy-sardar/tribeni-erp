@@ -42,7 +42,6 @@
                     <i class="fa fa-chevron-down inactive-color" [ngClass]="{'active-color':headerTh.sort_type=='desc'}"></i>
                   </span>
                 </th>
-                <th>UOM</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -50,12 +49,9 @@
               <tr *ngFor="let stock of stockList ; let i = index">
                 <th scope="row">{{itemNo + i +1}}</th>
                 <td>{{stock.company.company_name}}</td>
-                <td>{{stock.branch.branch_name}}</td>
-                <td>{{stock.storage_location.storage_address}}</td>
-                <td>{{stock.storage_bin.bin_no}}</td>
+                <td>{{stock.company_project.project_name}}</td>
                 <td>{{stock.material.material_fullname}}</td>
                 <td>{{stock.quantity}}</td>
-                <td>PSC</td>
                 <td>
                   <a href="javascript:void(0);" class="anchor-action" title="Issue" name="Issue" [routerLink]="['/stocks/issue', stock.id]">
                     <i class="fa fa-random"></i>

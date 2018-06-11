@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { HelpService } from '../../core/services/help.service';
 import * as Globals from '../../core/globals';
 import { LoadingState } from '../../core/component/loading/loading.component';
+import { forEach } from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'app-grn',
@@ -24,16 +25,10 @@ export class GrnComponent implements OnInit {
   upper_count: number;
   paginationMaxSize: number;
   itemPerPage: number;
-  stock = {
-    grn: '',
-    company: '',
-    material: '',
-    rate: '',
-    quantity: ''
-  }
+  stock: any = []
 
   sort_by = '';
-  sort_type= '';
+  sort_type = '';
   headerThOption = [];
   loading: LoadingState = LoadingState.NotReady;
   constructor(
@@ -47,47 +42,47 @@ export class GrnComponent implements OnInit {
   ngOnInit() {
 
     this.headerThOption = [
-      {  
+      {
         name: "GRN. No.",
         code: "grn_no",
-        sort_type:'',
-        has_tooltip:false,
-        tooltip_msg:''
+        sort_type: '',
+        has_tooltip: false,
+        tooltip_msg: ''
       },
-      {  
+      {
         name: "PO. No.",
         code: "po_order__purchase_order_no",
-        sort_type:'',
-        has_tooltip:true,
-        tooltip_msg:'Purchase Order Number'
+        sort_type: '',
+        has_tooltip: true,
+        tooltip_msg: 'Purchase Order Number'
       },
-      {  
+      {
         name: "Company",
         code: "company__company_name",
-        sort_type:'',
-        has_tooltip:false,
-        tooltip_msg:''
+        sort_type: '',
+        has_tooltip: false,
+        tooltip_msg: ''
       },
-      {  
+      {
         name: "Vendor",
         code: "vendor__vendor_fullname",
-        sort_type:'',
-        has_tooltip:false,
-        tooltip_msg:''
+        sort_type: '',
+        has_tooltip: false,
+        tooltip_msg: ''
       },
-      {  
+      {
         name: "Vendor Address",
         code: "vendor_address__address",
-        sort_type:'',
-        has_tooltip:false,
-        tooltip_msg:''
+        sort_type: '',
+        has_tooltip: false,
+        tooltip_msg: ''
       },
-      {  
+      {
         name: "GRN Raised Date",
         code: "created_at",
-        sort_type:'',
-        has_tooltip:false,
-        tooltip_msg:''
+        sort_type: '',
+        has_tooltip: false,
+        tooltip_msg: ''
       },
     ];
 
@@ -107,7 +102,7 @@ export class GrnComponent implements OnInit {
   }
 
   btnClickNav(toNav) {
-    this.router.navigateByUrl('/'+toNav);
+    this.router.navigateByUrl('/' + toNav);
   };
 
   dataSearch() {
@@ -116,33 +111,30 @@ export class GrnComponent implements OnInit {
     this.getGrnList();
   }
 
-  getGrnList(){
+  getGrnList() {
     let params: URLSearchParams = new URLSearchParams();
     params.set('page', this.defaultPagination.toString());
-    if(this.search_key !='')
-    {
+    if (this.search_key != '') {
       params.set('search', this.search_key.toString());
     }
-    if(this.sort_by !='')
-    {
+    if (this.sort_by != '') {
       params.set('field_name', this.sort_by.toString());
     }
 
-    if(this.sort_type !='')
-    {
+    if (this.sort_type != '') {
       params.set('order_by', this.sort_type.toString());
     }
     this.grnService.getGrnList(params).subscribe(
       (data: any[]) => {
         this.totalGrnList = data['count'];
         this.grnList = data['results'];
-        console.log(this.grnList)
+        // console.log(this.grnList)
         this.itemNo = (this.defaultPagination - 1) * this.itemPerPage;
         this.lower_count = this.itemNo + 1;
-        if(this.totalGrnList > this.itemPerPage*this.defaultPagination){
-          this.upper_count = this.itemPerPage*this.defaultPagination
+        if (this.totalGrnList > this.itemPerPage * this.defaultPagination) {
+          this.upper_count = this.itemPerPage * this.defaultPagination
         }
-        else{
+        else {
           this.upper_count = this.totalGrnList
         }
         this.loading = LoadingState.Ready;
@@ -154,9 +146,9 @@ export class GrnComponent implements OnInit {
         });
       }
     );
-  }  
+  }
 
-  changeApproveStatus(value, id) {    
+  changeApproveStatus(value, id) {
     if (value > 0) {
 
       this.loading = LoadingState.Processing;
@@ -165,18 +157,17 @@ export class GrnComponent implements OnInit {
         id: id,
         is_approve: value
       };
-
       this.grnService.approveDisapproveGrn(grn).subscribe(
         response => {
-          if(value == 1){
+          if (value == 1) {
             this.addNewStock(id)
           }
-          else{
+          else {
             this.toastr.success('GRN dis-approved successfully', '', {
               timeOut: 3000,
             });
             this.getGrnList();
-          }          
+          }
         },
         error => {
           this.loading = LoadingState.Ready;
@@ -189,31 +180,47 @@ export class GrnComponent implements OnInit {
 
   }
 
-  addNewStock(id){
+  addNewStock(id) {
     this.grnService.getGrnDetails(id).subscribe(res => {
-      this.stock = {
-        grn: res.id,
-        company: res.company.id,
-        material: res.grn_detail[0].material.id,
-        rate: res.po_order.purchase_order_detail[0].rate,
-        quantity: res.grn_detail[0].receive_quantity
-      }
-      this.stocksService.addNewStock(this.stock).subscribe(
-        response => {
-          this.loading = LoadingState.Ready;
+      res.grn_detail.forEach(x => {
+        var obj = res.po_order.purchase_order_detail.filter(k => k.material.id == x.material.id && k.material.material_type_id == x.material.material_type_id)
+        var d = {
+          grn: res.id,
+          company: res.company.id,
+          company_project: res.project.id,
+          material: x.material.id,
+          material_type: x.material.material_type_id,
+          rate: obj[0].rate,
+          quantity: x.receive_quantity
+        }
+        this.stock.push(d)
+      })
+      var i = 0;
+      this.stock.forEach(s => {
+        i++;
+        this.insertStock(s, i);
+      })
+    })
+  }
+
+  insertStock(d, i) {
+    this.stocksService.addNewStock(d).subscribe(
+      response => {
+        this.loading = LoadingState.Ready;
+        if (i == this.stock.length) {
           this.toastr.success('GRN approved successfully', '', {
             timeOut: 3000,
           });
           this.getGrnList();
-        },
-        error => {
-          this.loading = LoadingState.Ready;
-          this.toastr.error('Something went wrong', '', {
-            timeOut: 3000,
-          });
         }
-      );
-    })
+      },
+      error => {
+        this.loading = LoadingState.Ready;
+        this.toastr.error('Something went wrong', '', {
+          timeOut: 3000,
+        });
+      }
+    );
   }
 
   pagination() {
@@ -221,23 +228,19 @@ export class GrnComponent implements OnInit {
     this.getGrnList();
   };
 
-  sortTable(value)
-  {
+  sortTable(value) {
     let type = '';
     this.headerThOption.forEach(function (optionValue) {
-      if(optionValue.code == value)
-      {
-        if(optionValue.sort_type =='desc')
-        {
+      if (optionValue.code == value) {
+        if (optionValue.sort_type == 'desc') {
           type = 'asc';
         }
-        else
-        {
+        else {
           type = 'desc';
         }
         optionValue.sort_type = type;
       }
-      else{
+      else {
         optionValue.sort_type = '';
       }
     });

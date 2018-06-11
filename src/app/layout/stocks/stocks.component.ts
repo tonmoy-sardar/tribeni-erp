@@ -44,20 +44,10 @@ export class StocksComponent implements OnInit {
         sort_type:''
       },
       {  
-        name: "Branch",
-        code: "branch__branch_name",
+        name: "Project",
+        code: "company_project__project_name",
         sort_type:''
-      },
-      {  
-        name: "Storage Location",
-        code: "storage_location__storage_address",
-        sort_type:''
-      },
-      {  
-        name: "Storage Bin",
-        code: "storage_bin__bin_no",
-        sort_type:''
-      },
+      },      
       {  
         name: "Material",
         code: "material__material_fullname",

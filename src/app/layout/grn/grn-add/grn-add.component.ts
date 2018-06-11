@@ -142,7 +142,7 @@ export class GrnAddComponent implements OnInit {
       this.visible_key = false;
       this.purchaseOrdersService.getPurchaseOrderDetails(id).subscribe(res => {
         this.purchase_order_details = res;
-        console.log(this.purchase_order_details)
+        // console.log(this.purchase_order_details)
         this.getPrevGrnList(id);
       },
         error => {
@@ -233,41 +233,25 @@ export class GrnAddComponent implements OnInit {
     })
 
     if (this.form.valid) {
-      var prv_tkn_qtn = 0;
-      var grn_qtn = 0;
-      var po_qtn = 0;
-      var mrng_qtn = 0;
-      this.form.value.grn_detail.forEach(g => {
-        console.log(g)
-
-        // grn_qtn += Math.round(g.receive_quantity)
-      })
-      // this.purchase_order_details.purchase_order_detail.forEach(o => {
-      //   po_qtn += Math.round(o.order_quantity)
-      // })
-      // this.previous_grn_list.forEach(p => {
-      //   p.grn_detail.forEach(k => {
-      //     prv_tkn_qtn += Math.round(k.receive_quantity)
-      //   })
-      // })
+      var i = 0;
       this.material_details_list.forEach(m => {
-        console.log(m)
-        if (m.rest_quantity > 0) {
-          var obj = this.form.value.grn_detail.filter(k => k.material == m.material)
-          console.log(obj)
+        if (m.rest_quantity <= 0) {
+          i++;
         }
-
-        // mrng_qtn += Math.round((m.margin * m.rest_quantity / 100))
+        else {
+          var mgn = Math.round((m.rest_quantity * m.margin) / 100);
+          var min = Math.round(m.rest_quantity) - mgn;
+          var max = Math.round(m.rest_quantity) + mgn;
+          var obj = this.form.value.grn_detail.filter(k => k.material == m.material)
+          if (obj.length > 0 && min <= obj[0].receive_quantity && max >= obj[0].receive_quantity) {
+            i++;
+          }
+        }
       })
-      // console.log("min"+(po_qtn - mrng_qtn))
-      // console.log("max"+(po_qtn + mrng_qtn))
-      // console.log("Qtn"+(prv_tkn_qtn + grn_qtn))
-
-      // if ((po_qtn - mrng_qtn) <= (prv_tkn_qtn + grn_qtn) && (po_qtn + mrng_qtn) >= (prv_tkn_qtn + grn_qtn)) {
-      //   // this.orderFinalize()
-      //   console.log("kkk")
-      // }
-      console.log(this.form.value)
+      if (this.material_details_list.length == i) {
+        this.orderFinalize();
+      }
+      // console.log(this.form.value)
       this.loading = LoadingState.Processing;
       var challanDate = new Date(this.form.value.challan_date.year, this.form.value.challan_date.month - 1, this.form.value.challan_date.day)
       this.form.patchValue({
