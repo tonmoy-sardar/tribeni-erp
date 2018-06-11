@@ -25,6 +25,7 @@ export class ProjectDetailsComponent implements OnInit {
   company_project;
   help_heading = "";
   help_description = "";
+  visible_key: boolean;
   constructor(
     private companyService: CompanyService,
     private statesService: StatesService,
@@ -54,6 +55,7 @@ export class ProjectDetailsComponent implements OnInit {
       (data: any[]) => {
         this.company_project = data;
         console.log(this.company_project);
+        this.visible_key = true;
         this.loading = LoadingState.Ready;
       },
       error => {
