@@ -26,9 +26,7 @@
                       <thead>
                         <tr>
                           <th>Company</th>
-                          <th>Plant</th>
-                          <th>Storage</th>
-                          <th>Bin</th>
+                          <th>Project</th>                          
                           <th>Item</th>
                           <th>Available Quantity</th>
                           <th *ngIf="getAvlChek(this.stockDetails.quantity)">Issuing Quantity</th>
@@ -37,9 +35,7 @@
                       <tbody>
                         <tr>
                           <td>{{stockDetails.company.company_name}}</td>
-                          <td>{{stockDetails.branch.branch_name}}</td>
-                          <td>{{stockDetails.storage_location.storage_address}}</td>
-                          <td>{{stockDetails.storage_bin.bin_no}}</td>
+                          <td>{{stockDetails.company_project.project_name}}</td>
                           <td>{{stockDetails.material.material_fullname}}</td>
                           <td>{{stockDetails.quantity}}</td>
                           <td width="150px" *ngIf="getAvlChek(this.stockDetails.quantity)">
