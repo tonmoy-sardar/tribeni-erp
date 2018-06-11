@@ -80,11 +80,11 @@ export class StocksIssueComponent implements OnInit {
     this.stocksService.getStockDetails(id).subscribe(
       (data: any[]) => {
         this.stockDetails = data;
-        this.getCompanyProject(this.stockDetails.company.id)
         // console.log(this.stockDetails)
+        this.getCompanyProject(this.stockDetails.company_details.id)        
         this.form.patchValue({
           stock: this.stockDetails.id,
-          from_project: this.stockDetails.company_project.id
+          from_project: this.stockDetails.company_project_details.id
         })
       },
       error => {

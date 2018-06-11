@@ -30,20 +30,20 @@
                           <th>Item</th>
                           <th>Available Quantity</th>
                           <th>To Project</th>
-                          <th>Type</th>
+                          <th>Transfer Type</th>
                           <th>Contractor</th>
-                          <th *ngIf="getAvlChek(this.stockDetails.quantity)">Issuing Quantity</th>
+                          <th *ngIf="getAvlChek(this.stockDetails.avl_qty)">Issuing Quantity</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr>
-                          <td>{{stockDetails.company.company_name}}</td>
-                          <td>{{stockDetails.company_project.project_name}}</td>
-                          <td>{{stockDetails.material.material_fullname}}</td>
-                          <td>{{stockDetails.quantity}}</td>
+                          <td>{{stockDetails.company_details.name}}</td>
+                          <td>{{stockDetails.company_project_details.project_name}}</td>
+                          <td>{{stockDetails.material_details.material_fullname}}({{stockDetails.material_details.material_code}})</td>
+                          <td>{{stockDetails.avl_qty}}</td>
                           <td>
                             <div class="form-group">
-                              <select class="form-control" name="to_project" formControlName="to_project" [ngClass]="displayFieldCss('to_project')" [(ngModel)]="stockDetails.company_project.id">
+                              <select class="form-control" name="to_project" formControlName="to_project" [ngClass]="displayFieldCss('to_project')" [(ngModel)]="stockDetails.company_project_details.id">
                                 <option value="">Select Project</option>
                                 <option value="{{project.id}}" *ngFor="let project of project_list">{{project.project_name}}</option>
                               </select>
@@ -55,13 +55,13 @@
                           <td>
                             <div class="form-group">
                               <select class="form-control" name="type" formControlName="type" [ngClass]="displayFieldCss('type')">
-                                <option value="">Select type</option>
-                                <option value="Free">Free</option>
+                                <option value="">Select Transfer Type</option>
+                                <option value="Freeable">Freeable</option>
                                 <option value="Refundable">Refundable</option>
                                 <option value="Chargeable">Chargeable</option>
                               </select>
                               <div class="invalid-feedback" *ngIf="isFieldValid('type')">
-                                Please select type
+                                Please select transfer type
                               </div>
                             </div>
                           </td>
@@ -76,7 +76,7 @@
                               </div>
                             </div>
                           </td>
-                          <td width="150px" *ngIf="getAvlChek(this.stockDetails.quantity)">
+                          <td width="150px" *ngIf="getAvlChek(this.stockDetails.avl_qty)">
                             <div class="form-group">
                               <input appOnlyNumber type="text" class="form-control" name="quantity" formControlName="quantity" [ngClass]="displayFieldCss('quantity')"
                                 (keyup)="getValueCheck($event.target.value)">
@@ -90,7 +90,7 @@
                     </table>
                   </div>
                 </div>
-                <div class="row" *ngIf="getAvlChek(this.stockDetails.quantity)">
+                <div class="row" *ngIf="getAvlChek(this.stockDetails.avl_qty)">
                   <div class="form-group col-md-12">
                     <label>Purpose notes</label>
                     <textarea cols="5" class="form-control" placeholder="Purpose notes" name="note" formControlName="note" [ngClass]="displayFieldCss('note')"></textarea>
