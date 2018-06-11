@@ -51,14 +51,21 @@
                         </div>
                       </div>
                       <div class="form-group col-md-3">
-                        <label>Payment By Company.</label>
+                        <label>By Company</label>
                         <ng-select class="form-control" placeholder="Select Company" [clearable]="false" name="company" [(ngModel)]="company">
                           <ng-option [value]="''">Select Company</ng-option>
                           <ng-option *ngFor="let company of company_list" [value]="company.id">{{company.company_name}}</ng-option>
                         </ng-select>
                       </div>
                       <div class="form-group col-md-3">
-                        <label>Payment By Vendor</label>
+                        <label>By Project</label>
+                        <ng-select class="form-control" placeholder="Select Project" [clearable]="false" name="project" [(ngModel)]="project">
+                          <ng-option [value]="''">Select Project</ng-option>
+                          <ng-option *ngFor="let project of project_list" [value]="project.id">{{project.project_name}}</ng-option>
+                        </ng-select>
+                      </div>
+                      <div class="form-group col-md-3">
+                        <label>By Vendor</label>
                         <ng-select class="form-control" placeholder="Select Vendor" [clearable]="false" name="vendor" [(ngModel)]="vendor">
                           <ng-option [value]="''">Select Vendor</ng-option>
                           <ng-option *ngFor="let vendor of vendor_list" [value]="vendor.id">{{vendor.vendor_fullname}}</ng-option>

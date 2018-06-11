@@ -20,7 +20,7 @@
                             <div class="card-header" style="background-color:#868e96; color: #fff;">Material Add</div>
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-3">
                                         <label>Material Type</label>
                                         <select class="form-control" formControlName="material_type" [ngClass]="displayFieldCss('material_type')">
                                             <option value="">Select Material Type</option>
@@ -30,18 +30,26 @@
                                             Please select material Type
                                         </div>
                                     </div>
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-3">
                                         <label>Material Name</label>
                                         <input class="form-control" formControlName="material_fullname" [ngClass]="displayFieldCss('material_fullname')" placeholder="Material Name">
                                         <div class="invalid-feedback" *ngIf="form.controls['material_fullname'].hasError('required')">
                                             Please enter material name
                                         </div>
                                     </div>
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-3">
                                         <label>Material Code</label>
                                         <input class="form-control" formControlName="material_code" [ngClass]="displayFieldCss('material_code')" placeholder="Material Code">
                                         <div class="invalid-feedback" *ngIf="form.controls['material_code'].hasError('required')">
-                                            Please enter material cose
+                                            Please enter material code
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label>Material Margin (%)</label>
+                                        <input class="form-control" formControlName="margin" [ngClass]="displayFieldCss('margin')" placeholder="Material Margin">
+                                        <div class="invalid-feedback" *ngIf="form.controls['margin'].hasError('required')">
+                                            Please enter material margin
                                         </div>
                                     </div>
 
@@ -63,26 +71,14 @@
                                                 </div>
                                                 <div class="form-group col-md-4">
                                                     <label>Unit Per UOM</label>
-                                                    <input class="form-control" type="text" appOnlyNumber formControlName="unit_per_uom" placeholder="Unit Per UOM" [ngClass]="{
-                                                    'is-invalid': material_uoms.get('unit_per_uom').invalid && (material_uoms.get('unit_per_uom').dirty || material_uoms.get('unit_per_uom').touched),
-                                                    'is-valid': material_uoms.get('unit_per_uom').valid && (material_uoms.get('unit_per_uom').dirty || material_uoms.get('unit_per_uom').touched)
-                                                  }">
-                                                    <div class="invalid-feedback" *ngIf="material_uoms.get('unit_per_uom').hasError('required')">
-                                                        Please enter unit per UOM
-                                                    </div>
+                                                    <input class="form-control" type="text" appOnlyNumber formControlName="unit_per_uom" placeholder="Unit Per UOM" >
                                                 </div>
                                                 <div class="form-group col-md-4">
                                                     <label>Unit of Measurement</label>
-                                                    <select class="form-control" formControlName="unit_uom" [ngClass]="{
-                                                    'is-invalid': material_uoms.get('unit_uom').invalid && (material_uoms.get('unit_uom').dirty || material_uoms.get('unit_uom').touched),
-                                                    'is-valid': material_uoms.get('unit_uom').valid && (material_uoms.get('unit_uom').dirty || material_uoms.get('unit_uom').touched)
-                                                  }">
+                                                    <select class="form-control" formControlName="unit_uom" >
                                                         <option value="">Select UOM</option>
                                                         <option *ngFor="let uom of UOMList;" value="{{uom.id}}">{{uom.name}}</option>
                                                     </select>
-                                                    <div class="invalid-feedback" *ngIf="material_uoms.get('unit_uom').hasError('required')">
-                                                        Please enter select UOM
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

@@ -46,6 +46,8 @@
                     <i class="fa fa-chevron-down inactive-color" [ngClass]="{'active-color':headerTh.sort_type=='desc'}"></i>
                   </span>
                 </th>
+                <th>Code</th>
+                <th>Margin (%)</th>
                 <th>UOM
                   <small> (Purchase)</small>
                 </th>
@@ -66,9 +68,11 @@
                 <th scope="row">{{i+1}}</th>
                 <td>{{material.material_type.material_type}}</td>
                 <td>{{material.material_fullname}}</td>
-                <td>{{material.material_uom[0].base_uom.name}}  <span *ngIf="material.material_uom[0]['unit_per_uom']">- {{material.material_uom[0]['unit_per_uom']}}</span> <span *ngIf="material.material_uom[0].unit_uom.name">{{material.material_uom[0].unit_uom.name}}</span></td>
+                <td>{{material.material_code}}</td>
+                <td>{{material.margin}}</td>
+                <td>{{material.material_uom[0].base_uom.name}}  <span *ngIf="material.material_uom[0]['unit_per_uom']">- {{material.material_uom[0]['unit_per_uom']}}</span> <span *ngIf="material.material_uom[0].unit_uom">{{material.material_uom[0].unit_uom.name}}</span></td>
                 <td>
-                  <span *ngIf="material.is_sales==true">{{material.material_uom[1].base_uom.name}} <span *ngIf="material.material_uom[1]['unit_per_uom']">- {{material.material_uom[1]['unit_per_uom']}}</span> <span *ngIf="material.material_uom[1].unit_uom.name">{{material.material_uom[1].unit_uom.name}}</span></span>
+                  <span *ngIf="material.is_sales==true">{{material.material_uom[1].base_uom.name}} <span *ngIf="material.material_uom[1]['unit_per_uom']">- {{material.material_uom[1]['unit_per_uom']}}</span> <span *ngIf="material.material_uom[1].unit_uom">{{material.material_uom[1].unit_uom.name}}</span></span>
                 </td>
                 <td>
                   <span *ngIf="material.is_taxable==true">{{material.material_tax[0]['igst']}} - {{material.material_tax[0]['cgst']}} - {{material.material_tax[0]['sgst']}}

@@ -42,6 +42,7 @@ export class MaterialEditComponent implements OnInit {
       material_type: [null, Validators.required],
       material_code: [null, Validators.required],
       material_fullname: [null, Validators.required],
+      margin:[null, Validators.required],
       description: [null, Validators.required],
       material_uom: this.formBuilder.array([this.createmMaterialUom(1)]),
       is_sales: [false],
@@ -96,11 +97,12 @@ export class MaterialEditComponent implements OnInit {
   }
 
   createmMaterialUom(for_id) {
-    return this.formBuilder.group({
+    return this.formBuilder.group({ 
+      id: null,
       material_for: for_id,
       base_uom: ['', Validators.required],
-      unit_per_uom: ['', Validators.required],
-      unit_uom: ['', Validators.required]
+      unit_per_uom: [null],
+      unit_uom: ['']
     });
   }
 
@@ -154,6 +156,7 @@ export class MaterialEditComponent implements OnInit {
 
   createmMaterialTax(for_id) {
     return this.formBuilder.group({
+      id: null,
       tax_for: for_id,
       igst: ['', Validators.required],
       cgst: ['', Validators.required],
@@ -180,6 +183,7 @@ export class MaterialEditComponent implements OnInit {
 
   showHideMaterialTax(val) {
     var mat_tax = {
+      id: null,
       tax_for: '',
       igst: '',
       cgst: '',
@@ -191,6 +195,7 @@ export class MaterialEditComponent implements OnInit {
       this.addMateriaTax(1);
       if (this.form.value.is_sales == true) {
         var mat_tax2 = {
+          id: null,
           tax_for: '',
           igst: '',
           cgst: '',

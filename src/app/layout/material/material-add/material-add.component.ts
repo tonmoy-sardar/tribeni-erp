@@ -40,6 +40,7 @@ export class MaterialAddComponent implements OnInit {
       material_type: ['', Validators.required],
       material_code: [null, Validators.required],
       material_fullname: [null, Validators.required],
+      margin:[null, Validators.required],
       description: [null, Validators.required],
       material_uom: this.formBuilder.array([this.createmMaterialUom(1)]),
       is_sales: [false],
@@ -69,8 +70,8 @@ export class MaterialAddComponent implements OnInit {
     return this.formBuilder.group({
       material_for: for_id,
       base_uom: ['', Validators.required],
-      unit_per_uom: ['', Validators.required],
-      unit_uom: ['', Validators.required]
+      unit_per_uom: [null],
+      unit_uom: ['']
     });
   }
 

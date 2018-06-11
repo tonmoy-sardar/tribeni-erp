@@ -24,6 +24,7 @@ export class ReportsGrnComponent implements OnInit {
   grn_list: any[] = [];
   company_list: any[] = [];
   vendor_list: any[] = [];
+  project_list: any[] = [];
   defaultPagination: number;
   SearchGrnList: any[] = [];
   material_details_list: any[] = [];
@@ -37,6 +38,7 @@ export class ReportsGrnComponent implements OnInit {
   grnDetails: any;
   grn_details_key: boolean;
   company: number;
+  project: number;
   vendor: number;
   status = '';
   approve = '';
@@ -62,6 +64,7 @@ export class ReportsGrnComponent implements OnInit {
     this.itemPerPage = Globals.itemPerPage;
     this.getGrnList();
     this.getCompanyList();
+    this.getCompanyProjectList();
     this.getVendorList();
     this.getHelp();
   }
@@ -139,6 +142,12 @@ export class ReportsGrnComponent implements OnInit {
     })
   }
 
+  getCompanyProjectList() {
+    this.companyService.getAllCompanyProjectDropdownList().subscribe(res => {
+      this.project_list = res;
+    })
+  }  
+
   getVendorList() {
     this.vendorService.getVendorListWithoutPagination().subscribe(res => {
       this.vendor_list = res;
@@ -164,6 +173,9 @@ export class ReportsGrnComponent implements OnInit {
     params.set('page', this.defaultPagination.toString());
     if (this.company > 0) {
       params.set('company', this.company.toString());
+    }
+    if (this.project > 0) {
+      params.set('project', this.project.toString());
     }
     if (this.status != "") {
       params.set('status', this.status.toString());
