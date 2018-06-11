@@ -34,12 +34,15 @@ export class StocksIssueComponent implements OnInit {
   ) { }
   ngOnInit() {
     this.form = this.formBuilder.group({
-      stock: ['', Validators.required],
+      stockview: ['', Validators.required],
+      material: ['', Validators.required],
+      material_type: ['', Validators.required],
       quantity: ['', Validators.required],
       note: ['', Validators.required],
       from_project: ['', Validators.required],
       to_project: ['', Validators.required],
-      type: ['', Validators.required],
+      transfer_type: ['', Validators.required],
+      issue_type: [''],
       contractor: ['', Validators.required]
     });
     this.getStockDetails(this.route.snapshot.params['id']);
@@ -81,9 +84,11 @@ export class StocksIssueComponent implements OnInit {
       (data: any[]) => {
         this.stockDetails = data;
         // console.log(this.stockDetails)
-        this.getCompanyProject(this.stockDetails.company_details.id)        
+        this.getCompanyProject(this.stockDetails.company_details.id)
         this.form.patchValue({
-          stock: this.stockDetails.id,
+          stockview: this.stockDetails.id,
+          material: this.stockDetails.material_details.id,
+          material_type: this.stockDetails.material_type.id,
           from_project: this.stockDetails.company_project_details.id
         })
       },
@@ -114,9 +119,23 @@ export class StocksIssueComponent implements OnInit {
 
   stockIssue() {
     if (this.form.valid) {
+      if (this.form.value.from_project == this.form.value.to_project) {
+        this.form.patchValue({
+          issue_type: 2
+        })
+      }
+      else {
+        this.form.patchValue({
+          issue_type: 1
+        })
+      }
       this.loading = LoadingState.Processing;
       this.stocksService.addNewStockIssue(this.form.value).subscribe(res => {
-        this.stockUpdate();
+        this.toastr.success('Stock issued successfully', '', {
+          timeOut: 3000,
+        });
+        this.loading = LoadingState.Ready;
+        this.router.navigateByUrl('/stocks/issue-history/' + this.route.snapshot.params['id']);
       },
         error => {
           this.loading = LoadingState.Ready;
@@ -131,31 +150,6 @@ export class StocksIssueComponent implements OnInit {
         control.markAsTouched({ onlySelf: true });
       });
     }
-  }
-
-  stockUpdate() {
-    let stock;
-
-    stock = {
-      id: this.stockDetails.id,
-      quantity: Math.round(this.stockDetails.quantity) - Math.round(this.form.value.quantity)
-    };
-    // console.log(stock)
-    this.stocksService.updateStock(stock).subscribe(
-      response => {
-        this.toastr.success('Stock issued successfully', '', {
-          timeOut: 3000,
-        });
-        this.loading = LoadingState.Ready;
-        this.router.navigateByUrl('/stocks/issue-history/' + this.route.snapshot.params['id']);
-      },
-      error => {
-        this.loading = LoadingState.Ready;
-        this.toastr.error('Something went wrong', '', {
-          timeOut: 3000,
-        });
-      }
-    );
   }
 
   btnClickNav(toNav) {

@@ -54,13 +54,13 @@
                           </td>
                           <td>
                             <div class="form-group">
-                              <select class="form-control" name="type" formControlName="type" [ngClass]="displayFieldCss('type')">
+                              <select class="form-control" name="transfer_type" formControlName="transfer_type" [ngClass]="displayFieldCss('transfer_type')">
                                 <option value="">Select Transfer Type</option>
-                                <option value="Freeable">Freeable</option>
-                                <option value="Refundable">Refundable</option>
-                                <option value="Chargeable">Chargeable</option>
+                                <option value="3">Freeable</option>                                
+                                <option value="2">Chargeable</option>
+                                <option value="1">Refundable</option>
                               </select>
-                              <div class="invalid-feedback" *ngIf="isFieldValid('type')">
+                              <div class="invalid-feedback" *ngIf="isFieldValid('transfer_type')">
                                 Please select transfer type
                               </div>
                             </div>
