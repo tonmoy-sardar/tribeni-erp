@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StocksService } from '../../../core/services/stocks.service';
+import { CompanyService } from '../../../core/services/company.service';
+import { ContractorsService } from '../../../core/services/contractors.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { HelpService } from '../../../core/services/help.service';
@@ -17,6 +19,8 @@ export class StocksIssueComponent implements OnInit {
   visible_key: boolean;
   help_heading = "";
   help_description = "";
+  project_list: any = [];
+  contractor_list: any = [];
   loading: LoadingState = LoadingState.NotReady;
   constructor(
     private stocksService: StocksService,
@@ -24,16 +28,22 @@ export class StocksIssueComponent implements OnInit {
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
-    private helpService: HelpService
+    private helpService: HelpService,
+    private companyService: CompanyService,
+    private contractorsService: ContractorsService
   ) { }
   ngOnInit() {
     this.form = this.formBuilder.group({
       stock: ['', Validators.required],
       quantity: ['', Validators.required],
       note: ['', Validators.required],
+      from_project: ['', Validators.required],
+      to_project: ['', Validators.required],
+      contractor: ['', Validators.required]
     });
     this.getStockDetails(this.route.snapshot.params['id']);
     this.getHelp();
+    this.getContractors();
   }
 
   getHelp() {
@@ -43,13 +53,38 @@ export class StocksIssueComponent implements OnInit {
     })
   }
 
+  getContractors() {
+    this.contractorsService.getContractorListWithoutPagination().subscribe(res => {
+      // console.log(res)
+      this.contractor_list = res;
+    })
+  }
+
+  getCompanyProject(id) {
+    this.companyService.getCompanyProjectDropdownList(id).subscribe(res => {
+      // console.log(res);
+      this.project_list = res;
+      this.visible_key = true;
+      this.loading = LoadingState.Ready;
+    },
+    error => {
+      this.loading = LoadingState.Ready;
+      this.toastr.error('Something went wrong', '', {
+        timeOut: 3000,
+      });
+    })
+  }
+
   getStockDetails(id) {
     this.stocksService.getStockDetails(id).subscribe(
       (data: any[]) => {
         this.stockDetails = data;
-        this.visible_key = true;
+        this.getCompanyProject(this.stockDetails.company.id)        
         // console.log(this.stockDetails)
-        this.loading = LoadingState.Ready;
+        this.form.patchValue({
+          stock: this.stockDetails.id,
+          from_project: this.stockDetails.company_project.id
+        })        
       },
       error => {
         this.loading = LoadingState.Ready;
@@ -76,10 +111,7 @@ export class StocksIssueComponent implements OnInit {
     }
   }
 
-  stockIssue() {
-    this.form.patchValue({
-      stock: this.stockDetails.id
-    })
+  stockIssue() {    
     if (this.form.valid) {
       this.loading = LoadingState.Processing;
       this.stocksService.addNewStockIssue(this.form.value).subscribe(res => {
@@ -134,13 +166,13 @@ export class StocksIssueComponent implements OnInit {
   }
 
   isFieldValid(field: string) {
-    return !this.form.get(field).valid && this.form.get(field).touched;
+    return !this.form.get(field).valid && (this.form.get(field).dirty || this.form.get(field).touched);
   }
 
   displayFieldCss(field: string) {
     return {
-      'is-invalid': !this.form.get(field).valid && this.form.get(field).touched,
-      'is-valid': this.form.get(field).valid
+      'is-invalid': this.form.get(field).invalid && (this.form.get(field).dirty || this.form.get(field).touched),
+      'is-valid': this.form.get(field).valid && (this.form.get(field).dirty || this.form.get(field).touched)
     };
   }
 

@@ -26,9 +26,11 @@
                       <thead>
                         <tr>
                           <th>Company</th>
-                          <th>Project</th>                          
+                          <th>From Project</th>
                           <th>Item</th>
                           <th>Available Quantity</th>
+                          <th>To Project</th>
+                          <th>Contractor</th>                          
                           <th *ngIf="getAvlChek(this.stockDetails.quantity)">Issuing Quantity</th>
                         </tr>
                       </thead>
@@ -38,11 +40,33 @@
                           <td>{{stockDetails.company_project.project_name}}</td>
                           <td>{{stockDetails.material.material_fullname}}</td>
                           <td>{{stockDetails.quantity}}</td>
+                          <td>
+                            <div class="form-group">
+                              <select class="form-control" name="to_project" formControlName="to_project" [ngClass]="displayFieldCss('to_project')" [(ngModel)]="stockDetails.company_project.id">
+                                <option value="">Select Project</option>
+                                <option value="{{project.id}}" *ngFor="let project of project_list">{{project.project_name}}</option>
+                              </select>
+                              <div class="invalid-feedback" *ngIf="isFieldValid('to_project')">
+                                Please select project
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="form-group">
+                              <select class="form-control" name="contractor" formControlName="contractor" [ngClass]="displayFieldCss('contractor')">
+                                <option value="">Select Contractor</option>
+                                <option value="{{contractor.id}}" *ngFor="let contractor of contractor_list">{{contractor.contractor_name}}</option>
+                              </select>
+                              <div class="invalid-feedback" *ngIf="isFieldValid('contractor')">
+                                Please select contractor
+                              </div>
+                            </div>
+                          </td>                          
                           <td width="150px" *ngIf="getAvlChek(this.stockDetails.quantity)">
                             <div class="form-group">
                               <input appOnlyNumber type="text" class="form-control" name="quantity" formControlName="quantity" [ngClass]="displayFieldCss('quantity')"
                                 (keyup)="getValueCheck($event.target.value)">
-                              <div class="invalid-feedback" *ngIf="form.controls['quantity'].hasError('required')">
+                              <div class="invalid-feedback" *ngIf="isFieldValid('quantity')">
                                 Please enter quantity
                               </div>
                             </div>
