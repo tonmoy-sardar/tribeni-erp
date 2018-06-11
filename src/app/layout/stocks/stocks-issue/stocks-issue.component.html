@@ -30,7 +30,8 @@
                           <th>Item</th>
                           <th>Available Quantity</th>
                           <th>To Project</th>
-                          <th>Contractor</th>                          
+                          <th>Type</th>
+                          <th>Contractor</th>
                           <th *ngIf="getAvlChek(this.stockDetails.quantity)">Issuing Quantity</th>
                         </tr>
                       </thead>
@@ -53,6 +54,19 @@
                           </td>
                           <td>
                             <div class="form-group">
+                              <select class="form-control" name="type" formControlName="type" [ngClass]="displayFieldCss('type')">
+                                <option value="">Select type</option>
+                                <option value="Free">Free</option>
+                                <option value="Refundable">Refundable</option>
+                                <option value="Chargeable">Chargeable</option>
+                              </select>
+                              <div class="invalid-feedback" *ngIf="isFieldValid('type')">
+                                Please select type
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="form-group">
                               <select class="form-control" name="contractor" formControlName="contractor" [ngClass]="displayFieldCss('contractor')">
                                 <option value="">Select Contractor</option>
                                 <option value="{{contractor.id}}" *ngFor="let contractor of contractor_list">{{contractor.contractor_name}}</option>
@@ -61,7 +75,7 @@
                                 Please select contractor
                               </div>
                             </div>
-                          </td>                          
+                          </td>
                           <td width="150px" *ngIf="getAvlChek(this.stockDetails.quantity)">
                             <div class="form-group">
                               <input appOnlyNumber type="text" class="form-control" name="quantity" formControlName="quantity" [ngClass]="displayFieldCss('quantity')"
