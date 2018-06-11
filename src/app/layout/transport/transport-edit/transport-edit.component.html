@@ -60,16 +60,6 @@
                     </div>
                   </div>
                   <div class="form-group col-md-3">
-                    <label>Storage</label>
-                    <select class="form-control" name="storage" [(ngModel)]="transport.storage" formControlName="storage" [ngClass]="displayFieldCss('storage')">
-                      <option value="">Select storage</option>
-                      <option value="{{store.id}}" *ngFor="let store of storageList">{{store.storage_address}}</option>
-                    </select>
-                    <div class="invalid-feedback" *ngIf="form.controls['storage'].hasError('required')">
-                      Please select storage
-                    </div>
-                  </div>
-                  <div class="form-group col-md-2">
                     <label>State</label>
                     <select class="form-control" name="state" [(ngModel)]="transport.state" formControlName="state" [ngClass]="displayFieldCss('state')">
                       <option value="">Select State</option>
@@ -101,7 +91,9 @@
                     <label>GSTIN</label>
                     <input class="form-control" [(ngModel)]="transport.gstin" name="gstin" placeholder="GSTIN" formControlName="gstin">
                   </div>
-                  <div class="form-group col-md-12" style="text-align: right">
+                  <div class="form-group col-md-2">
+                    <label>&nbsp;&nbsp;&nbsp;</label>
+                    <div class="clearfix"></div>
                     <button type="submit" class="btn btn-primary" (click)="updateTransport()">Submit</button>
                     <button type="reset" class="btn btn-secondary" (click)="reSet()">Reset</button>
                   </div>

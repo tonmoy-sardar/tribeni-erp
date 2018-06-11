@@ -17,7 +17,6 @@ import { LoadingState } from '../../../core/component/loading/loading.component'
 export class TransportAddComponent implements OnInit {
   form: FormGroup;
   companyList = [];
-  storageList = [];
   stateList = [];
   help_heading = "";
   help_description = "";
@@ -44,7 +43,6 @@ export class TransportAddComponent implements OnInit {
         Validators.maxLength(12)
       ]),
       company: new FormControl('', Validators.required),
-      storage: new FormControl('', Validators.required),
       state: new FormControl('', Validators.required),
       city: new FormControl('', Validators.required),
       pin: new FormControl('', Validators.required),
@@ -77,18 +75,8 @@ export class TransportAddComponent implements OnInit {
     }
     );
   };
-  getCompanyStorageDropdownList(id) {
-    this.companyService.getCompanyStorageDropdownList(id).subscribe(
-      (data: any[]) => {
-        this.storageList = data;
-      }
-    );
-  };
-  companyChange(id) {
-    if (id) {
-      this.getCompanyStorageDropdownList(id)
-    }
-  }
+  
+ 
   getCompanyList() {
     this.companyService.getCompanyDropdownList().subscribe(
       (data: any[]) => {
