@@ -75,7 +75,7 @@ export class StocksIssueHistoryComponent implements OnInit {
         this.upper_count = this.totalStockIssueList
       }
       this.loading = LoadingState.Ready;
-      // console.log(this.stockIssueList)
+      console.log(this.stockIssueList)
     },
     error => {
       this.loading = LoadingState.Ready;
