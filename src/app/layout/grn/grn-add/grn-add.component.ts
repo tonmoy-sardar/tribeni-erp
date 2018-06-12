@@ -61,55 +61,25 @@ export class GrnAddComponent implements OnInit {
   getPrevGrnList(id) {
     this.grnService.getPrevGrnList(id).subscribe(res => {
       this.previous_grn_list = res;
-      if (this.previous_grn_list.length > 0) {
-        this.purchase_order_details.purchase_order_detail.forEach(x => {
-          var sum = 0;
-          this.previous_grn_list.forEach(y => {
-            var obj = y.grn_detail.filter(z => z.material.id == x.material.id && z.material.material_type_id == x.material.material_type_id)
-            if (obj.length > 0) {
-              sum += Math.round(obj[0]['receive_quantity'])
-            }
-          })
-          var Mdtl = {
-            material: x.material.id,
-            uom: x.uom,
-            order_quantity: x.order_quantity,
-            rest_quantity: x.order_quantity - sum,
-            margin: x.material.margin,
-            receive_quantity: ''
-          }
-          this.material_details_list.push(Mdtl)
-        })
-        this.form.patchValue({
-          po_order: this.purchase_order_details.id,
-          company: this.purchase_order_details.company.id,
-          vendor: this.purchase_order_details.vendor.id,
-          vendor_address: this.purchase_order_details.vendor_address.id,
-        })
-        this.visible_key = true;
-        this.loading = LoadingState.Ready;
-      }
-      else {
-        this.purchase_order_details.purchase_order_detail.forEach(x => {
-          var Mdtl = {
-            material: x.material.id,
-            uom: x.uom,
-            order_quantity: x.order_quantity,
-            rest_quantity: x.order_quantity,
-            margin: x.material.margin,
-            receive_quantity: ''
-          }
-          this.material_details_list.push(Mdtl)
-        })
-        this.form.patchValue({
-          po_order: this.purchase_order_details.id,
-          company: this.purchase_order_details.company.id,
-          vendor: this.purchase_order_details.vendor.id,
-          vendor_address: this.purchase_order_details.vendor_address.id,
-        })
-        this.visible_key = true;
-        this.loading = LoadingState.Ready;
-      }
+      this.purchase_order_details.purchase_order_detail.forEach(x => {
+        var Mdtl = {
+          material: x.material.id,
+          uom: x.uom,
+          order_quantity: x.order_quantity,
+          rest_quantity: x.avail_qty,
+          margin: x.material.margin,
+          receive_quantity: ''
+        }
+        this.material_details_list.push(Mdtl)
+      })
+      this.form.patchValue({
+        po_order: this.purchase_order_details.id,
+        company: this.purchase_order_details.company.id,
+        vendor: this.purchase_order_details.vendor.id,
+        vendor_address: this.purchase_order_details.vendor_address.id,
+      })
+      this.visible_key = true;
+      this.loading = LoadingState.Ready;
     },
       error => {
         this.loading = LoadingState.Ready;
@@ -286,7 +256,7 @@ export class GrnAddComponent implements OnInit {
     };
     this.purchaseOrdersService.finalizePurchaseOrder(d).subscribe(
       response => {
-        console.log(response)
+        // console.log(response)
       },
       error => {
         this.loading = LoadingState.Ready;
@@ -322,5 +292,14 @@ export class GrnAddComponent implements OnInit {
       'is-invalid': this.form.get(field).invalid && (this.form.get(field).dirty || this.form.get(field).touched),
       'is-valid': this.form.get(field).valid && (this.form.get(field).dirty || this.form.get(field).touched)
     };
+  }
+
+  getAvailQty(val) {
+    if (Math.round(val) > 0) {
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 }

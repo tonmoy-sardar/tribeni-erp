@@ -88,60 +88,32 @@ export class PurchaseOrdersAddComponent implements OnInit {
       this.previous_purchase_list = res;
       // console.log(this.previous_purchase_list)
       const order_freight_control = <FormArray>this.form.controls['purchase_order_freight'];
-      if (this.previous_purchase_list.length > 0) {
-        this.requisition_details.requisition_detail.forEach(x => {
-          var sum = 0;
-          this.previous_purchase_list.forEach(y => {
-            var obj = y.purchase_order_detail.filter(z => z.material.id == x.material.id && z.material.material_type_id == x.material.material_type_id)
-            if (obj.length > 0) {
-              sum += Math.round(obj[0]['order_quantity'])
-            }
-          })
-          var Mdtl = {
-            material: x.material.id,
-            taken_qtn: sum,
-            gst_amount: '',
-            order_quantity: '',
-            rate: '',
-            discount_percent: '',
-            delivery_date: '',
-            sub_total: ''
-          }
-          this.material_details_list.push(Mdtl)
-        })
-        this.form.patchValue({
-          company: this.requisition_details.company.id
-        })
-        if (this.requisition_details.requisition_detail.length > 0) {
-          order_freight_control.push(this.create_purchase_order_freight());
-          this.visible_key = true;
-          this.loading = LoadingState.Ready;
+      this.requisition_details.requisition_detail.forEach(x => {
+        // console.log(x)
+        var Mdtl = {
+          material: x.material.id,
+          gst_amount: '',
+          order_quantity: '',
+          rate: '',
+          discount_percent: '',
+          delivery_date: '',
+          sub_total: ''
         }
+        this.material_details_list.push(Mdtl)
+      })
+      this.form.patchValue({
+        company: this.requisition_details.company.id
+      })
+      if (this.requisition_details.requisition_detail.length > 0) {
+        order_freight_control.push(this.create_purchase_order_freight());
+        this.visible_key = true;
+        this.loading = LoadingState.Ready;
       }
-      else {
-        this.requisition_details.requisition_detail.forEach(x => {
-          console.log(x)
-          var Mdtl = {
-            material: x.material.id,
-            taken_qtn: 0,
-            gst_amount: '',
-            order_quantity: '',
-            rate: '',
-            discount_percent: '',
-            delivery_date: '',
-            sub_total: ''
-          }
-          this.material_details_list.push(Mdtl)
-        })
-        this.form.patchValue({
-          company: this.requisition_details.company.id
-        })
-        if (this.requisition_details.requisition_detail.length > 0) {
-          order_freight_control.push(this.create_purchase_order_freight());
-          this.visible_key = true;
-          this.loading = LoadingState.Ready;
-        }
-      }
+    }, error => {
+      this.loading = LoadingState.Ready;
+      this.toastr.error('Something went wrong', '', {
+        timeOut: 3000,
+      });
     })
   }
 
@@ -197,7 +169,7 @@ export class PurchaseOrdersAddComponent implements OnInit {
       this.purchaseRequisitionService.getPurchaseRequisitionDetails(id).subscribe(res => {
         this.requisition_details = res;
         this.getRequisitionPurchaseOrderList(id);
-        // console.log(this.requisition_details)        
+        // console.log(this.requisition_details)
       })
     }
     else {
@@ -267,7 +239,7 @@ export class PurchaseOrdersAddComponent implements OnInit {
     })
   }
   getSubTotal(quantity, rate, discount, i) {
-    var avl_qtn = Math.round(this.requisition_details.requisition_detail[i].quantity - this.material_details_list[i].taken_qtn)
+    var avl_qtn = Math.round(this.requisition_details.requisition_detail[i].avail_qty)
     if (Math.round(quantity) > avl_qtn) {
       this.material_details_list[i].order_quantity = avl_qtn
       this.toastr.error('Quantity should not be more than Rest Quantity', '', {
@@ -465,7 +437,7 @@ export class PurchaseOrdersAddComponent implements OnInit {
     };
     this.purchaseRequisitionService.finalizePurchaseRequisition(d).subscribe(
       response => {
-        console.log(response)
+        // console.log(response)
       },
       error => {
         this.loading = LoadingState.Ready;
@@ -496,6 +468,13 @@ export class PurchaseOrdersAddComponent implements OnInit {
     };
   }
 
-
+  getAvailQty(val) {
+    if (Math.round(val) > 0) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
 
 }

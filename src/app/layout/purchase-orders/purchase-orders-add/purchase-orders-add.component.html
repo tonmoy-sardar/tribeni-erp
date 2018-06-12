@@ -161,12 +161,12 @@
                                             <tbody>
                                                 <tr *ngFor="let mat of requisition_details.requisition_detail; let k = index">
                                                     <th scope="row" width="20px">
-                                                        <input type="checkbox" (change)="matCheck($event, mat)" *ngIf="(mat.quantity - material_details_list[k].taken_qtn) > 0">
+                                                        <input type="checkbox" (change)="matCheck($event, mat)" *ngIf="getAvailQty(mat.avail_qty)">
                                                     </th>
                                                     <td>{{mat.material.material_type.material_type}}</td>
                                                     <td>{{mat.material.material_fullname}}({{mat.material.material_code}})</td>
                                                     <td>{{mat.quantity}}</td>
-                                                    <td>{{mat.quantity - material_details_list[k].taken_qtn}}</td>
+                                                    <td>{{mat.avail_qty}}</td>
                                                     <td>{{mat.material_rate[0].rate}}</td>
                                                     <td>{{mat.uom.name}}</td>
                                                     <td>{{mat.material.material_tax[0].hsn}}</td>
@@ -176,23 +176,23 @@
                                                     <td width="80px">
                                                         <input appOnlyNumber type="text" class="form-control" name="order_quantity" [(ngModel)]="material_details_list[k].order_quantity"
                                                             (keyup)="getSubTotal(material_details_list[k].order_quantity,material_details_list[k].rate,material_details_list[k].discount_percent, k)"
-                                                            [ngModelOptions]="{standalone: true}" *ngIf="(mat.quantity - material_details_list[k].taken_qtn) > 0">
+                                                            [ngModelOptions]="{standalone: true}" *ngIf="getAvailQty(mat.avail_qty)">
                                                     </td>
                                                     <td width="80px">
                                                         <input appOnlyNumber type="text" class="form-control" name="rate" [(ngModel)]="material_details_list[k].rate" (keyup)="getSubTotal(material_details_list[k].order_quantity,material_details_list[k].rate,material_details_list[k].discount_percent, k)"
-                                                            [ngModelOptions]="{standalone: true}" *ngIf="(mat.quantity - material_details_list[k].taken_qtn) > 0">
+                                                            [ngModelOptions]="{standalone: true}" *ngIf="getAvailQty(mat.avail_qty)">
                                                     </td>
                                                     <td width="80px">
                                                         <input appOnlyNumber type="text" class="form-control" name="discount_percent" [(ngModel)]="material_details_list[k].discount_percent"
                                                             (keyup)="getSubTotal(material_details_list[k].order_quantity,material_details_list[k].rate,material_details_list[k].discount_percent, k)"
-                                                            [ngModelOptions]="{standalone: true}" *ngIf="(mat.quantity - material_details_list[k].taken_qtn) > 0">
+                                                            [ngModelOptions]="{standalone: true}" *ngIf="getAvailQty(mat.avail_qty)">
                                                     </td>
                                                     <td width="80px">
                                                         <input appOnlyNumber type="text" class="form-control" name="gst_amount" [(ngModel)]="material_details_list[k].gst_amount"
-                                                            [ngModelOptions]="{standalone: true}" readonly *ngIf="(mat.quantity - material_details_list[k].taken_qtn) > 0">
+                                                            [ngModelOptions]="{standalone: true}" readonly *ngIf="getAvailQty(mat.avail_qty)">
                                                     </td>
                                                     <td width="150px">
-                                                        <div class="input-group" *ngIf="(mat.quantity - material_details_list[k].taken_qtn) > 0">
+                                                        <div class="input-group" *ngIf="getAvailQty(mat.avail_qty)">
                                                             <input class="form-control" placeholder="yyyy-mm-dd" name="delivery_date" ngbDatepicker #i="ngbDatepicker" [(ngModel)]="material_details_list[k].delivery_date"
                                                                 [ngModelOptions]="{standalone: true}">
                                                             <div class="input-group-append">
@@ -204,7 +204,7 @@
                                                     </td>
                                                     <td width="80px">
                                                         <input appOnlyNumber type="text" class="form-control" name="sub_total" [(ngModel)]="material_details_list[k].sub_total" [ngModelOptions]="{standalone: true}"
-                                                            readonly *ngIf="(mat.quantity - material_details_list[k].taken_qtn) > 0">
+                                                            readonly *ngIf="getAvailQty(mat.avail_qty)">
                                                     </td>
                                                 </tr>
                                             </tbody>

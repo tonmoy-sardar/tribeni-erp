@@ -118,7 +118,7 @@
                                                 <tbody>
                                                     <tr *ngFor="let mat of purchase_order_details.purchase_order_detail; let k = index">
                                                         <td>
-                                                            <div class="checkbox" *ngIf="material_details_list[k].rest_quantity > 0">
+                                                            <div class="checkbox" *ngIf="getAvailQty(mat.avail_qty)">
                                                                 <label>
                                                                     <input type="checkbox" (change)="matCheck($event, mat)">
                                                                 </label>
@@ -127,12 +127,12 @@
                                                         <th>{{mat.material.material_type.material_type}}</th>
                                                         <td>{{mat.material.material_fullname}} ({{mat.material.material_code}})</td>
                                                         <td>{{mat.order_quantity}}</td>
-                                                        <td><span *ngIf="material_details_list[k].rest_quantity > 0">{{material_details_list[k].rest_quantity}}</span><span *ngIf="material_details_list[k].rest_quantity <= 0">0</span></td>
+                                                        <td>{{mat.avail_qty}}</td>
                                                         <td>{{material_details_list[k].margin}}</td>
                                                         <td>{{mat.uom.name}}</td>
                                                         <td width="200">
                                                             <input appOnlyNumber type="text" class="form-control" placeholder="GRN Quantity" [(ngModel)]="material_details_list[k].receive_quantity"
-                                                                [ngModelOptions]="{standalone: true}" (keyup)="GnrQuantity(material_details_list[k].receive_quantity, k)" *ngIf="material_details_list[k].rest_quantity > 0">
+                                                                [ngModelOptions]="{standalone: true}" (keyup)="GnrQuantity(material_details_list[k].receive_quantity, k)" *ngIf="getAvailQty(mat.avail_qty)">
                                                         </td>
                                                     </tr>
                                                 </tbody>
