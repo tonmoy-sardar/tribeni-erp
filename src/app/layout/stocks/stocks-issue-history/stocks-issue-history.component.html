@@ -41,8 +41,8 @@
                 <th>Date</th>
                 <th>From Project</th>
                 <th>To Project</th>
-                <th>Material</th>
                 <th>Material Type</th>
+                <th>Material</th>
                 <th>Transfer Type</th>
                 <th>Quantity</th>
                 <th>Note</th>
@@ -54,8 +54,8 @@
                 <td>{{issue.created_at | date:'dd-MM-yyyy'}}</td>
                 <td>{{issue.project_details.from_project_name}}</td>
                 <td>{{issue.project_details.to_project_name}}</td>
-                <td>{{issue.material.material_name}}({{issue.material.material_code}})</td>
                 <td>{{issue.material.material_type_name}}</td>
+                <td>{{issue.material.material_name}}({{issue.material.material_code}})</td>
                 <td>{{issue.material.transfer_type}}</td>
                 <td>{{issue.quantity}}({{issue.material.material_uom}})</td>
                 <td>{{issue.note}}</td>

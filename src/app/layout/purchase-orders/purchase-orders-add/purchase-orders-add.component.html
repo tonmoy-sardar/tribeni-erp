@@ -101,32 +101,35 @@
                                 <div class="card bg-light mb-3" *ngIf="visible_key && previous_purchase_list.length > 0">
                                     <div class="card-header">Previous Purchase Order</div>
                                     <div class="card-body">
-                                        <div class="card bg-light mb-3" *ngFor="let prevOrder of previous_purchase_list">
-                                            <div class="card-header">Purchase Order No ({{prevOrder.purchase_order_no}})</div>
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <table class="card-body table table-sm ">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Material</th>
-                                                                <th>PR. Qty.</th>
-                                                                <th>Qty. Taken</th>
-                                                                <th>UOM</th>
-                                                                <th>Average Rate</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr *ngFor="let prevOrderDetail of prevOrder.purchase_order_detail">
-                                                                <td>{{prevOrderDetail.material.material_code}}</td>
-                                                                <td>{{prevOrderDetail.requisition_quantity}}</td>
-                                                                <td>{{prevOrderDetail.order_quantity}}</td>
-                                                                <td>{{prevOrderDetail.uom.name}}</td>
-                                                                <td>{{prevOrderDetail.rate}}</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
+                                        <div class="card bg-light mb-3" *ngFor="let prevOrder of previous_purchase_list" >
+                                            <table class="card-body table table-sm " >
+                                                    <tbody>
+                                                        <tr>
+                                                            <td colspan="6">Purchase Order No ({{prevOrder.purchase_order_no}})</td>
+                                                        </tr>
+                                                    </tbody>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Material Group</td>
+                                                            <td>Material</td>
+                                                            <td>PR. Qty.</td>
+                                                            <td>Qty. Taken</td>
+                                                            <td>UOM</td>
+                                                            <td>Average Rate</td>
+                                                        </tr>
+                                                    </tbody>
+                                                    <tbody>
+                                                        <tr *ngFor="let prevOrderDetail of prevOrder.purchase_order_detail">
+                                                            <td>{{prevOrderDetail.material.material_type.material_type}}</td>
+                                                            <td>{{prevOrderDetail.material.material_fullname}} ({{prevOrderDetail.material.material_code}})</td>
+                                                            <td>{{prevOrderDetail.requisition_quantity}}</td>
+                                                            <td>{{prevOrderDetail.order_quantity}}</td>
+                                                            <td>{{prevOrderDetail.uom.name}}</td>
+                                                            <td>{{prevOrderDetail.rate}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                            </table>
+                                            
                                         </div>
                                     </div>
                                 </div>
