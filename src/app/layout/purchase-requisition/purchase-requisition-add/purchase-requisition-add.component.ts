@@ -180,27 +180,10 @@ export class PurchaseRequisitionAddComponent implements OnInit {
       var sum = 0;
       var spcf_qtn = 0;
       var d;
-      if (material_type != '' && material != '') {
-        if (this.prevPurchaseRequisition.length > 0) {
-
-          this.prevPurchaseRequisition.forEach(x => {
-            var obj = x.requisition_detail.filter(y => y.material.id == material && y.material.material_type_id == material_type)
-            obj.forEach(z => {
-              sum += Math.round(z.quantity)
-              spcf_qtn = z.project_material_quantity[0].quantity
-            })
-          })
-          d = { mat_id: material, spc_qtn: spcf_qtn, avl_qtn: spcf_qtn - sum, qtn: '' }
-          this.projectSpcQuantity.splice(i, 1, d);
-        }
-        else {
-          var obj = this.projectMaterialList.filter(x => x.material == material && x.materialtype == material_type)
-          if (obj != undefined) {
-            d = { mat_id: material, spc_qtn: obj[0].quantity, avl_qtn: obj[0].quantity, qtn: '' }
-            this.projectSpcQuantity.splice(i, 1, d);
-          }
-        }
-
+      var obj = this.projectMaterialList.filter(x => x.material.id == material && x.materialtype.id == material_type)
+      if (obj != undefined) {
+        d = { mat_id: material, spc_qtn: obj[0].quantity, avl_qtn: obj[0].avail_qty, qtn: '' }
+        this.projectSpcQuantity.splice(i, 1, d);
       }
     }
   }
@@ -265,7 +248,7 @@ export class PurchaseRequisitionAddComponent implements OnInit {
       })
       this.purchaseRequisitionService.addNewPurchaseRequisition(this.form.value).subscribe(
         response => {
-          this.toastr.success('Material added successfully', '', {
+          this.toastr.success('Purchase requisition added successfully', '', {
             timeOut: 3000,
           });
           this.loading = LoadingState.Ready;
