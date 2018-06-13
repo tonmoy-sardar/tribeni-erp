@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter  } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CompanyService } from '../../../core/services/company.service';
 import { StatesService } from '../../../core/services/states.service';
@@ -10,6 +10,8 @@ import { ToastrService } from 'ngx-toastr';
 import { HelpService } from '../../../core/services/help.service';
 import * as Globals from '../../../core/globals';
 import { LoadingState } from '../../../core/component/loading/loading.component';
+
+
 
 @Component({
   selector: 'app-project-add',
@@ -31,6 +33,11 @@ export class ProjectAddComponent implements OnInit {
   help_heading = "";
   help_description = "";
   loading: LoadingState = LoadingState.NotReady;
+
+
+  lat:number;
+  lng:number;
+
   constructor(
     private companyService: CompanyService,
     private statesService: StatesService,
@@ -41,7 +48,8 @@ export class ProjectAddComponent implements OnInit {
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
-    private helpService: HelpService
+    private helpService: HelpService,
+
   ) { }
 
   ngOnInit() {
@@ -92,6 +100,8 @@ export class ProjectAddComponent implements OnInit {
     this.getStateList();
     this.getHelp();
   }
+
+ 
 
   getHelp() {
     this.helpService.getHelp().subscribe(res => {
