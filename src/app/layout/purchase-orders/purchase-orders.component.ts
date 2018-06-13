@@ -17,7 +17,8 @@ export class PurchaseOrdersComponent implements OnInit {
   defaultPagination: number;
   totalPurchaseOrderList: number;
   search_key = '';
-  companyList = [];
+  companyList: any = [];
+  projectList: any = [];
   itemNo: number;
   help_heading = "";
   help_description = "";
@@ -25,7 +26,8 @@ export class PurchaseOrdersComponent implements OnInit {
   upper_count: number;
   paginationMaxSize: number;
   itemPerPage: number;
-
+  project_id: '';
+  company_id: '';
   sort_by = '';
   sort_type= '';
   headerThOption = [];
@@ -82,7 +84,8 @@ export class PurchaseOrdersComponent implements OnInit {
     this.paginationMaxSize = Globals.paginationMaxSize;
     this.itemPerPage = Globals.itemPerPage;
     this.getPurchaseOrderList();
-    this.getCompanyList()
+    this.getCompanyList();
+    this.getProjectList();
     this.getHelp();
   }
 
@@ -90,6 +93,18 @@ export class PurchaseOrdersComponent implements OnInit {
     this.helpService.getHelp().subscribe(res => {
       this.help_heading = res.data.purchaseOrder.heading;
       this.help_description = res.data.purchaseOrder.desc;
+    })
+  }
+
+  getCompanyList() {
+    this.companyService.getCompanyDropdownList().subscribe(data => {
+      this.companyList = data;
+    });
+  }
+
+  getProjectList() {
+    this.companyService.getAllCompanyProjectDropdownList().subscribe(res => {
+      this.projectList = res;
     })
   }
 
@@ -102,13 +117,7 @@ export class PurchaseOrdersComponent implements OnInit {
     this.defaultPagination = 1;
     this.getPurchaseOrderList();
   }
-  getCompanyList() {
-    this.companyService.getCompanyDropdownList().subscribe(
-      (data: any[]) => {
-        this.companyList = data;
-      }
-    );
-  };
+  
 
   getPurchaseOrderList() {
     let params: URLSearchParams = new URLSearchParams();
@@ -117,6 +126,15 @@ export class PurchaseOrdersComponent implements OnInit {
     {
       params.set('search', this.search_key.toString());
     }
+
+    if (this.company_id != undefined) {
+      params.set('company', this.company_id);
+    }
+
+    if (this.project_id != undefined) {
+      params.set('project', this.project_id);
+    }
+    
     if(this.sort_by !='')
     {
       params.set('field_name', this.sort_by.toString());
