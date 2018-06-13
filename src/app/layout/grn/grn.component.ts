@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { GrnService } from '../../core/services/grn.service';
 import { StocksService } from '../../core/services/stocks.service';
+import { CompanyService } from '../../core/services/company.service';
 import { ToastrService } from 'ngx-toastr';
 import { HelpService } from '../../core/services/help.service';
 import * as Globals from '../../core/globals';
@@ -14,7 +15,9 @@ import { forEach } from '@angular/router/src/utils/collection';
   styleUrls: ['./grn.component.scss']
 })
 export class GrnComponent implements OnInit {
-  grnList = []
+  grnList: any = [];
+  companyList: any = [];
+  projectList: any = [];
   defaultPagination: number;
   totalGrnList: number;
   search_key = '';
@@ -26,7 +29,8 @@ export class GrnComponent implements OnInit {
   paginationMaxSize: number;
   itemPerPage: number;
   stock: any = []
-
+  project_id: '';
+  company_id: '';
   sort_by = '';
   sort_type = '';
   headerThOption = [];
@@ -36,6 +40,7 @@ export class GrnComponent implements OnInit {
     private toastr: ToastrService,
     private grnService: GrnService,
     private stocksService: StocksService,
+    private companyService: CompanyService,
     private helpService: HelpService
   ) { }
 
@@ -92,6 +97,8 @@ export class GrnComponent implements OnInit {
     this.itemPerPage = Globals.itemPerPage;
     this.getGrnList();
     this.getHelp();
+    this.getCompanyList();
+    this.getProjectList();
   }
 
   getHelp() {
@@ -101,6 +108,17 @@ export class GrnComponent implements OnInit {
     })
   }
 
+  getCompanyList() {
+    this.companyService.getCompanyDropdownList().subscribe(data => {
+      this.companyList = data;
+    });
+  }
+
+  getProjectList() {
+    this.companyService.getAllCompanyProjectDropdownList().subscribe(res => {
+      this.projectList = res;
+    })
+  }
   btnClickNav(toNav) {
     this.router.navigateByUrl('/' + toNav);
   };
@@ -117,6 +135,15 @@ export class GrnComponent implements OnInit {
     if (this.search_key != '') {
       params.set('search', this.search_key.toString());
     }
+
+    if (this.company_id != undefined) {
+      params.set('company', this.company_id);
+    }
+
+    if (this.project_id != undefined) {
+      params.set('project', this.project_id);
+    }
+    
     if (this.sort_by != '') {
       params.set('field_name', this.sort_by.toString());
     }

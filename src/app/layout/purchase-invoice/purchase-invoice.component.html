@@ -18,8 +18,18 @@
         <div class="card">
           <div class="card-header">
             <div class="row">
-              <div class="col-md-9">
+              <div class="col-md-3">
                 <h5>Purchase Invoice</h5>
+              </div>
+              <div class="col-md-3">
+                <ng-select class="form-control" placeholder="Select Company" [clearable]="false" name="company" [(ngModel)]="company_id">
+                  <ng-option *ngFor="let company of companyList" [value]="company.id">{{company.company_name}}</ng-option>
+                </ng-select>
+              </div>
+              <div class="col-md-3">
+                <ng-select class="form-control" placeholder="Select Project" [clearable]="false" name="project" [(ngModel)]="project_id">
+                  <ng-option *ngFor="let project of projectList" [value]="project.id">{{project.project_name}}</ng-option>
+                </ng-select>
               </div>
               <div class="col-md-3">
                 <form role="form" (ngSubmit)="dataSearch()">

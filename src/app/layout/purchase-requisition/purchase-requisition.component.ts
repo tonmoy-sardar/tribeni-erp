@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { CompanyService } from '../../core/services/company.service';
 import { PurchaseRequisitionService } from '../../core/services/purchase-requisition.service';
 import { ToastrService } from 'ngx-toastr';
 import { HelpService } from '../../core/services/help.service';
@@ -12,7 +13,9 @@ import { LoadingState } from '../../core/component/loading/loading.component';
   styleUrls: ['./purchase-requisition.component.scss']
 })
 export class PurchaseRequisitionComponent implements OnInit {
-  purchaseRequisitionList = []
+  purchaseRequisitionList: any = [];
+  companyList: any = [];
+  projectList: any = [];
   defaultPagination: number;
   totalPurchaseRequisitionList: number;
   search_key = '';
@@ -23,7 +26,8 @@ export class PurchaseRequisitionComponent implements OnInit {
   upper_count: number;
   paginationMaxSize: number;
   itemPerPage: number;
-
+  project_id: '';
+  company_id: '';
   sort_by = '';
   sort_type = '';
   headerThOption = [];
@@ -31,6 +35,7 @@ export class PurchaseRequisitionComponent implements OnInit {
   constructor(
     private router: Router,
     private purchaseRequisitionService: PurchaseRequisitionService,
+    private companyService: CompanyService,
     private toastr: ToastrService,
     private helpService: HelpService
   ) { }
@@ -51,7 +56,7 @@ export class PurchaseRequisitionComponent implements OnInit {
         sort_type: '',
         has_tooltip: false,
         tooltip_msg: ''
-      },      
+      },
       {
         name: "PR Raised Date",
         code: "created_at",
@@ -73,12 +78,26 @@ export class PurchaseRequisitionComponent implements OnInit {
     this.itemPerPage = Globals.itemPerPage;
     this.getPurchaseRequisitionList();
     this.getHelp();
+    this.getCompanyList();
+    this.getProjectList();
   }
 
   getHelp() {
     this.helpService.getHelp().subscribe(res => {
       this.help_heading = res.data.purchaseRequisition.heading;
       this.help_description = res.data.purchaseRequisition.desc;
+    })
+  }
+
+  getCompanyList() {
+    this.companyService.getCompanyDropdownList().subscribe(data => {
+      this.companyList = data;
+    });
+  }
+
+  getProjectList() {
+    this.companyService.getAllCompanyProjectDropdownList().subscribe(res => {
+      this.projectList = res;
     })
   }
 
@@ -92,6 +111,15 @@ export class PurchaseRequisitionComponent implements OnInit {
     if (this.search_key != '') {
       params.set('search', this.search_key.toString());
     }
+
+    if (this.company_id != undefined) {
+      params.set('company', this.company_id);
+    }
+    
+    if (this.project_id != undefined) {
+      params.set('project', this.project_id);
+    }
+
     if (this.sort_by != '') {
       params.set('field_name', this.sort_by.toString());
     }
@@ -121,7 +149,7 @@ export class PurchaseRequisitionComponent implements OnInit {
         });
       }
     );
-  }  
+  }
 
   changeApproveStatus(value, id) {
     if (value > 0) {

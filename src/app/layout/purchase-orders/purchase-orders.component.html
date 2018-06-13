@@ -18,8 +18,18 @@
         <div class="card">
           <div class="card-header">
             <div class="row">
-              <div class="col-md-9">
+              <div class="col-md-3">
                 <h5>Purchase Orders</h5>
+              </div>
+              <div class="col-md-3">
+                <ng-select class="form-control" placeholder="Select Company" [clearable]="false" name="company" [(ngModel)]="company_id">
+                  <ng-option *ngFor="let company of companyList" [value]="company.id">{{company.company_name}}</ng-option>
+                </ng-select>
+              </div>
+              <div class="col-md-3">
+                <ng-select class="form-control" placeholder="Select Project" [clearable]="false" name="project" [(ngModel)]="project_id">
+                  <ng-option *ngFor="let project of projectList" [value]="project.id">{{project.project_name}}</ng-option>
+                </ng-select>
               </div>
               <div class="col-md-3">
                 <form role="form" (ngSubmit)="dataSearch()">
@@ -63,7 +73,8 @@
                   <label *ngIf="purchaseOrder.is_approve == 0 && purchaseOrder.is_finalised == 0" style="display: inline;">None</label>
                   <label *ngIf="purchaseOrder.is_approve == 1 && purchaseOrder.is_finalised == 0" style="display: inline;">Yes</label>
                   <label *ngIf="purchaseOrder.is_approve == 2 && purchaseOrder.is_finalised == 0" style="display: inline;">No</label>
-                  <select *ngIf="purchaseOrder.is_finalised == 0" class="form-control" name="is_approve" (change)="changeApproveStatus($event.target.value,purchaseOrder.id)" style="display: inline-flex; width: 81%; float: right; ">
+                  <select *ngIf="purchaseOrder.is_finalised == 0" class="form-control" name="is_approve" (change)="changeApproveStatus($event.target.value,purchaseOrder.id)"
+                    style="display: inline-flex; width: 81%; float: right; ">
                     <option value='0'>Change Approve</option>
                     <option value='1'>Approve</option>
                     <option value='2'>Dis-Approve</option>

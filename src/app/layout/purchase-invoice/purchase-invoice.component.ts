@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PurchaseInvoiceService } from '../../core/services/purchase-invoice.service';
+import { CompanyService } from '../../core/services/company.service';
 import { ToastrService } from 'ngx-toastr';
 import { PaymentService } from '../../core/services/payment.service';
 import { HelpService } from '../../core/services/help.service';
@@ -13,7 +14,9 @@ import { LoadingState } from '../../core/component/loading/loading.component';
   styleUrls: ['./purchase-invoice.component.scss']
 })
 export class PurchaseInvoiceComponent implements OnInit {
-  purchaseInvoiceList = []
+  purchaseInvoiceList: any = [];
+  companyList: any = [];
+  projectList: any = [];
   defaultPagination: number;
   totalPurchaseInvoiceList: number;
   search_key = '';
@@ -24,7 +27,8 @@ export class PurchaseInvoiceComponent implements OnInit {
   upper_count: number;
   paginationMaxSize: number;
   itemPerPage: number;
-
+  project_id: '';
+  company_id: '';
   sort_by = '';
   sort_type= '';
   headerThOption = [];
@@ -33,6 +37,7 @@ export class PurchaseInvoiceComponent implements OnInit {
     private router: Router,
     private toastr: ToastrService,
     private purchaseInvoiceService: PurchaseInvoiceService,
+    private companyService: CompanyService,
     private helpService: HelpService,
     private paymentService: PaymentService
   ) { }
@@ -96,12 +101,26 @@ export class PurchaseInvoiceComponent implements OnInit {
     this.itemPerPage = Globals.itemPerPage;
     this.getPurchaseInvoiceList();
     this.getHelp();
+    this.getCompanyList();
+    this.getProjectList();
   }
 
   getHelp() {
     this.helpService.getHelp().subscribe(res => {
       this.help_heading = res.data.purchaseInvoice.heading;
       this.help_description = res.data.purchaseInvoice.desc;
+    })
+  }
+
+  getCompanyList() {
+    this.companyService.getCompanyDropdownList().subscribe(data => {
+      this.companyList = data;
+    });
+  }
+
+  getProjectList() {
+    this.companyService.getAllCompanyProjectDropdownList().subscribe(res => {
+      this.projectList = res;
     })
   }
 
@@ -122,6 +141,15 @@ export class PurchaseInvoiceComponent implements OnInit {
     {
       params.set('search', this.search_key.toString());
     }
+
+    if (this.company_id != undefined) {
+      params.set('company', this.company_id);
+    }
+
+    if (this.project_id != undefined) {
+      params.set('project', this.project_id);
+    }
+    
     if(this.sort_by !='')
     {
       params.set('field_name', this.sort_by.toString());
