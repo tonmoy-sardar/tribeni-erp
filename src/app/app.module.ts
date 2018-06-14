@@ -10,6 +10,8 @@ import { AppComponent } from './app.component';
 // core
 import { CoreModule } from "./core/core.module";
 import { NgxPermissionsModule } from 'ngx-permissions';
+import { AgmCoreModule } from '@agm/core';
+
 @NgModule({
   declarations: [
     AppComponent
@@ -22,7 +24,10 @@ import { NgxPermissionsModule } from 'ngx-permissions';
     CoreModule,
     CoreModule.forRoot(),
     ToastrModule.forRoot(),
-    NgxPermissionsModule.forRoot()
+    NgxPermissionsModule.forRoot(),
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyDCwmrD9NEiBAtmQS8_UfaIO4wFg99N8MU'
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

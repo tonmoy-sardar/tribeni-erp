@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxPermissionsModule } from 'ngx-permissions';
-
+import { AgmCoreModule } from '@agm/core';
 import { HeaderComponent } from './component/header/header.component';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
@@ -83,6 +83,7 @@ import { GoogleMapsService } from './services/google-maps.service';
     ReactiveFormsModule,
     NgSelectModule,
     NgxPermissionsModule,
+    AgmCoreModule,
     //----------------Material----------------//
     MatAutocompleteModule,MatButtonModule,MatButtonToggleModule,
     MatCardModule,MatCheckboxModule,MatChipsModule,MatStepperModule,MatDatepickerModule,
@@ -122,6 +123,7 @@ import { GoogleMapsService } from './services/google-maps.service';
     ReactiveFormsModule,
     NgSelectModule,
     NgxPermissionsModule,
+    AgmCoreModule,
     //----------------Material----------------//
     MatAutocompleteModule,MatButtonModule,MatButtonToggleModule,
     MatCardModule,MatCheckboxModule,MatChipsModule,MatStepperModule,MatDatepickerModule,
