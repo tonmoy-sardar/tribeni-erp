@@ -1,0 +1,64 @@
+<loading [state]="loading">
+    <div>
+      <div class="row">
+        <div class="col-md-6">
+          <h4 class="page-header">Employee Attendance Edit</h4>
+        </div>
+        <div class="col-md-6 pull-right" style="text-align: right">
+          <app-help [heading]="help_heading" [description]="help_description"></app-help>
+          <button type="button" class="btn btn-primary" (click)="btnClickNav('employees/attendance')">
+            <i class="fa fa-arrow-left"></i> Back</button>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+      <hr/>
+      <div>
+        <div class="row">
+          <div class="col-md-12">
+            <form role="form">
+              <div class="card bg-light mb-3">
+                <div class="card-header" style="background-color:#868e96; color: #fff;">Employee Attendance Edit</div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="form-group col-md-4">
+                      <label>Employee</label>
+                      <select class="form-control">
+                        <option value="">Select Employee</option>
+                        <option value="">MK Sharma</option>
+                        <option value="">AK Roy</option>
+                      </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label>Date</label>
+                      <div class="input-group">
+                        <input class="form-control" placeholder="yyyy-mm-dd" name="date" ngbDatepicker #d="ngbDatepicker">
+                        <div class="input-group-append">
+                          <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-2">
+                      <label>In Time</label>
+                      <input type="text" class="form-control" name="in_time" placeholder="In Time">
+                    </div>
+                    <div class="form-group col-md-2">
+                      <label>Out Time</label>
+                      <input type="text" class="form-control" name="out_time" placeholder="Out Time">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-md-12" style="text-align: right">
+                      <button type="submit" class="btn btn-primary" (click)="updateAttendance()">Submit</button>
+                      <button type="reset" class="btn btn-secondary" (click)="reSet()">Reset</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </loading>

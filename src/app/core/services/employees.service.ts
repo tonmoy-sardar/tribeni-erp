@@ -20,6 +20,12 @@ export class EmployeesService {
       headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
     })
   }
+
+  getEmployeeListWithoutPagination(): Observable<any>{
+    return this.http.get(environment.apiEndpoint+'employee_dropdwon/', {
+      headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
+    })
+  }
   
 
   getEmployeeDetails(id): Observable<any>{
