@@ -15,10 +15,25 @@
     <div class="card form-group">
       <div class="card-header" style="background: #fff;border: none;">
         <div class="row">
+            <div class="col-md-2">
+                <select class="form-control" [(ngModel)]="employee.month" name="month">
+                  <option value="">Select Month</option>
+                  <option *ngFor="let month of months" value="{{month.value}}">{{month.text}}</option>
+                </select>
+            </div>
+          <div class="col-md-2">
+              <select class="form-control" [(ngModel)]="employee.year" name="year"  >
+                <option value="">Select Year</option>
+                <option *ngFor="let year of years" value="{{year}}">{{year}}</option>
+              </select>
+          </div>
           <div class="col-md-3">
-            <ng-select class="form-control" placeholder="Select Employee" [clearable]="false" name="company" (change)="changeEmployee($event)">
+            <ng-select class="form-control" [(ngModel)]="employee.emp" placeholder="Select Employee" [clearable]="false" name="employee">
               <ng-option *ngFor="let employee of employee_list" [value]="employee.id">{{employee.first_name}} {{employee.last_name}}</ng-option>
             </ng-select>
+          </div>
+          <div class="col-md-3">
+            <button type="submit" class="btn btn-primary" (click)="getEmployeeAttendanceList()">Submit</button>
           </div>
         </div>
       </div>
@@ -37,7 +52,6 @@
             <thead>
               <tr>
                 <th>Date</th>
-                <td>Employee ID</td>
                 <th>Employee Name</th>
                 <th>In Time</th>
                 <th>Out Time</th>
@@ -45,54 +59,21 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>01-06-2018</td>
-                <td>SHM001</td>
-                <td>MK Sharma</td>
-                <td>9:00 AM</td>
-                <td>6:00 PM</td>
+              <tr *ngFor="let employee_attendance of employee_attendance_list ; let i = index">
+                <td>{{employee_attendance.date | date}}</td>
+                <td>{{employee_attendance.employee_details.name}}</td>
+                <td>{{employee_attendance.in_time}}</td>
+                <td>{{employee_attendance.out_time}}</td>
+                
                 <td>
-                  <a href="javascript:void(0);" class="anchor-action" title="Edit" name="Edit" [routerLink]="['/employees/attendance/edit', 1]">
+                  <a href="javascript:void(0);" class="anchor-action" title="Edit" name="Edit" [routerLink]="['/employees/attendance/edit', employee_attendance.id]">
                     <i class="fa fa-edit"></i>
                   </a>
                 </td>
               </tr>
-              <tr>
-                <td>02-06-2018</td>
-                <td>SHM001</td>
-                <td>MK Sharma</td>
-                <td>9:00 AM</td>
-                <td>6:00 PM</td>
-                <td>
-                  <a href="javascript:void(0);" class="anchor-action" title="Edit" name="Edit" [routerLink]="['/employees/attendance/edit', 1]">
-                    <i class="fa fa-edit"></i>
-                  </a>
-                </td>
-              </tr>
-              <tr>
-                <td>03-06-2018</td>
-                <td>SHM001</td>
-                <td>MK Sharma</td>
-                <td>9:00 AM</td>
-                <td>6:00 PM</td>
-                <td>
-                  <a href="javascript:void(0);" class="anchor-action" title="Edit" name="Edit" [routerLink]="['/employees/attendance/edit', 1]">
-                    <i class="fa fa-edit"></i>
-                  </a>
-                </td>
-              </tr>
-              <tr>
-                <td>04-06-2018</td>
-                <td>SHM001</td>
-                <td>MK Sharma</td>
-                <td>9:00 AM</td>
-                <td>6:00 PM</td>
-                <td>
-                  <a href="javascript:void(0);" class="anchor-action" title="Edit" name="Edit" [routerLink]="['/employees/attendance/edit', 1]">
-                    <i class="fa fa-edit"></i>
-                  </a>
-                </td>
-              </tr>
+              <tr *ngIf="employee_attendance_list.length == 0">
+                  <td colspan="5" class="text-center">No record found</td>
+                </tr>
             </tbody>
           </table>
         </div>

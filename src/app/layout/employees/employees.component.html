@@ -54,9 +54,9 @@
                 <td>{{employee.last_name}}</td>
                 <td>{{employee.email}}</td>
                 <td>{{employee.contact}}</td>
-                <td>{{employee.company.company_name}}</td>
-                <td>{{employee.departments.department_name}}</td>
-                <td>{{employee.designation.designation_name}}</td>
+                <td>{{employee.company_details.name}}</td>
+                <td>{{employee.department_details.name}}</td>
+                <td>{{employee.designation_details.name}}</td>
                 <td>
                   <a href="javascript:void(0);" class="anchor-action" title="Active" name="Active" (click)="inactiveState(employee.id)" *ngIf="employee.status==true">
                     <i class="fa fa-thumbs-up"></i> Active</a>

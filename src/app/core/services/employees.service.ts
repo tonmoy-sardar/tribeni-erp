@@ -52,4 +52,28 @@ export class EmployeesService {
     })
   }
 
+  addEmployeesAttendance(data): Observable<any>{
+    return this.http.post(environment.apiEndpoint+'attendance/', data, {
+      headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
+    })
+  }
+
+  getEmployeeAttendanceDetails(id): Observable<any>{
+    return this.http.get(environment.apiEndpoint+'attendance/'+id+'/', {
+      headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
+    })
+  }
+
+  updateEmployeeAttendance(id,data): Observable<any>{
+    return this.http.patch(environment.apiEndpoint+'attendance/'+id+'/', data, {
+      headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
+    })
+  }
+
+  getEmployeeAttendanceList(id,params): Observable<any>{
+    return this.http.get(environment.apiEndpoint+'emp_attendance/'+id+'/?'+params, {
+      headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
+    })
+  }
+  
 }
