@@ -28,6 +28,7 @@
     "@ng-select/ng-select": "^1.4.1",
     "@types/googlemaps": "^3.30.9",
     "@types/jspdf": "^1.1.31",
+    "angular-dual-listbox": "^4.7.0",
     "chart.js": "^2.7.2",
     "core-js": "^2.5.4",
     "font-awesome": "^4.7.0",

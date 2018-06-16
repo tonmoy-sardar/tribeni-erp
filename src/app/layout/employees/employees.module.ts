@@ -5,13 +5,17 @@ import { EmployeesRoutingModule } from './employees-routing.module';
 import { EmployeesComponent } from './employees.component';
 import { EmployeesAddComponent } from './employees-add/employees-add.component';
 import { EmployeesEditComponent } from './employees-edit/employees-edit.component';
-import { EmployeeRoleManagementComponent } from './employee-role-management/employee-role-management.component';
+
 import { EmployeeAttendanceComponent } from './employee-attendance/employee-attendance.component';
 import { EmployeeAttendanceAddComponent } from './employee-attendance-add/employee-attendance-add.component';
 import { EmployeeAttendanceEditComponent } from './employee-attendance-edit/employee-attendance-edit.component';
+import { ModuleActivatePermissionComponent } from './module-activate-permission/module-activate-permission.component';
+import { ModuleActivatePermissionAddComponent } from './module-activate-permission-add/module-activate-permission-add.component';
+import { ModuleActivatePermissionEditComponent } from './module-activate-permission-edit/module-activate-permission-edit.component';
 
 // core
 import {CoreModule} from "../../core/core.module";
+
 
 @NgModule({
   imports: [
@@ -19,6 +23,6 @@ import {CoreModule} from "../../core/core.module";
     EmployeesRoutingModule,
     CoreModule
   ],
-  declarations: [EmployeesComponent, EmployeesAddComponent, EmployeesEditComponent, EmployeeRoleManagementComponent, EmployeeAttendanceComponent, EmployeeAttendanceAddComponent, EmployeeAttendanceEditComponent]
+  declarations: [EmployeesComponent, EmployeesAddComponent, EmployeesEditComponent, EmployeeAttendanceComponent, EmployeeAttendanceAddComponent, EmployeeAttendanceEditComponent, ModuleActivatePermissionComponent, ModuleActivatePermissionAddComponent, ModuleActivatePermissionEditComponent]
 })
 export class EmployeesModule { }
