@@ -4,7 +4,7 @@ import { DepartmentsService } from '../../../core/services/departments.service';
 import { CompanyService } from '../../../core/services/company.service';
 import { DesignationsService } from '../../../core/services/designations.service';
 import { EmployeesService } from '../../../core/services/employees.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators,FormArray } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { HelpService } from '../../../core/services/help.service';
 import { StatesService } from '../../../core/services/states.service';
@@ -41,41 +41,61 @@ export class EmployeesEditComponent implements OnInit {
 
   ngOnInit() {
     this.employee_details = {
+      id: '',
       first_name: '',
       last_name: '',
       email:'',
-      contact: '',
-      alt_contact: '',
-      dob: '',
-      blood_group: '',
-      pan: '',
-      adhaar_no: '',
-      emp_present_address: '',
-      emp_present_state: '',
-      emp_present_city: '',
-      emp_present_pin: '',
-      emp_permanent_address: '',
-      emp_permanent_state: '',
-      emp_permanent_city: '',
-      emp_permanent_pin: '',
-      company: '',
-      departments: '',
-      designation: ''
+      employee_profile_details:[
+        {
+          id: null,
+          contact: '',
+          alt_contact: '',
+          dob: '',
+          blood_group: '',
+          pan: '',
+          adhaar_no: '',
+          emp_present_address: '',
+          emp_present_state: '',
+          emp_present_city: '',
+          emp_present_pin: '',
+          emp_permanent_address: '',
+          emp_permanent_state: '',
+          emp_permanent_city: '',
+          emp_permanent_pin: '',
+          company: '',
+          departments: '',
+          designation: ''
+        }
+      ],
+      
     }
     
     this.form = this.formBuilder.group({
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
+      groups:[[]],
       email: ['', [
         Validators.required,
         Validators.pattern(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/)
       ]],
+      employee_profile_details: this.formBuilder.array([]),
+    });
+    
+    this.getHelp();
+    this.getCompanyList();
+    this.getStateList();
+    this.getEmployeeDetails(this.route.snapshot.params['id']);
+  }
+
+  createEmployeeProfile()
+  { 
+    return this.formBuilder.group({
       contact: ['', [
         Validators.required,
         Validators.minLength(10),
         Validators.maxLength(12)
       ]],
-      alt_contact: ['', [
+      alt_contact: ['',[
         Validators.minLength(10),
         Validators.maxLength(12)
       ]],
@@ -95,24 +115,33 @@ export class EmployeesEditComponent implements OnInit {
       departments: ['', Validators.required],
       designation: ['', Validators.required]
     });
-    this.getHelp();
-    this.getCompanyList();
-    this.getStateList();
-    this.getEmployeeDetails(this.route.snapshot.params['id']);
+
+  };
+
+  getEmployeeProfile(form) {
+    return form.get('employee_profile_details').controls
   }
 
+  
   getEmployeeDetails(id){
     this.employeesService.getEmployeeDetails(id).subscribe(res => {
       this.employee_details = res;
-      // console.log(res)
-      var date = new Date(this.employee_details.dob)
-      this.employee_details.dob = {
+      console.log(this.employee_details)
+      var date = new Date(this.employee_details.employee_profile_details[0].dob)
+      this.employee_details.employee_profile_details[0].dob = {
         year: date.getFullYear(),
         month: date.getMonth() + 1,
         day: date.getDate()
       }
-      this.getDepartmentList(this.employee_details.departments);
-      this.getDesignationList(this.employee_details.designation);
+
+      const employee_profile_details_control = <FormArray>this.form.controls['employee_profile_details'];
+     
+      this.employee_details.employee_profile_details.forEach(x => {
+        employee_profile_details_control.push(this.createEmployeeProfile());
+      })
+      console.log(this.employee_details)
+      this.getDepartmentList(this.employee_details.employee_profile_details[0].departments);
+      this.getDesignationList(this.employee_details.employee_profile_details[0].designation);
       this.loading = LoadingState.Ready;
     },
     error => {
@@ -174,9 +203,14 @@ export class EmployeesEditComponent implements OnInit {
   updateEmployee() {
     if (this.form.valid) {
       this.loading = LoadingState.Processing;
-      var date = new Date(this.form.value.dob.year, this.form.value.dob.month - 1, this.form.value.dob.day)
-      
-      this.employee_details.dob = date.toISOString();
+      var date = new Date(this.form.value.employee_profile_details[0].dob.year, this.form.value.employee_profile_details[0].dob.month - 1, this.form.value.employee_profile_details[0].dob.day)
+      this.form.patchValue({
+        //dob: date.toISOString()
+        employee_profile_details:[
+          {
+            dob:date.toISOString()
+          }]
+      })
       // console.log(this.form.value)
       this.employeesService.updateEmployee(this.employee_details).subscribe(
         response => {
@@ -194,10 +228,7 @@ export class EmployeesEditComponent implements OnInit {
         }
       );
     } else {
-      Object.keys(this.form.controls).forEach(field => {
-        const control = this.form.get(field);
-        control.markAsTouched({ onlySelf: true });
-      });
+      this.markFormGroupTouched(this.form)
     }
   }
 
@@ -210,6 +241,15 @@ export class EmployeesEditComponent implements OnInit {
     this.router.navigateByUrl('/' + toNav);
   };
 
+
+  markFormGroupTouched(formGroup: FormGroup) {
+    (<any>Object).values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+      if (control.controls) {
+        control.controls.forEach(c => this.markFormGroupTouched(c));
+      }
+    });
+  }
   isFieldValid(field: string) {
     return !this.form.get(field).valid && (this.form.get(field).dirty || this.form.get(field).touched);
   }

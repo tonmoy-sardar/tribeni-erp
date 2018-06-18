@@ -36,25 +36,25 @@
                         <div class="row">
                           <div class="form-group col-md-4">
                             <label>Level</label>
-                            <input class="form-control" placeholder="Level" name="emp_level" formControlName="emp_level" [ngClass]="{
-                                  'is-invalid': empApproveDetails.get('emp_level').invalid && (empApproveDetails.get('emp_level').dirty || empApproveDetails.get('emp_level').touched),
-                                  'is-valid': empApproveDetails.get('emp_level').valid && (empApproveDetails.get('emp_level').dirty || empApproveDetails.get('emp_level').touched)
-                                }" readonly value="{{i+1}}">
+                            <input class="form-control" placeholder="Level" name="emp_level" formControlName="emp_level" readonly [ngClass]="{
+                              'is-invalid': empApproveDetails.get('emp_level').invalid && (empApproveDetails.get('emp_level').dirty || empApproveDetails.get('emp_level').touched),
+                              'is-valid': empApproveDetails.get('emp_level').valid && (empApproveDetails.get('emp_level').dirty || empApproveDetails.get('emp_level').touched)
+                            }">
                             <div class="invalid-feedback" *ngIf="empApproveDetails.get('emp_level').touched && empApproveDetails.get('emp_level').hasError('required')">
                               Please enter level
                             </div>
                           </div>
                           <div class="form-group col-md-4">
-                            <label>Primary Employee</label>
+                            <label>Primary Approver</label>
                             <select class="form-control" name="primary_emp" formControlName="primary_emp" [ngClass]="{
                               'is-invalid': empApproveDetails.get('primary_emp').invalid && (empApproveDetails.get('primary_emp').dirty || empApproveDetails.get('primary_emp').touched),
                               'is-valid': empApproveDetails.get('primary_emp').valid && (empApproveDetails.get('primary_emp').dirty || empApproveDetails.get('primary_emp').touched)
                             }">
                               <option value="">Select Employee</option>
-                              <option *ngFor="let employee of employeeList" value="{{employee.id}}">{{employee.first_name}} {{employee.last_name}}</option>
+                              <option *ngFor="let employee of employeeList" value="{{employee.user}}">{{employee.first_name}} {{employee.last_name}}</option>
                             </select>
                             <div class="invalid-feedback" *ngIf="empApproveDetails.get('primary_emp').touched && empApproveDetails.get('primary_emp').hasError('required')">
-                              Please select primary employee
+                              Please select primary approver
                             </div>
                           </div>
                           <div class="form-group col-md-4">
@@ -63,11 +63,11 @@
                               'is-invalid': empApproveDetails.get('secondary_emp').invalid && (empApproveDetails.get('secondary_emp').dirty || empApproveDetails.get('secondary_emp').touched),
                               'is-valid': empApproveDetails.get('secondary_emp').valid && (empApproveDetails.get('secondary_emp').dirty || empApproveDetails.get('secondary_emp').touched)
                             }">
-                              <option value="">Select Employee</option>
-                              <option *ngFor="let employee of employeeList" value="{{employee.id}}">{{employee.first_name}} {{employee.last_name}}</option>
+                              <option value="">Select Approver</option>
+                              <option *ngFor="let employee of employeeList" value="{{employee.user}}">{{employee.first_name}} {{employee.last_name}}</option>
                             </select>
                             <div class="invalid-feedback" *ngIf="empApproveDetails.get('secondary_emp').touched && empApproveDetails.get('secondary_emp').hasError('required')">
-                              Please select secondary employee
+                              Please select secondary approver
                             </div>
                           </div>
                         </div>
@@ -78,7 +78,7 @@
                 <div class="row">
 
                   <div class="form-group col-md-12" style="text-align: right" >
-                    <button type="submit" class="btn btn-primary" (click)="addAttendance()">Submit</button>
+                    <button type="submit" class="btn btn-primary" (click)="addModuleActivatePermission()">Submit</button>
                     <button type="reset" class="btn btn-secondary" (click)="reSet()">Reset</button>
                   </div>
                 </div>

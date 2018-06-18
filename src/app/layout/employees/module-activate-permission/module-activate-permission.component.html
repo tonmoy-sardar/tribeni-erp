@@ -39,24 +39,33 @@
               <tr>
                 <th>Sl.No.</th>
                 <th *ngFor="let headerTh of headerThOption ; let i = index" (click)="sortTable(headerTh.code)" class="custom-table-head">{{headerTh.name}}
-                  <span class="pull-right">
-                    <i class="fa fa-chevron-up inactive-color" [ngClass]="{'active-color':headerTh.sort_type=='asc'}"></i>
-                    <i class="fa fa-chevron-down inactive-color" [ngClass]="{'active-color':headerTh.sort_type=='desc'}"></i>
-                  </span>
+                  
                 </th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let employee of moduleActivatePermissionList ; let i = index">
+              <tr *ngFor="let moduleActivate of moduleActivatePermissionList ; let i = index">
                 <th scope="row">{{itemNo + i +1}}</th>
-                <td>{{employee.first_name}}</td>
-                <td>{{employee.last_name}}</td>
-                <td>{{employee.email}}</td>
-                <td>{{employee.contact}}</td>
+                <td>{{moduleActivate.content_details.name}}</td>
+              <td>
+                <table class="card-body table table-hover table-sm table-bordered">
+                  <th>Permission Level</th>
+                  <th>Primary Employee</th>
+                  <th>Secondary Employee</th>
+                  <tr *ngFor="let approve_details of moduleActivate.emp_approve_details ; let j = index">
+                        <td>{{approve_details.emp_level}}</td>
+                        <td>{{approve_details.primary_emp_details.name}}</td>
+                        <td>{{approve_details.secondary_emp_details.name}}</td>
+                
+                  </tr>
+                </table>
+              </td>
+                <!-- <td>{{moduleActivate.content_details.name}}</td>
+                <td>{{moduleActivate.content_details.name}}</td> -->
                 
                 <td>
-                  <a href="javascript:void(0);" class="anchor-action" title="Edit" name="Edit" [routerLink]="['/employees/edit', employee.id]">
+                  <a href="javascript:void(0);" class="anchor-action" title="Edit" name="Edit" [routerLink]="['/employees/module-activate-permission/edit', moduleActivate.id]">
                     <i class="fa fa-edit"></i>
                   </a>&nbsp;&nbsp;&nbsp;
                   <!-- <a href="javascript:void(0);" title="Map" name="Map" (click)="deleteEmployee(employee.id)">

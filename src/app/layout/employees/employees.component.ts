@@ -127,7 +127,7 @@ export class EmployeesComponent implements OnInit {
       (data: any[]) => {
         this.totalEmployeeList = data['count'];
         this.employeeList = data['results'];
-        // console.log(this.employeeList)
+        console.log(this.employeeList)
         this.itemNo = (this.defaultPagination - 1) * this.itemPerPage;
         this.lower_count = this.itemNo + 1;
         if (this.totalEmployeeList > this.itemPerPage * this.defaultPagination) {

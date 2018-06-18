@@ -43,24 +43,21 @@ export class ModuleActivatePermissionComponent implements OnInit {
     this.headerThOption = [
       {  
         name: "Module",
-        code: "first_name",
-        sort_type:''
+       
       },
       {  
-        name: "Permission Level",
-        code: "last_name",
-        sort_type:''
+        name: "Permission Details",
       },
-      {  
-        name: "Primary Employee",
-        code: "email",
-        sort_type:''
-      },
-      {  
-        name: "Secondary Employee",
-        code: "contact",
-        sort_type:''
-      }
+      // {  
+      //   name: "Primary Employee",
+      //   code: "email",
+      //   sort_type:''
+      // },
+      // {  
+      //   name: "Secondary Employee",
+      //   code: "contact",
+      //   sort_type:''
+      // }
     ];
     this.itemNo = 0;
     this.defaultPagination = 1;
@@ -102,11 +99,11 @@ export class ModuleActivatePermissionComponent implements OnInit {
     {
       params.set('order_by', this.sort_type.toString());
     }
-    this.employeesService.getEmployeeList(params).subscribe(
+    this.employeesService.getEmployeeModuleActivateList(params).subscribe(
       (data: any[]) => {
         this.totalModuleActivatePermissionList = data['count'];
-        this.getModuleActivatePermissionList = data['results'];
-        // console.log(this.employeeList)
+        this.moduleActivatePermissionList = data['results'];
+        console.log(this.moduleActivatePermissionList)
         this.itemNo = (this.defaultPagination - 1) * this.itemPerPage;
         this.lower_count = this.itemNo + 1;
         if (this.totalModuleActivatePermissionList > this.itemPerPage * this.defaultPagination) {

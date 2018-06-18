@@ -30,6 +30,7 @@ export class ModuleActivatePermissionAddComponent implements OnInit {
   meridian = false;
   prevMainLevel = 0;
   mainLevel = 0;
+  level =0;
 
    constructor(
     private employeesService: EmployeesService,
@@ -42,8 +43,6 @@ export class ModuleActivatePermissionAddComponent implements OnInit {
   ngOnInit() {
     this.form = this.formBuilder.group({
       content: ['', Validators.required],
-      primary_emp: ['', Validators.required],
-      secondary_emp: ['', Validators.required],
       emp_approve_details: this.formBuilder.array([this.createEmpApproveDetails()]),
     });
     this.getEmployeeList();
@@ -55,8 +54,7 @@ export class ModuleActivatePermissionAddComponent implements OnInit {
 
   moduleChange(id)
   {
-    //var mainLevel = 3
-    //var mainLevel1 = 3
+
 
     var contentDetails = this.moduleList.filter(p => p.content_id == this.form.value.content)[0];
 
@@ -84,8 +82,9 @@ export class ModuleActivatePermissionAddComponent implements OnInit {
   }
 
   createEmpApproveDetails() {
+    this.level = this.level+1;
     return this.formBuilder.group({
-      emp_level: ['', Validators.required],
+      emp_level: [this.level, Validators.required],
       primary_emp: ['', Validators.required],
       secondary_emp: ['', Validators.required]
     });
@@ -115,6 +114,8 @@ export class ModuleActivatePermissionAddComponent implements OnInit {
     this.employeesService.getEmployeeListWithoutPagination().subscribe(
       (data: any[]) => {
         this.employeeList = data;
+
+        console.log(this.employeeList)
       }
     );
   };
@@ -129,25 +130,17 @@ export class ModuleActivatePermissionAddComponent implements OnInit {
   };
   
   addModuleActivatePermission(){
+ 
     if (this.form.valid) {
       this.loading = LoadingState.Processing;
-      var in_time = this.form.value.in_time.hour+":"+this.form.value.in_time.minute+":00";
-      var out_time = this.form.value.out_time.hour+":"+this.form.value.out_time.minute+":00";
-      
-      var date = new Date(this.form.value.date.year, this.form.value.date.month - 1, this.form.value.date.day)
-      this.form.patchValue({
-        date: date.toISOString(),
-        in_time: in_time,
-        out_time:out_time
-      })
-
-      this.employeesService.addEmployeesAttendance(this.form.value).subscribe(
+     
+      this.employeesService.addModuleActivatePermission(this.form.value).subscribe(
         response => {
-          this.toastr.success('Attendance added successfully', '', {
+          this.toastr.success('Module active permission  added successfully', '', {
             timeOut: 3000,
           });
           this.loading = LoadingState.Ready;
-          this.goToList('employees/attendance');
+          this.goToList('employees/module-activate-permission');
         },
         error => {
           this.loading = LoadingState.Ready;
@@ -157,10 +150,7 @@ export class ModuleActivatePermissionAddComponent implements OnInit {
         }
       );
     } else {
-      Object.keys(this.form.controls).forEach(field => {
-        const control = this.form.get(field);
-        control.markAsTouched({ onlySelf: true });
-      });
+      this.markFormGroupTouched(this.form)
     }
   }
 
@@ -175,6 +165,16 @@ export class ModuleActivatePermissionAddComponent implements OnInit {
   btnClickNav(toNav) {
     this.router.navigateByUrl('/' + toNav);
   };
+
+
+  markFormGroupTouched(formGroup: FormGroup) {
+    (<any>Object).values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+      if (control.controls) {
+        control.controls.forEach(c => this.markFormGroupTouched(c));
+      }
+    });
+  }
 
   isFieldValid(field: string) {
     return !this.form.get(field).valid && this.form.get(field).touched;

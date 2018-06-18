@@ -4,7 +4,7 @@ import { DepartmentsService } from '../../../core/services/departments.service';
 import { CompanyService } from '../../../core/services/company.service';
 import { DesignationsService } from '../../../core/services/designations.service';
 import { EmployeesService } from '../../../core/services/employees.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators,FormArray } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { HelpService } from '../../../core/services/help.service';
 import { StatesService } from '../../../core/services/states.service';
@@ -40,10 +40,21 @@ export class EmployeesAddComponent implements OnInit {
     this.form = this.formBuilder.group({
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
+      groups:[[]],
       email: ['', [
         Validators.required,
         Validators.pattern(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/)
       ]],
+      employee_profile_details: this.formBuilder.array([this.createEmployeeProfile()]),
+    });
+    this.getHelp();
+    this.getCompanyList();
+    this.getStateList()
+  }
+
+  createEmployeeProfile()
+  { 
+    return this.formBuilder.group({
       contact: ['', [
         Validators.required,
         Validators.minLength(10),
@@ -69,9 +80,11 @@ export class EmployeesAddComponent implements OnInit {
       departments: ['', Validators.required],
       designation: ['', Validators.required]
     });
-    this.getHelp();
-    this.getCompanyList();
-    this.getStateList()
+
+  };
+
+  getEmployeeProfile(form) {
+    return form.get('employee_profile_details').controls
   }
 
   getStateList() {
@@ -131,11 +144,15 @@ export class EmployeesAddComponent implements OnInit {
   addEmployee() {
     if (this.form.valid) {
       this.loading = LoadingState.Processing;
-      var date = new Date(this.form.value.dob.year, this.form.value.dob.month - 1, this.form.value.dob.day)
+      var date = new Date(this.form.value.employee_profile_details[0].dob.year, this.form.value.employee_profile_details[0].dob.month - 1, this.form.value.employee_profile_details[0].dob.day)
       this.form.patchValue({
-        dob: date.toISOString()
+        //dob: date.toISOString()
+        employee_profile_details:[
+          {
+            dob:date.toISOString()
+          }]
       })
-      // console.log(this.form.value)
+      
       this.employeesService.addNewEmployee(this.form.value).subscribe(
         response => {
           this.toastr.success('Employee added successfully', '', {
@@ -152,10 +169,7 @@ export class EmployeesAddComponent implements OnInit {
         }
       );
     } else {
-      Object.keys(this.form.controls).forEach(field => {
-        const control = this.form.get(field);
-        control.markAsTouched({ onlySelf: true });
-      });
+      this.markFormGroupTouched(this.form)
     }
   }
 
@@ -168,6 +182,14 @@ export class EmployeesAddComponent implements OnInit {
     this.router.navigateByUrl('/' + toNav);
   };
 
+  markFormGroupTouched(formGroup: FormGroup) {
+    (<any>Object).values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+      if (control.controls) {
+        control.controls.forEach(c => this.markFormGroupTouched(c));
+      }
+    });
+  }
   isFieldValid(field: string) {
     return !this.form.get(field).valid && (this.form.get(field).dirty || this.form.get(field).touched);
   }

@@ -23,7 +23,7 @@
                   <div class="form-group col-md-4">
                     <label>Employee</label>
                     <select class="form-control" [(ngModel)]="employee.employee" name="employee" formControlName="employee" [ngClass]="displayFieldCss('employee')">
-                      <option value="">Select Company</option>
+                      <option value="">Select Employee</option>
                       <option *ngFor="let employee of employeeList" value="{{employee.id}}">{{employee.first_name}} {{employee.last_name}}</option>
                     </select>
                     <div class="invalid-feedback" *ngIf="isFieldValid('employee')">

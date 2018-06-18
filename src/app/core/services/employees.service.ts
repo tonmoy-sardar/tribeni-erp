@@ -10,7 +10,7 @@ export class EmployeesService {
   constructor(private http: HttpClient) { }
 
   addNewEmployee(data): Observable<any>{
-    return this.http.post(environment.apiEndpoint+'employee/', data, {
+    return this.http.post(environment.apiEndpoint+'create_user/', data, {
       headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
     })
   }
@@ -81,5 +81,32 @@ export class EmployeesService {
       headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
     })
   }
+
+  getEmployeeModuleActivateList(params): Observable<any>{
+    return this.http.get(environment.apiEndpoint+'all_emp_approve/?'+params, {
+      headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
+    })
+  }
+
+  addModuleActivatePermission(data): Observable<any> {
+    return this.http.post(environment.apiEndpoint + 'emp_approve/', data, {
+      headers: new HttpHeaders().set('Authorization', 'Token ' + localStorage.getItem('logedUserToken'))
+    })
+  }
+
+  getEmployeeModuleActivateDetails(id): Observable<any>{
+    return this.http.get(environment.apiEndpoint+'all_emp_approve/'+id+'/', {
+      headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
+    })
+  }
+
+
+  updateModuleActivatePermission(data): Observable<any> {
+    return this.http.put(environment.apiEndpoint + 'emp_approve/'+data.id+'/', data, {
+      headers: new HttpHeaders().set('Authorization', 'Token ' + localStorage.getItem('logedUserToken'))
+    })
+  }
+  
+
   
 }
