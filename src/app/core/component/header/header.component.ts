@@ -10,7 +10,7 @@ import { NgxPermissionsService } from 'ngx-permissions';
 export class HeaderComponent implements OnInit {
 
   pushRightClass: string = 'push-right';
-
+  logedUser;
   constructor(
     public router: Router,
     private permissionsService: NgxPermissionsService
@@ -27,7 +27,7 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
-    
+    this.logedUser = localStorage.getItem('logedUser');
   }
 
 
@@ -53,6 +53,7 @@ export class HeaderComponent implements OnInit {
     localStorage.removeItem('logedUserUserId');
     localStorage.removeItem('logedUserUserName');
     localStorage.removeItem('userRole');
+    localStorage.removeItem('logedUser');
   }
 
 

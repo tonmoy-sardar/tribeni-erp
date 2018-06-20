@@ -58,6 +58,13 @@ export class PurchaseRequisitionComponent implements OnInit {
         tooltip_msg: ''
       },
       {
+        name: "Project",
+        code: "project__project_name",
+        sort_type: '',
+        has_tooltip: false,
+        tooltip_msg: ''
+      },
+      {
         name: "PR Raised Date",
         code: "created_at",
         sort_type: '',
@@ -158,7 +165,8 @@ export class PurchaseRequisitionComponent implements OnInit {
 
       purchaseRequisition = {
         id: id,
-        is_approve: value
+        is_approve: value,
+        approval_level:1
       };
 
       this.purchaseRequisitionService.changeApproveStatusPurchaseRequisition(purchaseRequisition).subscribe(
@@ -169,10 +177,20 @@ export class PurchaseRequisitionComponent implements OnInit {
           this.getPurchaseRequisitionList();
         },
         error => {
+          
           this.loading = LoadingState.Ready;
-          this.toastr.error('Something went wrong', '', {
-            timeOut: 3000,
-          });
+          if(error.error.message)
+          {
+            this.toastr.error(error.error.message, '', {
+              timeOut: 3000,
+            });
+          }
+          else{
+            this.toastr.error('Something went wrong', '', {
+              timeOut: 3000,
+            });
+          }
+          
         }
       );
     }
