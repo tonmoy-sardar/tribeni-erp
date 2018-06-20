@@ -158,16 +158,26 @@ export class PurchaseRequisitionComponent implements OnInit {
     );
   }
 
-  changeApproveStatus(value, id) {
+  changeApproveStatus(value, id,approval_level) {
     if (value > 0) {
       this.loading = LoadingState.Processing;
       let purchaseRequisition;
 
-      purchaseRequisition = {
-        id: id,
-        is_approve: value,
-        approval_level:1
-      };
+      if(value==2)
+      {
+        purchaseRequisition = {
+          id: id,
+          is_approve:value,
+          approval_level:0
+        };
+      }
+      else
+      {
+        purchaseRequisition = {
+          id: id,
+          approval_level:approval_level+1
+        };
+      }
 
       this.purchaseRequisitionService.changeApproveStatusPurchaseRequisition(purchaseRequisition).subscribe(
         response => {

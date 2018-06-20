@@ -11,6 +11,7 @@ export class AppComponent implements OnInit {
   constructor(private permissionsService: NgxPermissionsService) { }
 
   ngOnInit(): void {
+    console.log("get");
     // this.permissionsService.loadPermissions(['Admin', 'Staff']);
     this.loadPermission();
   }
