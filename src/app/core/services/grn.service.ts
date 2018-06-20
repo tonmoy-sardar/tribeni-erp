@@ -27,6 +27,12 @@ export class GrnService {
     })
   }
 
+  getGrnDisapproveListWithoutPagination(): Observable<any>{
+    return this.http.get(environment.apiEndpoint+'grn_dropdown_nonapproval/', {
+      headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
+    })
+  }
+
   getPrevGrnList(id): Observable<any>{
     return this.http.get(environment.apiEndpoint+'purchase_order_grn/'+id+'/', {
       headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))

@@ -31,6 +31,7 @@ const routes: Routes = [
       { path: 'purchase-requisition', loadChildren: './purchase-requisition/purchase-requisition.module#PurchaseRequisitionModule' },
       { path: 'purchase-orders', loadChildren: './purchase-orders/purchase-orders.module#PurchaseOrdersModule' },
       { path: 'grn', loadChildren: './grn/grn.module#GrnModule' },
+      { path: 'reverse-grn', loadChildren: './reverse-grn/reverse-grn.module#ReverseGrnModule' },
       { path: 'purchase-invoice', loadChildren: './purchase-invoice/purchase-invoice.module#PurchaseInvoiceModule' },
       { path: 'stocks', loadChildren: './stocks/stocks.module#StocksModule' },
       { path: 'stocks-transfer', loadChildren: './stocks-transfer/stocks-transfer.module#StocksTransferModule' },
