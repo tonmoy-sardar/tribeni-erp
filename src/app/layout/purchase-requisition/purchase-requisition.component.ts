@@ -16,6 +16,8 @@ export class PurchaseRequisitionComponent implements OnInit {
   purchaseRequisitionList: any = [];
   companyList: any = [];
   projectList: any = [];
+  user_approve_details: any = [];
+  module = "requisition";
   defaultPagination: number;
   totalPurchaseRequisitionList: number;
   search_key = '';
@@ -83,6 +85,8 @@ export class PurchaseRequisitionComponent implements OnInit {
     this.defaultPagination = 1;
     this.paginationMaxSize = Globals.paginationMaxSize;
     this.itemPerPage = Globals.itemPerPage;
+    this.user_approve_details  = JSON.parse(localStorage.getItem('approve_details'));
+
     this.getPurchaseRequisitionList();
     this.getHelp();
     this.getCompanyList();
@@ -138,6 +142,12 @@ export class PurchaseRequisitionComponent implements OnInit {
       (data: any[]) => {
         this.totalPurchaseRequisitionList = data['count'];
         this.purchaseRequisitionList = data['results'];
+        for(let i=0;i<this.purchaseRequisitionList.length;i++)
+        {
+          this.purchaseRequisitionList[i].isApproveStatus = this.user_approve_details.filter(p => p.content == this.module && p.level <= this.purchaseRequisitionList[i].approval_level)[0];
+        }
+        
+
         this.itemNo = (this.defaultPagination - 1) * this.itemPerPage;
         this.lower_count = this.itemNo + 1;
         if (this.totalPurchaseRequisitionList > this.itemPerPage * this.defaultPagination) {

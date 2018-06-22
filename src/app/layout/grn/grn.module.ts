@@ -7,6 +7,7 @@ import { GrnAddComponent } from './grn-add/grn-add.component';
 
 // core
 import {CoreModule} from "../../core/core.module";
+import { GrnDetailsComponent } from './grn-details/grn-details.component';
 
 @NgModule({
   imports: [
@@ -15,7 +16,7 @@ import {CoreModule} from "../../core/core.module";
     CoreModule
     
   ],
-  declarations: [GrnComponent, GrnAddComponent],
+  declarations: [GrnComponent, GrnAddComponent, GrnDetailsComponent],
   providers: []
 })
 export class GrnModule { }

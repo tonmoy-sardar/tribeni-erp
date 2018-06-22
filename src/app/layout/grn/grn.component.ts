@@ -19,6 +19,8 @@ export class GrnComponent implements OnInit {
   companyList: any = [];
   projectList: any = [];
   defaultPagination: number;
+  user_approve_details: any = [];
+  module = "grn";
   totalGrnList: number;
   search_key = '';
   itemNo: number;
@@ -155,7 +157,10 @@ export class GrnComponent implements OnInit {
       (data: any[]) => {
         this.totalGrnList = data['count'];
         this.grnList = data['results'];
-        // console.log(this.grnList)
+        for(let i=0;i<this.grnList.length;i++)
+        {
+          this.grnList[i].isApproveStatus = this.user_approve_details.filter(p => p.content == this.module && p.level <= this.grnList[i].approval_level)[0];
+        }
         this.itemNo = (this.defaultPagination - 1) * this.itemPerPage;
         this.lower_count = this.itemNo + 1;
         if (this.totalGrnList > this.itemPerPage * this.defaultPagination) {
@@ -175,15 +180,27 @@ export class GrnComponent implements OnInit {
     );
   }
 
-  changeApproveStatus(value, id) {
+  changeApproveStatus(value, id,approval_level) {
     if (value > 0) {
 
       this.loading = LoadingState.Processing;
       let grn;
-      grn = {
-        id: id,
-        is_approve: value
-      };
+     
+      if(value==2)
+      {
+        grn = {
+          id: id,
+          is_approve:value,
+          approval_level:0
+        };
+      }
+      else
+      {
+        grn = {
+          id: id,
+          approval_level:approval_level+1
+        };
+      }
       this.grnService.approveDisapproveGrn(grn).subscribe(
         response => {
           if (value == 1) {

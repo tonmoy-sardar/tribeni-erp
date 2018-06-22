@@ -1,28 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PurchaseOrdersService } from '../../../core/services/purchase-orders.service';
+import { GrnService } from '../../../core/services/grn.service';
 import { HelpService } from '../../../core/services/help.service';
 import { ToastrService } from 'ngx-toastr';
 import * as Globals from '../../../core/globals';
 import { LoadingState } from '../../../core/component/loading/loading.component';
 
 @Component({
-  selector: 'app-purchase-orders-details',
-  templateUrl: './purchase-orders-details.component.html',
-  styleUrls: ['./purchase-orders-details.component.scss']
+  selector: 'app-grn-details',
+  templateUrl: './grn-details.component.html',
+  styleUrls: ['./grn-details.component.scss']
 })
-export class PurchaseOrdersDetailsComponent implements OnInit {
+export class GrnDetailsComponent implements OnInit {
 
-  purchaseOrder;
+  grnDetails;
   visible_key: boolean;
   help_heading = "";
   help_description = "";
-  module = "purchaseorder";
+  module = "grn";
   user_approve_details: any = [];
   isApproveStatus;
   loading: LoadingState = LoadingState.NotReady;
   constructor(
-    private purchaseOrdersService: PurchaseOrdersService,
+    private grnService: GrnService,
     private router: Router,
     private route: ActivatedRoute,
     private helpService: HelpService,
@@ -31,24 +31,25 @@ export class PurchaseOrdersDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.user_approve_details  = JSON.parse(localStorage.getItem('approve_details'));
-    this.getPurchaseOrderDetails(this.route.snapshot.params['id']);
+    this.getGrnDetails(this.route.snapshot.params['id']);
     this.getHelp();
 
   }
 
   getHelp() {
     this.helpService.getHelp().subscribe(res => {
-      this.help_heading = res.data.purchaseOrderDetails.heading;
-      this.help_description = res.data.purchaseOrderDetails.desc;
+     // this.help_heading = res.data.grnDetails.heading;
+      //this.help_description = res.data.grnDetails.desc;
     })
   }
 
-  getPurchaseOrderDetails(id) {
-    this.purchaseOrdersService.getPurchaseOrderDetails(id).subscribe(
+  getGrnDetails(id) {
+    this.grnService.getGrnDetails(id).subscribe(
       (data: any[]) => {
-        this.purchaseOrder = data;
+        this.grnDetails = data;
+        console.log(this.grnDetails);
         this.visible_key = true
-        this.isApproveStatus = this.user_approve_details.filter(p => p.content == this.module && p.level <= this.purchaseOrder.approval_level)[0];
+        this.isApproveStatus = this.user_approve_details.filter(p => p.content == this.module && p.level <= this.grnDetails.approval_level)[0];
         this.loading = LoadingState.Ready;
       },
       error => {
@@ -69,11 +70,11 @@ export class PurchaseOrdersDetailsComponent implements OnInit {
   changeApproveStatus(value, id,approval_level) {
     if (value > 0) {
       this.loading = LoadingState.Processing;
-      let PurchaseOrder;
+      let grn;
 
       if(value==2)
       {
-        PurchaseOrder = {
+        grn = {
           id: id,
           is_approve:value,
           approval_level:0
@@ -81,18 +82,18 @@ export class PurchaseOrdersDetailsComponent implements OnInit {
       }
       else
       {
-        PurchaseOrder = {
+        grn = {
           id: id,
           approval_level:approval_level+1
         };
       }
 
-      this.purchaseOrdersService.approveDisapprovePurchaseOrder(PurchaseOrder).subscribe(
+      this.grnService.approveDisapproveGrn(grn).subscribe(
         response => {
-          this.toastr.success('Purchase order approve status changed successfully', '', {
+          this.toastr.success('Grn approve status changed successfully', '', {
             timeOut: 3000,
           });
-          this.getPurchaseOrderDetails(id);
+          this.getGrnDetails(id);
         },
         error => {
           

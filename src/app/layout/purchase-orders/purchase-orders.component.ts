@@ -17,6 +17,8 @@ export class PurchaseOrdersComponent implements OnInit {
   defaultPagination: number;
   totalPurchaseOrderList: number;
   search_key = '';
+  user_approve_details: any = [];
+  module = "purchaseorder";
   companyList: any = [];
   projectList: any = [];
   itemNo: number;
@@ -83,6 +85,7 @@ export class PurchaseOrdersComponent implements OnInit {
     this.defaultPagination = 1;
     this.paginationMaxSize = Globals.paginationMaxSize;
     this.itemPerPage = Globals.itemPerPage;
+    this.user_approve_details  = JSON.parse(localStorage.getItem('approve_details'));
     this.getPurchaseOrderList();
     this.getCompanyList();
     this.getProjectList();
@@ -148,6 +151,10 @@ export class PurchaseOrdersComponent implements OnInit {
       (data: any[]) => {
         this.totalPurchaseOrderList = data['count'];
         this.purchaseOrderList = data['results'];
+        for(let i=0;i<this.purchaseOrderList.length;i++)
+        {
+          this.purchaseOrderList[i].isApproveStatus = this.user_approve_details.filter(p => p.content == this.module && p.level <= this.purchaseOrderList[i].approval_level)[0];
+        }
         this.itemNo = (this.defaultPagination - 1) * this.itemPerPage;
         this.lower_count = this.itemNo + 1;
         if(this.totalPurchaseOrderList > this.itemPerPage*this.defaultPagination){
@@ -201,15 +208,32 @@ export class PurchaseOrdersComponent implements OnInit {
     }
   }
 
-  changeApproveStatus(value, id) {
+  changeApproveStatus(value, id, approval_level) {
+   
     if (value > 0) {
       this.loading = LoadingState.Processing;
       let PurchaseOrder;
 
-      PurchaseOrder = {
-        id: id,
-        is_approve: value
-      };
+      // PurchaseOrder = {
+      //   id: id,
+      //   is_approve: value
+      // };
+
+      if(value==2)
+      {
+        PurchaseOrder = {
+          id: id,
+          is_approve:value,
+          approval_level:0
+        };
+      }
+      else
+      {
+        PurchaseOrder = {
+          id: id,
+          approval_level:approval_level+1
+        };
+      }
 
       this.purchaseOrdersService.approveDisapprovePurchaseOrder(PurchaseOrder).subscribe(
         response => {
@@ -219,10 +243,20 @@ export class PurchaseOrdersComponent implements OnInit {
           this.getPurchaseOrderList();
         },
         error => {
+          
           this.loading = LoadingState.Ready;
-          this.toastr.error('Something went wrong', '', {
-            timeOut: 3000,
-          });
+          if(error.error.message)
+          {
+            this.toastr.error(error.error.message, '', {
+              timeOut: 3000,
+            });
+          }
+          else{
+            this.toastr.error('Something went wrong', '', {
+              timeOut: 3000,
+            });
+          }
+          
         }
       );
     }

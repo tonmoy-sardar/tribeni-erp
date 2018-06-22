@@ -57,8 +57,8 @@
                   </span>
                 </th>
                 <!-- <th>Status</th> -->
-                <th>Is approved</th>
-                <th class="text-center">Action</th>
+                <th>Status</th>
+                <th class="text-center">Details</th>
               </tr>
             </thead>
             <tbody>
@@ -81,17 +81,21 @@
                   <option value='1'>Active</option>
                 </select>
               </td> -->
-                <td style="width: 185px;">
+                <td style="width:15%" *ngIf="!pInvoice.isApproveStatus">
                   <label *ngIf="pInvoice.is_finalised == 1" style="display: inline;">Finalised</label>
                   <label *ngIf="pInvoice.is_approve == 0 && pInvoice.is_finalised == 0" style="display: inline;">None</label>
-                  <label *ngIf="pInvoice.is_approve == 1 && pInvoice.is_finalised == 0" style="display: inline;">Yes</label>
-                  <label *ngIf="pInvoice.is_approve == 2 && pInvoice.is_finalised == 0" style="display: inline;">No</label>
+                  <label *ngIf="pInvoice.is_approve == 1 && pInvoice.is_finalised == 0" style="display: inline;">Approved</label>
+                  <label *ngIf="pInvoice.is_approve == 2 && pInvoice.is_finalised == 0" style="display: inline;">Rejected</label>
                   <select *ngIf="pInvoice.is_finalised == 0 && (pInvoice.is_approve == 2 || pInvoice.is_approve == 0)" class="form-control"
                     name="is_approve" (change)="changeApproveStatus($event.target.value,pInvoice)" style="display: inline-flex; width: 81%; float: right; ">
                     <option value='0'>Change Approve</option>
                     <option value='1'>Approve</option>
-                    <option value='2'>Dis-Approve</option>
+                    <option value='2'>Reject</option>
                   </select>
+                </td>
+                <td style="width:15%" *ngIf="pInvoice.isApproveStatus">
+                  <label *ngIf="pInvoice.is_finalised == 1" style="display: inline;">Finalised</label>
+                  <label *ngIf="pInvoice.is_finalised == 0" style="display: inline;">Approved</label>
                 </td>
                 <td class="text-center">
                   <a href="javascript:void(0);" class="anchor-action" title="Details" name="Details" [routerLink]="['/purchase-invoice/details', pInvoice.id]">

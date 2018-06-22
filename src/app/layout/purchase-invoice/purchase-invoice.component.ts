@@ -20,6 +20,8 @@ export class PurchaseInvoiceComponent implements OnInit {
   defaultPagination: number;
   totalPurchaseInvoiceList: number;
   search_key = '';
+  user_approve_details: any = [];
+  module = "purchaseinvoice";
   itemNo: number;
   help_heading = "";
   help_description = "";
@@ -163,6 +165,10 @@ export class PurchaseInvoiceComponent implements OnInit {
       (data: any[]) => {
         this.totalPurchaseInvoiceList = data['count'];
         this.purchaseInvoiceList = data['results'];
+        for(let i=0;i<this.purchaseInvoiceList.length;i++)
+        {
+          this.purchaseInvoiceList[i].isApproveStatus = this.user_approve_details.filter(p => p.content == this.module && p.level <= this.purchaseInvoiceList[i].approval_level)[0];
+        }
         this.itemNo = (this.defaultPagination - 1) * this.itemPerPage;
         this.lower_count = this.itemNo + 1;
         if (this.totalPurchaseInvoiceList > this.itemPerPage * this.defaultPagination) {
@@ -220,11 +226,23 @@ export class PurchaseInvoiceComponent implements OnInit {
     if (value > 0) {
       this.loading = LoadingState.Processing;
       let PurchaseInvoice;
-
-      PurchaseInvoice = {
-        id: pInvoice.id,
-        is_approve: value
-      };
+      
+     
+      if(value==2)
+      {
+        PurchaseInvoice = {
+          id:  pInvoice.id,
+          is_approve:value,
+          approval_level:0
+        };
+      }
+      else
+      {
+        PurchaseInvoice = {
+          id: pInvoice.id,
+          approval_level:pInvoice.approval_level+1
+        };
+      }
 
       this.purchaseInvoiceService.approveDisapprovePurchaseInvoice(PurchaseInvoice).subscribe(
         response => {

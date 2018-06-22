@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { GrnComponent } from './grn.component';
 import { GrnAddComponent } from './grn-add/grn-add.component';
-
+import { GrnDetailsComponent } from './grn-details/grn-details.component';
 
 const routes: Routes = [
   {
@@ -12,6 +12,10 @@ const routes: Routes = [
   {
     path: 'add',
     component: GrnAddComponent
+  },
+  {
+    path: 'details/:id',
+    component: GrnDetailsComponent
   }
 ];
 

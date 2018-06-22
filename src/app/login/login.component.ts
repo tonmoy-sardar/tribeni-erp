@@ -52,6 +52,8 @@ export class LoginComponent implements OnInit {
                     localStorage.setItem('logedUserUserName', response.username);
                     localStorage.setItem('logedUser', response.first_name+' '+response.last_name);
                     localStorage.setItem('userRole', response.user_type);
+                    localStorage.setItem('approve_details', JSON.stringify(response.approve_details));
+                    
                     this.goToPage('dashboard');
                 },
                 error => {
