@@ -47,7 +47,6 @@ export class ReverseGrnAddComponent implements OnInit {
 
   getGrnList() {
     this.grnService.getGrnDisapproveListWithoutPagination().subscribe(res => {
-      console.log(res)
       this.grnList = res;
       this.loading = LoadingState.Ready;
     },
@@ -72,7 +71,7 @@ export class ReverseGrnAddComponent implements OnInit {
       this.grn_details.grn_detail.forEach(x => {
         var Mdtl = {
           material: x.material.id,
-          rest_quantity: x.material.receive_quantity,
+          rest_quantity: x.receive_quantity,
           reverse_grn_quantity: '',
           reverse_reason: ''
         }
@@ -103,7 +102,6 @@ export class ReverseGrnAddComponent implements OnInit {
       this.visible_key = false;
       this.grnService.getGrnDetails(id).subscribe(res => {
         this.grn_details = res;
-        console.log(this.grn_details)
         this.getPrevRevGrnList(id);
       },
         error => {
@@ -142,7 +140,7 @@ export class ReverseGrnAddComponent implements OnInit {
   }
 
   delete_reverse_grn_detail(index: number) {
-    const control = <FormArray>this.form.controls['grn_detail'];
+    const control = <FormArray>this.form.controls['reverse_grn_detail'];
     control.removeAt(index);
   }
 
@@ -150,57 +148,49 @@ export class ReverseGrnAddComponent implements OnInit {
     if (val.currentTarget.checked) {
       this.add_reverse_grn_detail(mat)
     } else {
-      var index = this.form.value.grn_detail.findIndex(p => p.material == mat.material.id)
+      var index = this.form.value.reverse_grn_detail.findIndex(p => p.material == mat.material.id)
       this.delete_reverse_grn_detail(index)
     }
   }
 
   RevGnrQuantity(reverse_grn_quantity, i) {
     var rest_qtn = Math.round(this.material_details_list[i].rest_quantity)
-    var margn = Math.round(this.material_details_list[i].margin)
-    var expected_qtn = Math.round(rest_qtn + (rest_qtn * margn / 100))
-    if (Math.round(reverse_grn_quantity) > expected_qtn) {
-      this.material_details_list[i].reverse_grn_quantity = expected_qtn
+    if (Math.round(reverse_grn_quantity) > rest_qtn) {
+      this.material_details_list[i].reverse_grn_quantity = rest_qtn
       this.toastr.error('Quantity should not be more than Rest quantity', '', {
         timeOut: 3000,
       });
     }
   }
+
   addReverseGrn() {
-    if (this.form.value.grn_detail.length == 0) {
+    if (this.form.value.reverse_grn_detail.length == 0) {
       this.toastr.error('Check atleast one item from list of item/s', '', {
         timeOut: 3000,
       });
       return;
     }
-    const grn_detail_control = <FormArray>this.form.controls['reverse_grn_detail'];
+    const reverse_grn_detail_control = <FormArray>this.form.controls['reverse_grn_detail'];
     this.material_details_list.forEach(x => {
-      var Mindex = this.form.value.grn_detail.findIndex(p => p.material == x.material)
+      var Mindex = this.form.value.reverse_grn_detail.findIndex(p => p.material == x.material)
       if (Mindex > -1) {
         var obj = this.material_details_list.filter(k => k.material == x.material);
-        if (obj[0].receive_quantity == "") {
-          this.toastr.error('GRN quantity is required in every selected row ', '', {
+        if (obj[0].reverse_grn_quantity == "" || obj[0].reverse_reason == "") {
+          this.toastr.error('All fields are required in selected row ', '', {
             timeOut: 3000,
           });
           return;
         }
-        grn_detail_control.at(Mindex).patchValue({
+        reverse_grn_detail_control.at(Mindex).patchValue({
           material: x.material,
-          order_quantity: x.order_quantity,
-          receive_quantity: x.receive_quantity
+          reverse_grn_quantity: x.reverse_grn_quantity,
+          reverse_reason: x.reverse_reason
         });
       }
     })
-
     if (this.form.valid) {
-      // console.log(this.form.value)
       this.loading = LoadingState.Processing;
-      var challanDate = new Date(this.form.value.challan_date.year, this.form.value.challan_date.month - 1, this.form.value.challan_date.day)
-      this.form.patchValue({
-        challan_date: challanDate.toISOString()
-      })
-      // console.log(this.form.value)
-      this.grnService.addNewGrn(this.form.value).subscribe(
+      this.grnReverseService.addNewReverseGrn(this.form.value).subscribe(
         response => {
           this.toastr.success('Reverse GNR added successfully', '', {
             timeOut: 3000,

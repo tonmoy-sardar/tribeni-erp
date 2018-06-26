@@ -22,7 +22,7 @@ export class GrnReverseService {
   }
   
   getPrevReverseGrnList(id): Observable<any>{
-    return this.http.get(environment.apiEndpoint+'all_reversegrn/'+id+'/', {
+    return this.http.get(environment.apiEndpoint+'previous_reverse_grn/'+id+'/', {
       headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
     })
   }

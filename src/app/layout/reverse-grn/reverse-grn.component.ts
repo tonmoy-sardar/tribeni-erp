@@ -51,42 +51,42 @@ export class ReverseGrnComponent implements OnInit {
 
     this.headerThOption = [
       {
-        name: "GRN. No.",
-        code: "grn_no",
+        name: "Reverse GRN. No.",
+        code: "revers_gen_no",
         sort_type: '',
         has_tooltip: false,
         tooltip_msg: ''
       },
       {
-        name: "PO. No.",
-        code: "po_order__purchase_order_no",
+        name: "GRN. No.",
+        code: "grn__grn_no",
         sort_type: '',
         has_tooltip: true,
         tooltip_msg: 'Purchase Order Number'
       },
       {
         name: "Company",
-        code: "company__company_name",
+        code: "grn__company__company_name",
         sort_type: '',
         has_tooltip: false,
         tooltip_msg: ''
       },
       {
         name: "Vendor",
-        code: "vendor__vendor_fullname",
+        code: "grn__vendor__vendor_fullname",
         sort_type: '',
         has_tooltip: false,
         tooltip_msg: ''
       },
       {
         name: "Vendor Address",
-        code: "vendor_address__address",
+        code: "grn__vendor_address__address",
         sort_type: '',
         has_tooltip: false,
         tooltip_msg: ''
       },
       {
-        name: "GRN Raised Date",
+        name: "Raised Date",
         code: "created_at",
         sort_type: '',
         has_tooltip: false,
@@ -158,7 +158,7 @@ export class ReverseGrnComponent implements OnInit {
       (data: any[]) => {
         this.totalGrnList = data['count'];
         this.grnList = data['results'];
-        // console.log(this.grnList)
+        console.log(this.grnList)
         this.itemNo = (this.defaultPagination - 1) * this.itemPerPage;
         this.lower_count = this.itemNo + 1;
         if (this.totalGrnList > this.itemPerPage * this.defaultPagination) {

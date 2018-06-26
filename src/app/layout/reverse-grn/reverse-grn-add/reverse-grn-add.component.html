@@ -24,8 +24,7 @@
                     <div class="row">
                       <div class="form-group col-md-3">
                         <label>GRN No.</label>
-                        <select class="form-control" (change)="grnChange($event.target.value)" name="grn" formControlName="grn"
-                          [ngClass]="displayFieldCss('grn')">
+                        <select class="form-control" (change)="grnChange($event.target.value)" name="grn" formControlName="grn" [ngClass]="displayFieldCss('grn')">
                           <option value="">Select GRN</option>
                           <option value="{{grn.id}}" *ngFor="let grn of grnList">{{grn.grn_no}}</option>
                         </select>
@@ -53,7 +52,7 @@
                         <tbody>
                           <tr>
                             <td>{{grn_details.company.company_name}}</td>
-                            <td>{{grn_details.project.project_name}}</td>
+                            <td>{{grn_details.project.name}}</td>
                             <td>{{grn_details.created_at | date:'dd-MM-yyyy'}}</td>
                             <td>{{grn_details.vendor.vendor_fullname}}</td>
                             <td>{{grn_details.vendor_address.address}}</td>
@@ -67,33 +66,32 @@
                   <div class="card-header">Previous GRN</div>
                   <div class="card-body">
                     <div class="card bg-light mb-3" *ngFor="let prevRevGrn of previous_reverse_grn_list">
-                      <div class="card-header">GRN No ({{prevRevGrn.grn_no}})</div>
+                      <div class="card-header">Reverse GRN No ({{prevRevGrn.revers_gen_no}})</div>
                       <div class="card-body">
                         <div class="row">
                           <table class="card-body table table-sm ">
                             <thead>
                               <tr>
-                                <th>Material Group</th>
+                                <th>Company</th>
+                                <th>Vendor</th>
+                                <th>Vendor Address</th>
                                 <th>Material</th>
-                                <th>PO. Qty.</th>
-                                <th>GRN Qty.</th>
+                                <th>UMO</th>
                                 <th>Reverse Qty.</th>
-                                <th>UOM</th>
                                 <th>Recieved At</th>
                                 <th>Reason</th>
                               </tr>
                             </thead>
                             <tbody>
-                              <tr *ngFor="let grn of prevRevGrn.grn_detail">
-                                <td>{{grn.material.material_type.material_type}}</td>
-                                <td>{{grn.material.material_fullname}} ( {{grn.material.material_code}} )
-                                </td>
-                                <td>{{grn.order_quantity}}</td>
-                                <td>{{grn.receive_quantity}}</td>
-                                <td>{{grn.reverse_grn_quantity}}</td>
+                              <tr *ngFor="let grn of prevRevGrn.reverse_grn_detail">
+                                <td>{{prevRevGrn.company}}</td>
+                                <td>{{prevRevGrn.vendor_name}}</td>
+                                <td>{{prevRevGrn.vendor_address}}</td>
+                                <td>{{grn.material_details.name}}</td>
                                 <td>{{grn.material_uom}}</td>
-                                <td>{{prevGrn.created_at | date:'dd-MM-yyyy'}}</td>
-                                <td>{{prevGrn.reverse_reason}}</td>
+                                <td>{{grn.reverse_grn_quantity}}</td>
+                                <td>{{prevRevGrn.created_at | date:'dd-MM-yyyy'}}</td>
+                                <td>{{grn.reverse_reason}}</td>
                               </tr>
                             </tbody>
                           </table>
@@ -123,7 +121,7 @@
                         <tbody>
                           <tr *ngFor="let mat of grn_details.grn_detail; let k = index">
                             <td>
-                              <div class="checkbox" *ngIf="getAvailQty(mat.avail_qty)">
+                              <div class="checkbox" *ngIf="getAvailQty(material_details_list[k].rest_quantity)">
                                 <label>
                                   <input type="checkbox" (change)="matCheck($event, mat)">
                                 </label>
@@ -137,11 +135,11 @@
                             <td>{{mat.material_uom}}</td>
                             <td width="200">
                               <input appOnlyNumber type="text" class="form-control" placeholder="GRN Quantity" [(ngModel)]="material_details_list[k].reverse_grn_quantity"
-                                [ngModelOptions]="{standalone: true}" (keyup)="RevGnrQuantity(material_details_list[k].reverse_grn_quantity, k)">
+                                [ngModelOptions]="{standalone: true}" (keyup)="RevGnrQuantity(material_details_list[k].reverse_grn_quantity, k)" *ngIf="getAvailQty(material_details_list[k].rest_quantity)">
                             </td>
                             <td>
                               <textarea name="reverse_reason" class="form-control" placeholder="Reason" [(ngModel)]="material_details_list[k].reverse_reason"
-                              [ngModelOptions]="{standalone: true}"></textarea>
+                                [ngModelOptions]="{standalone: true}" *ngIf="getAvailQty(material_details_list[k].rest_quantity)"></textarea>
                             </td>
                           </tr>
                         </tbody>
