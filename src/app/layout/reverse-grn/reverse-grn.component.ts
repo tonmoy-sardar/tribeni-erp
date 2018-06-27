@@ -21,6 +21,8 @@ export class ReverseGrnComponent implements OnInit {
   companyList: any = [];
   projectList: any = [];
   defaultPagination: number;
+  module = "reversgrn";
+  user_approve_details: any = [];
   totalGrnList: number;
   search_key = '';
   itemNo: number;
@@ -51,6 +53,20 @@ export class ReverseGrnComponent implements OnInit {
 
     this.headerThOption = [
       {
+        name: "Company",
+        code: "company__company_name",
+        sort_type: '',
+        has_tooltip: false,
+        tooltip_msg: ''
+      },
+      {
+        name: "Project",
+        code: "po_order__requisition__project",
+        sort_type: '',
+        has_tooltip: false,
+        tooltip_msg: ''
+      },
+      {
         name: "Reverse GRN. No.",
         code: "revers_gen_no",
         sort_type: '',
@@ -63,13 +79,6 @@ export class ReverseGrnComponent implements OnInit {
         sort_type: '',
         has_tooltip: true,
         tooltip_msg: 'Purchase Order Number'
-      },
-      {
-        name: "Company",
-        code: "grn__company__company_name",
-        sort_type: '',
-        has_tooltip: false,
-        tooltip_msg: ''
       },
       {
         name: "Vendor",
@@ -98,6 +107,8 @@ export class ReverseGrnComponent implements OnInit {
     this.defaultPagination = 1;
     this.paginationMaxSize = Globals.paginationMaxSize;
     this.itemPerPage = Globals.itemPerPage;
+    this.user_approve_details  = JSON.parse(localStorage.getItem('approve_details'));
+    console.log(this.user_approve_details);
     this.getGrnList();
     this.getHelp();
     this.getCompanyList();
@@ -159,6 +170,11 @@ export class ReverseGrnComponent implements OnInit {
         this.totalGrnList = data['count'];
         this.grnList = data['results'];
         console.log(this.grnList)
+        for(let i=0;i<this.grnList.length;i++)
+        {
+          this.grnList[i].isApproveStatus = this.user_approve_details.filter(p => p.content == this.module && p.level <= this.grnList[i].approval_level)[0];
+        }
+        console.log(this.grnList)
         this.itemNo = (this.defaultPagination - 1) * this.itemPerPage;
         this.lower_count = this.itemNo + 1;
         if (this.totalGrnList > this.itemPerPage * this.defaultPagination) {
@@ -178,35 +194,49 @@ export class ReverseGrnComponent implements OnInit {
     );
   }
 
-  changeApproveStatus(value, id) {
+  changeApproveStatus(value, id, approval_level) {
     if (value > 0) {
 
       this.loading = LoadingState.Processing;
       let grn;
-      grn = {
-        id: id,
-        is_approve: value
-      };
+      
+
+      if(value==2)
+      {
+        grn = {
+          id: id,
+          is_approve:value,
+          approval_level:0
+        };
+      }
+      else
+      {
+        grn = {
+          id: id,
+          approval_level:approval_level+1
+        };
+      }
       this.grnReverseService.approveDisapproveReverseGrn(grn).subscribe(
         response => {
-          if (value == 1) {
-            this.toastr.success('GRN approved successfully', '', {
-              timeOut: 3000,
-            });
-            this.getGrnList();
-          }
-          else {
-            this.toastr.success('GRN dis-approved successfully', '', {
-              timeOut: 3000,
-            });
-            this.getGrnList();
-          }
+         
+          this.toastr.success('Reverse Grn approve status changed successfully', '', {
+            timeOut: 3000,
+          });
+          this.getGrnList();
         },
         error => {
           this.loading = LoadingState.Ready;
-          this.toastr.error('Something went wrong', '', {
-            timeOut: 3000,
-          });
+          if(error.error.message)
+          {
+            this.toastr.error(error.error.message, '', {
+              timeOut: 3000,
+            });
+          }
+          else{
+            this.toastr.error('Something went wrong', '', {
+              timeOut: 3000,
+            });
+          }
         }
       );
     }

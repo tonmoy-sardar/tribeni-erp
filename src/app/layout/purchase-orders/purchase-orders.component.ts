@@ -54,7 +54,7 @@ export class PurchaseOrdersComponent implements OnInit {
       },
       {
         name: "Project",
-        code: "project__project_name",
+        code: "requisition__project__project_name",
         sort_type: '',
         has_tooltip: false,
         tooltip_msg: ''

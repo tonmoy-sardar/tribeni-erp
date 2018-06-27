@@ -58,7 +58,7 @@ export class GrnComponent implements OnInit {
       },
       {
         name: "Project",
-        code: "project__project_name",
+        code: "po_order__requisition__project",
         sort_type: '',
         has_tooltip: false,
         tooltip_msg: ''
@@ -104,6 +104,7 @@ export class GrnComponent implements OnInit {
     this.defaultPagination = 1;
     this.paginationMaxSize = Globals.paginationMaxSize;
     this.itemPerPage = Globals.itemPerPage;
+    this.user_approve_details  = JSON.parse(localStorage.getItem('approve_details'));
     this.getGrnList();
     this.getHelp();
     this.getCompanyList();
@@ -168,6 +169,7 @@ export class GrnComponent implements OnInit {
         {
           this.grnList[i].isApproveStatus = this.user_approve_details.filter(p => p.content == this.module && p.level <= this.grnList[i].approval_level)[0];
         }
+        console.log(this.grnList);
         this.itemNo = (this.defaultPagination - 1) * this.itemPerPage;
         this.lower_count = this.itemNo + 1;
         if (this.totalGrnList > this.itemPerPage * this.defaultPagination) {

@@ -1,38 +1,46 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GrnService } from '../../../core/services/grn.service';
-import { HelpService } from '../../../core/services/help.service';
+import { GrnReverseService } from '../../../core/services/grn-reverse.service';
+import { StocksService } from '../../../core/services/stocks.service';
+import { CompanyService } from '../../../core/services/company.service';
 import { ToastrService } from 'ngx-toastr';
+import { HelpService } from '../../../core/services/help.service';
 import * as Globals from '../../../core/globals';
 import { LoadingState } from '../../../core/component/loading/loading.component';
-
+import { forEach } from '@angular/router/src/utils/collection';
 
 @Component({
-  selector: 'app-grn-details',
-  templateUrl: './grn-details.component.html',
-  styleUrls: ['./grn-details.component.scss']
+  selector: 'app-reverse-grn-details',
+  templateUrl: './reverse-grn-details.component.html',
+  styleUrls: ['./reverse-grn-details.component.scss']
 })
-export class GrnDetailsComponent implements OnInit {
+export class ReverseGrnDetailsComponent implements OnInit {
 
-  grnDetails;
+  reverse_grnDetails;
   visible_key: boolean;
   help_heading = "";
   help_description = "";
-  module = "grn";
+  module = "reversgrn";
   user_approve_details: any = [];
   isApproveStatus;
   loading: LoadingState = LoadingState.NotReady;
+
   constructor(
-    private grnService: GrnService,
     private router: Router,
     private route: ActivatedRoute,
-    private helpService: HelpService,
     private toastr: ToastrService,
+    private grnService: GrnService,
+    private grnReverseService: GrnReverseService,
+    private stocksService: StocksService,
+    private companyService: CompanyService,
+    private helpService: HelpService
   ) { }
 
   ngOnInit() {
     this.user_approve_details  = JSON.parse(localStorage.getItem('approve_details'));
-    this.getGrnDetails(this.route.snapshot.params['id']);
+    console.log(this.user_approve_details);
+    this.getReverseGrnDetails(this.route.snapshot.params['id']);
     this.getHelp();
 
   }
@@ -44,13 +52,13 @@ export class GrnDetailsComponent implements OnInit {
     })
   }
 
-  getGrnDetails(id) {
-    this.grnService.getGrnDetails(id).subscribe(
+  getReverseGrnDetails(id) {
+    this.grnReverseService.getReverseGrnDetails(id).subscribe(
       (data: any[]) => {
-        this.grnDetails = data;
-        console.log(this.grnDetails);
+        this.reverse_grnDetails = data;
+        console.log(this.reverse_grnDetails);
         this.visible_key = true
-        this.isApproveStatus = this.user_approve_details.filter(p => p.content == this.module && p.level <= this.grnDetails.approval_level)[0];
+        this.isApproveStatus = this.user_approve_details.filter(p => p.content == this.module && p.level <= this.reverse_grnDetails.approval_level)[0];
         this.loading = LoadingState.Ready;
       },
       error => {
@@ -71,11 +79,11 @@ export class GrnDetailsComponent implements OnInit {
   changeApproveStatus(value, id,approval_level) {
     if (value > 0) {
       this.loading = LoadingState.Processing;
-      let grn;
+      let reverse_grn;
 
       if(value==2)
       {
-        grn = {
+        reverse_grn = {
           id: id,
           is_approve:value,
           approval_level:0
@@ -83,18 +91,18 @@ export class GrnDetailsComponent implements OnInit {
       }
       else
       {
-        grn = {
+        reverse_grn = {
           id: id,
           approval_level:approval_level+1
         };
       }
 
-      this.grnService.approveDisapproveGrn(grn).subscribe(
+      this.grnReverseService.approveDisapproveReverseGrn(reverse_grn).subscribe(
         response => {
-          this.toastr.success('Grn approve status changed successfully', '', {
+          this.toastr.success('Reverse Grn approve status changed successfully', '', {
             timeOut: 3000,
           });
-          this.getGrnDetails(id);
+          this.getReverseGrnDetails(id);
         },
         error => {
           
