@@ -101,6 +101,7 @@ export class PurchaseInvoiceComponent implements OnInit {
     this.defaultPagination = 1;
     this.paginationMaxSize = Globals.paginationMaxSize;
     this.itemPerPage = Globals.itemPerPage;
+    this.user_approve_details  = JSON.parse(localStorage.getItem('approve_details'));
     this.getPurchaseInvoiceList();
     this.getHelp();
     this.getCompanyList();
