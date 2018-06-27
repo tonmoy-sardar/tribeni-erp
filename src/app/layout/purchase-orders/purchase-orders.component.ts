@@ -46,6 +46,20 @@ export class PurchaseOrdersComponent implements OnInit {
 
     this.headerThOption = [
       {  
+        name: "Company",
+        code: "company__company_name",
+        sort_type:'',
+        has_tooltip:false,
+        tooltip_msg:''
+      },
+      {
+        name: "Project",
+        code: "project__project_name",
+        sort_type: '',
+        has_tooltip: false,
+        tooltip_msg: ''
+      },
+      {  
         name: "PO. No.",
         code: "purchase_order_no",
         sort_type:'',
@@ -65,13 +79,6 @@ export class PurchaseOrdersComponent implements OnInit {
         sort_type:'',
         has_tooltip:true,
         tooltip_msg:'Purchase Order Amount'
-      },
-      {  
-        name: "Company",
-        code: "company__company_name",
-        sort_type:'',
-        has_tooltip:false,
-        tooltip_msg:''
       },
       {  
         name: "PO. Raised Date",

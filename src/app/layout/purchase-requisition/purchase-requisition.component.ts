@@ -46,13 +46,6 @@ export class PurchaseRequisitionComponent implements OnInit {
 
     this.headerThOption = [
       {
-        name: "PR No.",
-        code: "requisition_no",
-        sort_type: '',
-        has_tooltip: true,
-        tooltip_msg: 'Purchase Requisition Number'
-      },
-      {
         name: "Company",
         code: "company__company_name",
         sort_type: '',
@@ -65,6 +58,13 @@ export class PurchaseRequisitionComponent implements OnInit {
         sort_type: '',
         has_tooltip: false,
         tooltip_msg: ''
+      },
+      {
+        name: "PR No.",
+        code: "requisition_no",
+        sort_type: '',
+        has_tooltip: true,
+        tooltip_msg: 'Purchase Requisition Number'
       },
       {
         name: "PR Raised Date",

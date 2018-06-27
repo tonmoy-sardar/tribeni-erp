@@ -56,35 +56,34 @@
                     <i class="fa fa-chevron-down inactive-color" [ngClass]="{'active-color':headerTh.sort_type=='desc'}"></i>
                   </span>
                 </th>
-                <th>Is approved</th>
+                <th>Status</th>
                 <th class="text-center">Details</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let purchaseOrder of purchaseOrderList ; let i = index">
                 <th scope="row">{{itemNo + i +1}}</th>
-                <td>{{purchaseOrder.purchase_order_no}}</td>
-                <td>{{purchaseOrder.requisition.requisition_number}}</td>
-                <td>{{purchaseOrder.grand_total}}</td>
-                <td>{{purchaseOrder.company.company_name}}</td>
-                <td>{{purchaseOrder.quotation_date | date:'dd-MM-yyyy'}}</td>
-                <td style="width:15%" *ngIf="!purchaseOrder.isApproveStatus">
+                <td style="width:15%">{{purchaseOrder.company.company_name}}</td>
+                <td style="width:15%">{{purchaseOrder.project.name}}</td>
+                <td style="width:14%">{{purchaseOrder.purchase_order_no}}</td>
+                <td style="width:14%">{{purchaseOrder.requisition.requisition_number}}</td>
+                <td style="width:10%">{{purchaseOrder.grand_total}}</td>
+                <td style="width:12%">{{purchaseOrder.quotation_date | date:'dd-MM-yyyy'}}</td>
+                <td style="width:10%" *ngIf="!purchaseOrder.isApproveStatus">
                   <label *ngIf="purchaseOrder.is_finalised == 1" style="display: inline;">Finalised</label>
-                  <label *ngIf="purchaseOrder.is_approve == 0 && purchaseOrder.is_finalised == 0" style="display: inline;">None</label>
                   <label *ngIf="purchaseOrder.is_approve == 1 && purchaseOrder.is_finalised == 0" style="display: inline;">Approved</label>
                   <label *ngIf="purchaseOrder.is_approve == 2 && purchaseOrder.is_finalised == 0" style="display: inline;">Rejected</label>
-                  <select *ngIf="purchaseOrder.is_finalised == 0  && purchaseOrder.is_approve == 0" class="form-control" name="is_approve" (change)="changeApproveStatus($event.target.value,purchaseOrder.id,purchaseOrder.approval_level)"
-                    style="display: inline-flex; width: 81%; float: right; ">
-                    <option value='0'>Change Approve</option>
+                  <select *ngIf="purchaseOrder.is_finalised == 0  && purchaseOrder.is_approve == 0" class="form-control" name="is_approve" (change)="changeApproveStatus($event.target.value,purchaseOrder.id,purchaseOrder.approval_level)">
+                    <option value='0'>None</option>
                     <option value='1'>Approve</option>
                     <option value='2'>Reject</option>
                   </select>
                 </td>
-                <td style="width:15%" *ngIf="purchaseOrder.isApproveStatus">
+                <td style="width:10%" *ngIf="purchaseOrder.isApproveStatus">
                   <label *ngIf="purchaseOrder.is_finalised == 1" style="display: inline;">Finalised</label>
                   <label *ngIf="purchaseOrder.is_finalised == 0" style="display: inline;">Approved</label>
                 </td>
-                <td class="text-center">
+                <td  style="width:5%" class="text-center">
                   <a href="javascript:void(0);" class="anchor-action" title="Details" name="Details" [routerLink]="['/purchase-orders/details', purchaseOrder.id]">
                     <i class="fa fa-eye"></i>
                   </a>
@@ -92,7 +91,7 @@
 
               </tr>
               <tr *ngIf="purchaseOrderList.length == 0">
-                <td colspan="12" class="text-center">No record found</td>
+                <td colspan="10" class="text-center">No record found</td>
               </tr>
             </tbody>
           </table>
