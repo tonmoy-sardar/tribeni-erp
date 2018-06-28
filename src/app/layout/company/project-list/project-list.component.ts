@@ -63,17 +63,8 @@ export class ProjectListComponent implements OnInit {
         name: "GST",
         code: "project_gstin",
         sort_type:''
-      },
-      {  
-        name: "PAN",
-        code: "project_pan",
-        sort_type:''
-      },
-      {  
-        name: "CIN",
-        code: "project_cin",
-        sort_type:''
       }
+      
     ];
     this.defaultPagination = 1;
     this.paginationMaxSize = Globals.paginationMaxSize;

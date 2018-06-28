@@ -190,6 +190,7 @@ export class GrnComponent implements OnInit {
   }
 
   changeApproveStatus(value, id,approval_level) {
+    console.log(approval_level);
     if (value > 0) {
 
       this.loading = LoadingState.Processing;
@@ -212,21 +213,32 @@ export class GrnComponent implements OnInit {
       }
       this.grnService.approveDisapproveGrn(grn).subscribe(
         response => {
-          if (value == 1) {
+          console.log(response);
+          if (response.is_approve == 1) {
             this.addNewStock(id)
           }
-          else {
-            this.toastr.success('GRN dis-approved successfully', '', {
+          else{
+            this.toastr.success('Grn approve status changed successfully', '', {
               timeOut: 3000,
             });
             this.getGrnList();
           }
+         
         },
         error => {
+
           this.loading = LoadingState.Ready;
-          this.toastr.error('Something went wrong', '', {
-            timeOut: 3000,
-          });
+          if(error.error.message)
+          {
+            this.toastr.error(error.error.message, '', {
+              timeOut: 3000,
+            });
+          }
+          else{
+            this.toastr.error('Something went wrong', '', {
+              timeOut: 3000,
+            });
+          }
         }
       );
     }
@@ -261,7 +273,7 @@ export class GrnComponent implements OnInit {
       response => {
         this.loading = LoadingState.Ready;
         if (i == this.stock.length) {
-          this.toastr.success('GRN approved successfully', '', {
+          this.toastr.success('Grn approve status changed successfully', '', {
             timeOut: 3000,
           });
           this.getGrnList();

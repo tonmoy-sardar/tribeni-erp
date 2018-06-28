@@ -54,6 +54,7 @@ export class ProjectAddComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.formBuilder.group({
+      company: [this.route.snapshot.params['id'], Validators.required],
       project_name: [null, Validators.required],
       description: [null],
       contact_person: [null],
@@ -79,7 +80,7 @@ export class ProjectAddComponent implements OnInit {
       project_gstin:'',
       project_details: [
         {
-          material_type: '',
+          materialtype: '',
           material: '',
           quantity: '',
           rate: '',
@@ -126,7 +127,7 @@ export class ProjectAddComponent implements OnInit {
 
   createProjectDetail() {
     return this.formBuilder.group({
-      material_type: ['', Validators.required],
+      materialtype: ['', Validators.required],
       material: ['', Validators.required],
       quantity: ['', Validators.required],
       uom: [{ value: null, disabled: true }],
@@ -138,7 +139,7 @@ export class ProjectAddComponent implements OnInit {
   addProjectDetail() {
 
     var project_details_obj = {
-      material_type: '',
+      materialtype: '',
       material: '',
       quantity: '',
       rate:'',
@@ -200,9 +201,11 @@ export class ProjectAddComponent implements OnInit {
   }
 
   addNewCompanyProject() {
+    console.log(this.companyProject);
+    console.log(this.form.value);
     if (this.form.valid) {
       this.loading = LoadingState.Processing;
-      this.companyService.addNewCompanyProject(this.companyProject).subscribe(
+      this.companyService.addNewCompanyProject(this.form.value).subscribe(
         response => {
           this.toastr.success('Project added successfully', '', {
             timeOut: 3000,

@@ -169,10 +169,10 @@
                                                     <td>{{mat.avail_qty}}</td>
                                                     <td>{{mat.material_rate[0].rate}}</td>
                                                     <td>{{mat.uom.name}}</td>
-                                                    <td>{{mat.material.material_tax[0].hsn}}</td>
-                                                    <td>{{mat.material.material_tax[0].igst}}</td>
-                                                    <td>{{mat.material.material_tax[0].cgst}}</td>
-                                                    <td>{{mat.material.material_tax[0].sgst}}</td>
+                                                    <td><span>{{mat.material.material_tax[0]?.hsn}}</span></td>
+                                                    <td><span>{{mat.material.material_tax[0]?.igst}}</span></td>
+                                                    <td><span>{{mat.material.material_tax[0]?.cgst}}</span></td>
+                                                    <td><span>{{mat.material.material_tax[0]?.sgst}}</span></td>
                                                     <td width="80px">
                                                         <input appOnlyNumber type="text" class="form-control" name="order_quantity" [(ngModel)]="material_details_list[k].order_quantity"
                                                             (keyup)="getSubTotal(material_details_list[k].order_quantity,material_details_list[k].rate,material_details_list[k].discount_percent, k)"

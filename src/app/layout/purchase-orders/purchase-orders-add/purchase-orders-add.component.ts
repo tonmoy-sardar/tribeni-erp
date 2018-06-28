@@ -91,13 +91,21 @@ export class PurchaseOrdersAddComponent implements OnInit {
       this.requisition_details.requisition_detail.forEach(x => {
         // console.log(x)
         var Mdtl = {
+          igst: 0,
+          cgst: 0,
+          sgst: 0,
           material: x.material.id,
-          gst_amount: '',
+          gst_amount: 0,
           order_quantity: '',
           rate: '',
-          discount_percent: '',
+          discount_percent: 0,
           delivery_date: '',
           sub_total: ''
+        }
+        if (x.material.material_tax.length > 0) {
+          Mdtl.igst = x.material.material_tax[0].igst;
+          Mdtl.cgst = x.material.material_tax[0].cgst;
+          Mdtl.sgst = x.material.material_tax[0].sgst;
         }
         this.material_details_list.push(Mdtl)
       })
@@ -199,9 +207,9 @@ export class PurchaseOrdersAddComponent implements OnInit {
       material_value: ['', Validators.required],
       discount_percent: ['', Validators.required],
       discount_value: ['', Validators.required],
-      igst: [mat.material.material_tax[0].igst, Validators.required],
-      cgst: [mat.material.material_tax[0].cgst, Validators.required],
-      sgst: [mat.material.material_tax[0].sgst, Validators.required],
+      igst: ['', Validators.required],
+      cgst: ['', Validators.required],
+      sgst: ['', Validators.required],
       gst_amount: ['', Validators.required],
       sub_total: ['', Validators.required],
       delivery_date: ['', Validators.required]
@@ -253,7 +261,13 @@ export class PurchaseOrdersAddComponent implements OnInit {
         timeOut: 3000,
       });
     }
-    var igst = Math.round(this.requisition_details.requisition_detail[i].material.material_tax[0].igst)
+    var igst;
+    if (this.requisition_details.requisition_detail[i].material.material_tax.length > 0) {
+      igst = Math.round(this.requisition_details.requisition_detail[i].material.material_tax[0].igst)
+    }
+    else {
+      igst = 0;
+    }
     if (quantity != "" && rate != "" && discount != "") {
       var val = Math.round((rate * quantity) - ((rate * quantity * discount) / 100))
       var gst_amount = Math.round((val * igst) / 100)
@@ -357,6 +371,7 @@ export class PurchaseOrdersAddComponent implements OnInit {
     this.router.navigateByUrl('/' + toNav);
   };
   addPurchaseOrder() {
+
     if (this.form.value.purchase_order_detail.length == 0) {
       this.toastr.error('Check atleast one item from list of item/s', '', {
         timeOut: 3000,
@@ -368,19 +383,26 @@ export class PurchaseOrdersAddComponent implements OnInit {
       var Mindex = this.form.value.purchase_order_detail.findIndex(p => p.material == x.material)
       if (Mindex > -1) {
         var obj = this.material_details_list.filter(k => k.material == x.material)
-        if (obj[0].gst_amount == "" || obj[0].rate == "" || obj[0].discount_percent == "" || obj[0].delivery_date == "") {
+        if (obj[0].rate == "" || obj[0].delivery_date == "") {
           this.toastr.error('All fields are required in every row ', '', {
             timeOut: 3000,
           });
           return;
         }
         var myDate = new Date(x.delivery_date.year, x.delivery_date.month - 1, x.delivery_date.day)
+        var discount = 0
+        if (x.discount_percent != '') {
+          discount = x.discount_percent
+        }
         order_detail_control.at(Mindex).patchValue({
           gst_amount: x.gst_amount,
           rate: x.rate,
           order_quantity: x.order_quantity,
-          discount_percent: x.discount_percent,
+          discount_percent: discount,
           discount_value: Math.round((x.rate * x.order_quantity) - (x.sub_total - x.gst_amount)),
+          igst: x.igst,
+          cgst: x.cgst,
+          sgst: x.sgst,
           sub_total: x.sub_total,
           material_value: Math.round((x.rate * x.order_quantity)),
           delivery_date: myDate.toISOString()

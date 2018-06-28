@@ -22,6 +22,7 @@ export class ProjectDetailsComponent implements OnInit {
   @Output() showProjectList = new EventEmitter();
   loading: LoadingState = LoadingState.NotReady;
 
+
   company_project;
   help_heading = "";
   help_description = "";
@@ -40,8 +41,12 @@ export class ProjectDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
-    this.getCompanyProjectDetails(this.route.snapshot.params['id']);
+    console.log(this.companyProjectId);  
+    
+    this.company_project ={
+      project_name:"aaaa",
+    }
+    this.getCompanyProjectDetails(this.companyProjectId);
   }
   getHelp() {
     this.helpService.getHelp().subscribe(res => {
@@ -53,8 +58,9 @@ export class ProjectDetailsComponent implements OnInit {
   getCompanyProjectDetails(id) {
     this.companyService.getCompanyProjectDetails(id).subscribe(
       (data: any[]) => {
+        console.log(data)
         this.company_project = data;
-        console.log(this.company_project);
+       
         this.visible_key = true;
         this.loading = LoadingState.Ready;
       },

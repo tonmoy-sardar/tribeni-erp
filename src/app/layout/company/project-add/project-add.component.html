@@ -82,14 +82,14 @@
                                                         <div class="row">
                                                             <div class="form-group col-md-3">
                                                                 <label>Material Group</label>
-                                                                <select class="form-control" name="material_type" formControlName="material_type" [ngClass]="{
-                                                        'is-invalid': projectObj.get('material_type').invalid && (projectObj.get('material_type').dirty || projectObj.get('material_type').touched),
-                                                        'is-valid': projectObj.get('material_type').valid && (projectObj.get('material_type').dirty || projectObj.get('material_type').touched)
-                                                      }" (change)="changeMaterialType($event.target.value,i)" [(ngModel)]="companyProject.project_details[i].material_type">
+                                                                <select class="form-control" name="materialtype" formControlName="materialtype" [ngClass]="{
+                                                        'is-invalid': projectObj.get('materialtype').invalid && (projectObj.get('materialtype').dirty || projectObj.get('materialtype').touched),
+                                                        'is-valid': projectObj.get('materialtype').valid && (projectObj.get('materialtype').dirty || projectObj.get('materialtype').touched)
+                                                      }" (change)="changeMaterialType($event.target.value,i)" [(ngModel)]="companyProject.project_details[i].materialtype">
                                                                     <option value="">Select Material Type</option>
-                                                                    <option *ngFor="let materialType of materialTypeList;" [value]="materialType.id">{{materialType.material_type}} </option>
+                                                                    <option *ngFor="let material_type of materialTypeList;" [value]="material_type.id">{{material_type.material_type}} </option>
                                                                 </select>
-                                                                <div class="invalid-feedback" *ngIf="projectObj.get('material_type').touched && projectObj.get('material_type').hasError('required')">
+                                                                <div class="invalid-feedback" *ngIf="projectObj.get('materialtype').touched && projectObj.get('materialtype').hasError('required')">
                                                                     Please select material Group
                                                                 </div>
                                                             </div>
