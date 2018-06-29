@@ -70,6 +70,7 @@
                 <td style="width:10%">{{purchaseOrder.grand_total}}</td>
                 <td style="width:12%">{{purchaseOrder.quotation_date | date:'dd-MM-yyyy'}}</td>
                 <td style="width:10%" *ngIf="!purchaseOrder.isApproveStatus">
+                 
                   <label *ngIf="purchaseOrder.is_finalised == 1" style="display: inline;">Finalised</label>
                   <label *ngIf="purchaseOrder.is_approve == 1 && purchaseOrder.is_finalised == 0" style="display: inline;">Approved</label>
                   <label *ngIf="purchaseOrder.is_approve == 2 && purchaseOrder.is_finalised == 0" style="display: inline;">Rejected</label>

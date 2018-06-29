@@ -247,7 +247,7 @@ export class PurchaseInvoiceComponent implements OnInit {
 
       this.purchaseInvoiceService.approveDisapprovePurchaseInvoice(PurchaseInvoice).subscribe(
         response => {
-          if (value == 1) {
+          if (response.is_approve == 1) {
             this.paymentCreation(pInvoice);
           }
           else {
@@ -259,9 +259,17 @@ export class PurchaseInvoiceComponent implements OnInit {
         },
         error => {
           this.loading = LoadingState.Ready;
-          this.toastr.error('Something went wrong', '', {
-            timeOut: 3000,
-          });
+          if(error.error.message)
+          {
+            this.toastr.error(error.error.message, '', {
+              timeOut: 3000,
+            });
+          }
+          else{
+            this.toastr.error('Something went wrong', '', {
+              timeOut: 3000,
+            });
+          }
         }
       );
     }
