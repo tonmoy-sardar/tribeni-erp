@@ -48,8 +48,8 @@ export class EmployeeAttendanceAddComponent implements OnInit {
 
   getHelp() {
     this.helpService.getHelp().subscribe(res => {
-      this.help_heading = res.data.grn.heading;
-      this.help_description = res.data.grn.desc;
+      this.help_heading = res.data.attendanceAdd.heading;
+      this.help_description = res.data.attendanceAdd.desc;
       this.loading = LoadingState.Ready
     })
   }

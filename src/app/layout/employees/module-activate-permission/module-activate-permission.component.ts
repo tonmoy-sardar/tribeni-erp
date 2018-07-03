@@ -68,8 +68,8 @@ export class ModuleActivatePermissionComponent implements OnInit {
   }
   getHelp() {
     this.helpService.getHelp().subscribe(res => {
-      this.help_heading = res.data.employee.heading;
-      this.help_description = res.data.employee.desc;
+      this.help_heading = res.data.modulePermission.heading;
+      this.help_description = res.data.modulePermission.desc;
     })
   }
 

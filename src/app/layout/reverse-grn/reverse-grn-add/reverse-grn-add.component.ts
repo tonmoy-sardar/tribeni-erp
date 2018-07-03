@@ -60,8 +60,8 @@ export class ReverseGrnAddComponent implements OnInit {
 
   getHelp() {
     this.helpService.getHelp().subscribe(res => {
-      this.help_heading = res.data.grnAdd.heading;
-      this.help_description = res.data.grnAdd.desc;
+      this.help_heading = res.data.reverseGrnAdd.heading;
+      this.help_description = res.data.reverseGrnAdd.desc;
     })
   }
 

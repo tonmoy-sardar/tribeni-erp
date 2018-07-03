@@ -40,13 +40,9 @@ export class ProjectDetailsComponent implements OnInit {
     private helpService: HelpService
   ) { }
 
-  ngOnInit() {
-    console.log(this.companyProjectId);  
-    
-    this.company_project ={
-      project_name:"aaaa",
-    }
+  ngOnInit() {    
     this.getCompanyProjectDetails(this.companyProjectId);
+    this.getHelp();
   }
   getHelp() {
     this.helpService.getHelp().subscribe(res => {

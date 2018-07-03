@@ -42,8 +42,8 @@ export class GrnDetailsComponent implements OnInit {
 
   getHelp() {
     this.helpService.getHelp().subscribe(res => {
-      // this.help_heading = res.data.grnDetails.heading;
-      //this.help_description = res.data.grnDetails.desc;
+      this.help_heading = res.data.grnDetails.heading;
+      this.help_description = res.data.grnDetails.desc;
     })
   }
 

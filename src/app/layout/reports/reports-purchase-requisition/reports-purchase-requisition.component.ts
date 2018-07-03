@@ -65,8 +65,8 @@ export class ReportsPurchaseRequisitionComponent implements OnInit {
 
   getHelp() {
     this.helpService.getHelp().subscribe(res => {
-      this.help_heading = res.data.employeeAdd.heading;
-      this.help_description = res.data.employeeAdd.desc;
+      this.help_heading = res.data.purchaseRequisitionReport.heading;
+      this.help_description = res.data.purchaseRequisitionReport.desc;
     })
   }
 
