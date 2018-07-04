@@ -34,6 +34,7 @@ export class PurchaseRequisitionComponent implements OnInit {
   sort_type = '';
   headerThOption = [];
   loading: LoadingState = LoadingState.NotReady;
+  status_visible_key: boolean
   constructor(
     private router: Router,
     private purchaseRequisitionService: PurchaseRequisitionService,
@@ -85,8 +86,11 @@ export class PurchaseRequisitionComponent implements OnInit {
     this.defaultPagination = 1;
     this.paginationMaxSize = Globals.paginationMaxSize;
     this.itemPerPage = Globals.itemPerPage;
-    this.user_approve_details  = JSON.parse(localStorage.getItem('approve_details'));
-
+    this.user_approve_details = JSON.parse(localStorage.getItem('approve_details'));
+    var permission_chk = this.user_approve_details.filter(p => p.content == this.module)[0];
+    if (permission_chk != undefined) {
+      this.status_visible_key = true
+    }
     this.getPurchaseRequisitionList();
     this.getHelp();
     this.getCompanyList();
@@ -126,7 +130,7 @@ export class PurchaseRequisitionComponent implements OnInit {
     if (this.company_id != undefined) {
       params.set('company', this.company_id);
     }
-    
+
     if (this.project_id != undefined) {
       params.set('project', this.project_id);
     }
@@ -142,11 +146,9 @@ export class PurchaseRequisitionComponent implements OnInit {
       (data: any[]) => {
         this.totalPurchaseRequisitionList = data['count'];
         this.purchaseRequisitionList = data['results'];
-        for(let i=0;i<this.purchaseRequisitionList.length;i++)
-        {
+        for (let i = 0; i < this.purchaseRequisitionList.length; i++) {
           this.purchaseRequisitionList[i].isApproveStatus = this.user_approve_details.filter(p => p.content == this.module && p.level <= this.purchaseRequisitionList[i].approval_level)[0];
         }
-        
 
         this.itemNo = (this.defaultPagination - 1) * this.itemPerPage;
         this.lower_count = this.itemNo + 1;
@@ -157,7 +159,7 @@ export class PurchaseRequisitionComponent implements OnInit {
           this.upper_count = this.totalPurchaseRequisitionList
         }
         this.loading = LoadingState.Ready;
-        // console.log(this.purchaseRequisitionList)
+        console.log(this.purchaseRequisitionList)
       },
       error => {
         this.loading = LoadingState.Ready;
@@ -168,24 +170,22 @@ export class PurchaseRequisitionComponent implements OnInit {
     );
   }
 
-  changeApproveStatus(value, id,approval_level) {
+  changeApproveStatus(value, id, approval_level) {
     if (value > 0) {
       this.loading = LoadingState.Processing;
       let purchaseRequisition;
 
-      if(value==2)
-      {
+      if (value == 2) {
         purchaseRequisition = {
           id: id,
-          is_approve:value,
-          approval_level:0
+          is_approve: value,
+          approval_level: 0
         };
       }
-      else
-      {
+      else {
         purchaseRequisition = {
           id: id,
-          approval_level:approval_level+1
+          approval_level: approval_level + 1
         };
       }
 
@@ -197,20 +197,19 @@ export class PurchaseRequisitionComponent implements OnInit {
           this.getPurchaseRequisitionList();
         },
         error => {
-          
+
           this.loading = LoadingState.Ready;
-          if(error.error.message)
-          {
+          if (error.error.message) {
             this.toastr.error(error.error.message, '', {
               timeOut: 3000,
             });
           }
-          else{
+          else {
             this.toastr.error('Something went wrong', '', {
               timeOut: 3000,
             });
           }
-          
+
         }
       );
     }

@@ -21,6 +21,7 @@ export class PurchaseOrdersDetailsComponent implements OnInit {
   user_approve_details: any = [];
   isApproveStatus;
   loading: LoadingState = LoadingState.NotReady;
+  status_visible_key: boolean;
   constructor(
     private purchaseOrdersService: PurchaseOrdersService,
     private router: Router,
@@ -31,6 +32,10 @@ export class PurchaseOrdersDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.user_approve_details  = JSON.parse(localStorage.getItem('approve_details'));
+    var permission_chk = this.user_approve_details.filter(p => p.content == this.module)[0];
+    if (permission_chk != undefined) {
+      this.status_visible_key = true
+    }
     this.getPurchaseOrderDetails(this.route.snapshot.params['id']);
     this.getHelp();
 

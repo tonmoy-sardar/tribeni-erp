@@ -40,9 +40,8 @@ export class LoginComponent implements OnInit {
             this.loading = LoadingState.Processing;
             this.loginService.login(this.form.value).subscribe(
                 response => {
-                    console.log(response);
                     this.loading = LoadingState.Ready;
-                    this.toastr.success('Login successfully', '', {
+                    this.toastr.success('Login successful', '', {
                         timeOut: 3000,
                     });
                     localStorage.setItem('isLoggedin', 'true');
@@ -50,22 +49,18 @@ export class LoginComponent implements OnInit {
                     localStorage.setItem('logedUserToken', response.token);
                     localStorage.setItem('logedUserUserId', response.user_id);
                     localStorage.setItem('logedUserUserName', response.username);
-                    localStorage.setItem('logedUser', response.first_name+' '+response.last_name);
+                    localStorage.setItem('logedUser', response.first_name + ' ' + response.last_name);
                     localStorage.setItem('userRole', response.user_type);
                     localStorage.setItem('approve_details', JSON.stringify(response.approve_details));
-                    
                     this.goToPage('dashboard');
                 },
                 error => {
-                    // console.log('error', error)
                     this.loading = LoadingState.Ready;
                     this.toastr.error(error.error.non_field_errors[0], '', {
                         timeOut: 3000,
                     });
                 }
             );
-            // console.log(this.login);
-            //localStorage.setItem('isLoggedin', 'true');
         } else {
             Object.keys(this.form.controls).forEach(field => {
                 const control = this.form.get(field);
@@ -76,13 +71,13 @@ export class LoginComponent implements OnInit {
     }
 
     isFieldValid(field: string) {
-        return !this.form.get(field).valid && this.form.get(field).touched;
+        return !this.form.get(field).valid && (this.form.get(field).dirty || this.form.get(field).touched);
     }
 
     displayFieldCss(field: string) {
         return {
-            'is-invalid': !this.form.get(field).valid && this.form.get(field).touched,
-            'is-valid': this.form.get(field).valid
+            'is-invalid': this.form.get(field).invalid && (this.form.get(field).dirty || this.form.get(field).touched),
+            'is-valid': this.form.get(field).valid && (this.form.get(field).dirty || this.form.get(field).touched)
         };
     }
 

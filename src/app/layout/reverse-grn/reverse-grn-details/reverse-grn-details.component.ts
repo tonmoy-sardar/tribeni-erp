@@ -25,7 +25,7 @@ export class ReverseGrnDetailsComponent implements OnInit {
   user_approve_details: any = [];
   isApproveStatus;
   loading: LoadingState = LoadingState.NotReady;
-
+  status_visible_key: boolean;
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -39,7 +39,10 @@ export class ReverseGrnDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.user_approve_details  = JSON.parse(localStorage.getItem('approve_details'));
-    console.log(this.user_approve_details);
+    var permission_chk = this.user_approve_details.filter(p => p.content == this.module)[0];
+    if (permission_chk != undefined) {
+      this.status_visible_key = true
+    }
     this.getReverseGrnDetails(this.route.snapshot.params['id']);
     this.getHelp();
 

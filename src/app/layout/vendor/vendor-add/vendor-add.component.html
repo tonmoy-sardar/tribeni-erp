@@ -102,7 +102,7 @@
                             <label>Designation</label>
                             <input class="form-control" placeholder="Designation" name="designation" formControlName="designation">
                           </div>
-                          <div class="form-group col-md-5">
+                          <div class="form-group col-md-4">
                             <label>Address</label>
                             <textarea class="form-control" rows="1" placeholder="Address" name="address" formControlName="address" [ngClass]="{
                             'is-invalid': contact.get('address').invalid && (contact.get('address').dirty || contact.get('address').touched),
@@ -145,9 +145,9 @@
                               Please enter pincode
                             </div>
                           </div>
-                          <div class="form-group col-md-1" style="padding-top:30px;">
+                          <div class="form-group col-md-2" style="padding-top:30px;">
                             <a routerLink="." (click)="addContact()" title="Add More" name="Add More" *ngIf="i == 0">
-                              <i class="fa fa-plus"></i> Add More</a>
+                              <i class="fa fa-plus"></i> Add another contact</a>
                             <a href="javascript:void(0);" title="Delete" name="Delete" *ngIf="i > 0" (click)="deleteContact(i)">
                               <i class="fa fa-times-circle fa-2"></i> Delete</a>
                           </div>
@@ -202,12 +202,12 @@
                               Please enter IFSC
                             </div>
                           </div>
-                          <div class="form-group col-md-1" style="padding-top:30px;">
+                          <!-- <div class="form-group col-md-1" style="padding-top:30px;">
                             <a routerLink="." (click)="addBank()" title="Add More" name="Add More" *ngIf="i == 0">
                               <i class="fa fa-plus"></i> Add More</a>
                             <a href="javascript:void(0);" title="Delete" name="Delete" *ngIf="i > 0" (click)="deleteBank(i)">
                               <i class="fa fa-times-circle fa-2"></i> Delete</a>
-                          </div>
+                          </div> -->
                         </div>
                       </div>
                     </div>

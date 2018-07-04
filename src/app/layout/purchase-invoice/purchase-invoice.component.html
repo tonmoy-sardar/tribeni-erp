@@ -57,7 +57,7 @@
                   </span>
                 </th>
                 <!-- <th>Status</th> -->
-                <th>Status</th>
+                <th *ngIf="status_visible_key">Status</th>
                 <th class="text-center">Details</th>
               </tr>
             </thead>
@@ -72,7 +72,7 @@
                 <td style="width:11%">{{pInvoice.grn.created_at | date:'dd-MM-yyyy'}}</td>
                 <td style="width:12%">{{pInvoice.grn.created_by.first_name}}</td>
                 
-                <td style="width:10%" *ngIf="!pInvoice.isApproveStatus">
+                <td style="width:10%" *ngIf="!pInvoice.isApproveStatus && status_visible_key">
                   <label *ngIf="pInvoice.is_finalised == 1" style="display: inline;">Finalised</label>
                   <label *ngIf="pInvoice.is_approve == 0 && pInvoice.is_finalised == 0" style="display: inline;">None</label>
                   <label *ngIf="pInvoice.is_approve == 1 && pInvoice.is_finalised == 0" style="display: inline;">Approved</label>
@@ -84,7 +84,7 @@
                     <option value='2'>Reject</option>
                   </select>
                 </td>
-                <td style="width:10%" *ngIf="pInvoice.isApproveStatus">
+                <td style="width:10%" *ngIf="pInvoice.isApproveStatus && status_visible_key">
                   <label *ngIf="pInvoice.is_finalised == 1" style="display: inline;">Finalised</label>
                   <label *ngIf="pInvoice.is_finalised == 0" style="display: inline;">Approved</label>
                 </td>

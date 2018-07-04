@@ -157,11 +157,11 @@
                     </tbody>
                   </table>
                 </div>
-                <div class="col-md-12">
-                  <h4>Approve Status</h4>
+                <div class="col-md-12" *ngIf="status_visible_key">
+                  <h4>Approval Status</h4>
                   <hr/>
                 </div>
-                <div class="col-md-4"  *ngIf="!isApproveStatus">
+                <div class="col-md-4"  *ngIf="!isApproveStatus && status_visible_key">
                   <label *ngIf="purchaseInvoice.is_finalised == 1" style="display: inline;">Finalised</label>
                   <label *ngIf="purchaseInvoice.is_approve == 0 && purchaseInvoice.is_finalised == 0" style="display: inline;">None</label>
                   <label *ngIf="purchaseInvoice.is_approve == 1 && purchaseInvoice.is_finalised == 0" style="display: inline;">Approved</label>
@@ -174,7 +174,7 @@
                     <option value='2'>Reject</option>
                   </select>
                 </div>
-                <div class="col-md-4" *ngIf="isApproveStatus">
+                <div class="col-md-4" *ngIf="isApproveStatus && status_visible_key">
                   <label *ngIf="purchaseInvoice.is_finalised == 1" style="display: inline;">Finalised</label>
                   <label *ngIf="purchaseInvoice.is_finalised == 0" style="display: inline;">Approved</label>
                   

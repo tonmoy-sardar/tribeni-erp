@@ -37,6 +37,7 @@ export class GrnComponent implements OnInit {
   sort_type = '';
   headerThOption = [];
   loading: LoadingState = LoadingState.NotReady;
+  status_visible_key: boolean;
   constructor(
     private router: Router,
     private toastr: ToastrService,
@@ -105,6 +106,10 @@ export class GrnComponent implements OnInit {
     this.paginationMaxSize = Globals.paginationMaxSize;
     this.itemPerPage = Globals.itemPerPage;
     this.user_approve_details  = JSON.parse(localStorage.getItem('approve_details'));
+    var permission_chk = this.user_approve_details.filter(p => p.content == this.module)[0];
+    if (permission_chk != undefined) {
+      this.status_visible_key = true
+    }
     this.getGrnList();
     this.getHelp();
     this.getCompanyList();

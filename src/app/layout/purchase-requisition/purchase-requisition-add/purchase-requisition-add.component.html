@@ -65,34 +65,34 @@
                                     <div class="card-header">Previous Purchase Requisition</div>
                                     <div class="card-body">
                                         <div class="card bg-light mb-3" *ngFor="let prevReq of prevPurchaseRequisition">
-                                                <table class="card-body table table-sm " >
-                                                        <tbody>
-                                                            <tr>
-                                                                <td colspan="6">Purchase Requisition No ({{prevReq.requisition_no}})</td>
-                                                            </tr>
-                                                        </tbody>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>Material Group</td>
-                                                                <td>Material</td>
-                                                                <td>Specific Qty.</td>
-                                                                <td>Qty. Taken</td>
-                                                                <td>UOM</td>
-                                                                <td>Average Rate</td>
-                                                            </tr>
-                                                        </tbody>
-                                                        <tbody>
-                                                            <tr *ngFor="let prevReqDetail of prevReq.requisition_detail">
-                                                                <td>{{prevReqDetail.material.material_type.material_type}}</td>
-                                                                <td>{{prevReqDetail.material.material_fullname}} ({{prevReqDetail.material.material_code}})</td>
-                                                                <td>{{prevReqDetail.project_material_quantity[0].quantity}}</td>
-                                                                <td>{{prevReqDetail.quantity}}</td>
-                                                                <td>{{prevReqDetail.uom.name}}</td>
-                                                                <td>{{prevReqDetail.material_rate[0].rate}}</td>
-                                                            </tr>
-                                                        </tbody>
-                                                </table>
-                                            
+                                            <table class="card-body table table-sm ">
+                                                <tbody>
+                                                    <tr>
+                                                        <td colspan="6">Purchase Requisition No ({{prevReq.requisition_no}})</td>
+                                                    </tr>
+                                                </tbody>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Material Group</td>
+                                                        <td>Material</td>
+                                                        <td>Specific Qty.</td>
+                                                        <td>Qty. Taken</td>
+                                                        <td>UOM</td>
+                                                        <td>Average Rate</td>
+                                                    </tr>
+                                                </tbody>
+                                                <tbody>
+                                                    <tr *ngFor="let prevReqDetail of prevReq.requisition_detail">
+                                                        <td>{{prevReqDetail.material.material_type.material_type}}</td>
+                                                        <td>{{prevReqDetail.material.material_fullname}} ({{prevReqDetail.material.material_code}})</td>
+                                                        <td>{{prevReqDetail.project_material_quantity[0].quantity}}</td>
+                                                        <td>{{prevReqDetail.quantity}}</td>
+                                                        <td>{{prevReqDetail.uom.name}}</td>
+                                                        <td>{{prevReqDetail.material_rate[0].rate}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
                                         </div>
                                     </div>
                                 </div>

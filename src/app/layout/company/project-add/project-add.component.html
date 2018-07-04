@@ -38,7 +38,13 @@
                                     <div class="form-group col-md-4">
                                         <label>Phone</label>
                                         <input type="text" appOnlyNumber class="form-control" [(ngModel)]="companyProject.project_contact_no" name="project_contact_no"
-                                            placeholder="Phone" formControlName="project_contact_no">
+                                            placeholder="Phone" formControlName="project_contact_no" [ngClass]="displayFieldCss('project_contact_no')">
+                                        <div class="invalid-feedback" *ngIf="form.controls['project_contact_no'].hasError('minlength') && !form.controls['project_contact_no'].hasError('required')">
+                                            Please enter at least 10 digit
+                                        </div>
+                                        <div class="invalid-feedback" *ngIf="form.controls['project_contact_no'].hasError('maxlength') && !form.controls['project_contact_no'].hasError('required')">
+                                            Phone number should be less then 13 digit
+                                        </div>
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label>Project Address</label>
@@ -63,14 +69,18 @@
                                     <div class="form-group col-md-4">
                                         <label>Pin</label>
                                         <input type="text" appOnlyNumber class="form-control" placeholder="Pin" [(ngModel)]="companyProject.project_pincode" name="project_pincode"
-                                            formControlName="project_pincode">
-                                        <div class="invalid-feedback" *ngIf="isFieldValid('project_pincode')">
-                                            Please enter pin
+                                            formControlName="project_pincode" [ngClass]="displayFieldCss('project_pincode')">
+                                        <div class="invalid-feedback" *ngIf="form.controls['project_pincode'].hasError('minlength') || form.controls['project_pincode'].hasError('maxlength') && !form.controls['project_pincode'].hasError('required')">
+                                            Pin number should be 6 digit
                                         </div>
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label>GSTIN</label>
-                                        <input type="text" class="form-control" placeholder="GSTIN" [(ngModel)]="companyProject.project_gstin" name="project_gstin"  formControlName="project_gstin">
+                                        <input type="text" class="form-control" placeholder="GSTIN" [(ngModel)]="companyProject.project_gstin" name="project_gstin"
+                                            formControlName="project_gstin" [ngClass]="displayFieldCss('project_gstin')">
+                                        <div class="invalid-feedback" *ngIf="form.controls['project_gstin'].hasError('minlength') || form.controls['project_gstin'].hasError('maxlength') && !form.controls['project_gstin'].hasError('required')">
+                                            GSTIN should be 15 digit
+                                        </div>
 
                                     </div>
                                     <div class="form-group col-md-12">
@@ -116,7 +126,7 @@
                                                                     Please enter quantity
                                                                 </div>
                                                             </div>
-                                                            
+
                                                             <div class="form-group col-md-2">
                                                                 <label>UOM</label>
                                                                 <select class="form-control" name="uom" formControlName="uom" [ngClass]="{

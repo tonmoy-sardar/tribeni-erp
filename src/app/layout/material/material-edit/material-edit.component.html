@@ -21,14 +21,14 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="form-group col-md-3">
-                                        <label>Material Type</label>
+                                        <label>Material Group</label>
                                         <select class="form-control" formControlName="material_type" [ngClass]="displayFieldCss('material_type')" [(ngModel)]="material.material_type"
                                             name="material_type">
-                                            <option value="">Select Material Type</option>
+                                            <option value="">Select Material Group</option>
                                             <option *ngFor="let materialType of materialTypeList;" value="{{materialType.id}}">{{materialType.material_type}}</option>
                                         </select>
                                         <div class="invalid-feedback" *ngIf="form.controls['material_type'].hasError('required')">
-                                            Please select material Type
+                                            Please select material Group
                                         </div>
                                     </div>
                                     <div class="form-group col-md-3">

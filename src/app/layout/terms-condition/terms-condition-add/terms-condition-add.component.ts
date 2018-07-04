@@ -64,7 +64,7 @@ export class TermsConditionAddComponent implements OnInit {
       this.termsConditionService.addNewTerms(this.form.value).subscribe(
         response => {
           // console.log(response)
-          this.toastr.success('Terms and services added successfully', '', {
+          this.toastr.success('Terms and conditions added successfully', '', {
             timeOut: 3000,
           });
           this.loading = LoadingState.Ready;

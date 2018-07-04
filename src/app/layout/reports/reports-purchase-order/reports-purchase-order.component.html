@@ -31,7 +31,7 @@
                       <div class="form-group col-md-3">
                         <label>Purchase Order Date</label>
                         <div class="input-group">
-                          <input class="form-control" placeholder="yyyy-mm-dd" name="order_date" ngbDatepicker #r="ngbDatepicker" [(ngModel)]="order_date">
+                          <input class="form-control" placeholder="yyyy-mm-dd" name="order_date" ngbDatepicker #r="ngbDatepicker" [(ngModel)]="order_date" (click)="r.open()">
                           <div class="input-group-append">
                             <button class="btn btn-outline-secondary" (click)="r.toggle()" type="button">
                               <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -42,7 +42,7 @@
                       <div class="form-group col-md-3">
                         <label>From Date</label>
                         <div class="input-group">
-                          <input class="form-control" placeholder="yyyy-mm-dd" name="from_date" ngbDatepicker #f="ngbDatepicker" [(ngModel)]="from_date">
+                          <input class="form-control" placeholder="yyyy-mm-dd" name="from_date" ngbDatepicker #f="ngbDatepicker" [(ngModel)]="from_date" (click)="f.open()">
                           <div class="input-group-append">
                             <button class="btn btn-outline-secondary" (click)="f.toggle()" type="button">
                               <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -53,7 +53,7 @@
                       <div class="form-group col-md-3">
                         <label>To Date</label>
                         <div class="input-group">
-                          <input class="form-control" placeholder="yyyy-mm-dd" name="to_date" ngbDatepicker #t="ngbDatepicker" [(ngModel)]="to_date">
+                          <input class="form-control" placeholder="yyyy-mm-dd" name="to_date" ngbDatepicker #t="ngbDatepicker" [(ngModel)]="to_date" (click)="t.open()">
                           <div class="input-group-append">
                             <button class="btn btn-outline-secondary" (click)="t.toggle()" type="button">
                               <i class="fa fa-calendar" aria-hidden="true"></i>

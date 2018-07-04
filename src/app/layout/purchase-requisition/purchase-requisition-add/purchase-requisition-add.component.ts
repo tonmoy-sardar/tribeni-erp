@@ -99,12 +99,49 @@ export class PurchaseRequisitionAddComponent implements OnInit {
   getProjectListBycompany(id) {
     this.companyService.getCompanyProjectDropdownList(id).subscribe(res => {
       this.projectList = res;
+      // reset form field
+      this.form.patchValue({
+        project: ''
+      })
+      const requisition_detail_control = <FormArray>this.form.controls['requisition_detail'];
+      
+      for (var i = 0; i < this.form.value.requisition_detail.length; i++) {
+        requisition_detail_control.at(i).patchValue({
+          material_type: '',
+          material: '',
+          spc_quantity: null,
+          avl_qtn: null,
+          quantity: '',
+          uom: ''
+        });
+        this.projectSpcQuantity[i]['mat_id'] = '';
+        this.projectSpcQuantity[i]['spc_qtn'] = '';
+        this.projectSpcQuantity[i]['avl_qtn'] = '';
+        this.projectSpcQuantity[i]['qtn'] = '';
+      }
     })
   }
 
   getMaterialTypeListByProject(id) {
     this.materialGroupService.getMaterialGroupListByProject(id).subscribe(res => {
       this.materialTypeList = res;
+      // reset form field
+      const requisition_detail_control = <FormArray>this.form.controls['requisition_detail'];
+      
+      for (var i = 0; i < this.form.value.requisition_detail.length; i++) {
+        requisition_detail_control.at(i).patchValue({
+          material_type: '',
+          material: '',
+          spc_quantity: null,
+          avl_qtn: null,
+          quantity: '',
+          uom: ''
+        });
+        this.projectSpcQuantity[i]['mat_id'] = '';
+        this.projectSpcQuantity[i]['spc_qtn'] = '';
+        this.projectSpcQuantity[i]['avl_qtn'] = '';
+        this.projectSpcQuantity[i]['qtn'] = '';
+      }
     })
   }
 
@@ -147,6 +184,30 @@ export class PurchaseRequisitionAddComponent implements OnInit {
     if (id > 0) {
       this.getProjectListBycompany(id);
     }
+    else {
+      this.projectList = [];
+      // reset form field
+      this.form.patchValue({
+        project: ''
+      })
+      const requisition_detail_control = <FormArray>this.form.controls['requisition_detail'];
+      
+      for (var i = 0; i < this.form.value.requisition_detail.length; i++) {
+        requisition_detail_control.at(i).patchValue({
+          material_type: '',
+          material: '',
+          spc_quantity: null,
+          avl_qtn: null,
+          quantity: '',
+          uom: ''
+        });
+        this.projectSpcQuantity[i]['mat_id'] = '';
+        this.projectSpcQuantity[i]['spc_qtn'] = '';
+        this.projectSpcQuantity[i]['avl_qtn'] = '';
+        this.projectSpcQuantity[i]['qtn'] = '';
+      }
+    }
+
   }
 
   changePoject(id) {
@@ -157,6 +218,26 @@ export class PurchaseRequisitionAddComponent implements OnInit {
         this.getPreviousPurchaseRequisition(id);
       })
       this.getMaterialTypeListByProject(id);
+
+    }
+    else {
+      // reset form field
+      const requisition_detail_control = <FormArray>this.form.controls['requisition_detail'];
+      
+      for (var i = 0; i < this.form.value.requisition_detail.length; i++) {
+        requisition_detail_control.at(i).patchValue({
+          material_type: '',
+          material: '',
+          spc_quantity: null,
+          avl_qtn: null,
+          quantity: '',
+          uom: ''
+        });
+        this.projectSpcQuantity[i]['mat_id'] = '';
+        this.projectSpcQuantity[i]['spc_qtn'] = '';
+        this.projectSpcQuantity[i]['avl_qtn'] = '';
+        this.projectSpcQuantity[i]['qtn'] = '';
+      }
     }
   }
 

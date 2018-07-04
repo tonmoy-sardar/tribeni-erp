@@ -86,7 +86,7 @@ export class TermsConditionEditComponent implements OnInit {
       this.termsConditionService.updateTerms(this.termsCondition).subscribe(
         response => {
           // console.log(response)
-          this.toastr.success('Terms and services updated successfully', '', {
+          this.toastr.success('Terms and conditions updated successfully', '', {
             timeOut: 3000,
           });
           this.loading = LoadingState.Ready;

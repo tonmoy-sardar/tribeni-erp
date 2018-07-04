@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter  } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CompanyService } from '../../../core/services/company.service';
 import { StatesService } from '../../../core/services/states.service';
@@ -29,14 +29,14 @@ export class ProjectAddComponent implements OnInit {
   materialTypeList: any = [];
   MaterialList = [];
   dynamicMaterialList = [];
-  
+
   help_heading = "";
   help_description = "";
   loading: LoadingState = LoadingState.NotReady;
 
 
-  lat:number;
-  lng:number;
+  lat: number;
+  lng: number;
 
   constructor(
     private companyService: CompanyService,
@@ -58,12 +58,30 @@ export class ProjectAddComponent implements OnInit {
       project_name: [null, Validators.required],
       description: [null],
       contact_person: [null],
-      project_contact_no: [null],
+      project_contact_no: [
+        null,
+        [
+          Validators.minLength(10),
+          Validators.maxLength(12)
+        ]
+      ],
       project_address: [null],
       project_state: [null],
       project_city: [null],
-      project_pincode: [null],
-      project_gstin: [null],
+      project_pincode: [
+        null,
+        [
+          Validators.minLength(6),
+          Validators.maxLength(6)
+        ]
+      ],
+      project_gstin: [
+        null,
+        [
+          Validators.minLength(15),
+          Validators.maxLength(15)
+        ]
+      ],
       project_details: this.formBuilder.array([this.createProjectDetail()])
     });
 
@@ -74,10 +92,10 @@ export class ProjectAddComponent implements OnInit {
       contact_person: '',
       project_contact_no: null,
       project_address: '',
-      project_state:'',
-      project_city:'',
-      project_pincode:'',
-      project_gstin:'',
+      project_state: '',
+      project_city: '',
+      project_pincode: '',
+      project_gstin: '',
       project_details: [
         {
           materialtype: '',
@@ -89,20 +107,20 @@ export class ProjectAddComponent implements OnInit {
         }
       ]
     }
-    
+
     this.uomValueList = [
       {
         id: ''
       }
     ]
-   
+
     this.getUOMList();
     this.getMaterialTypeList();
     this.getStateList();
     this.getHelp();
   }
 
- 
+
 
   getHelp() {
     this.helpService.getHelp().subscribe(res => {
@@ -142,8 +160,8 @@ export class ProjectAddComponent implements OnInit {
       materialtype: '',
       material: '',
       quantity: '',
-      rate:'',
-      boq_ref:'',
+      rate: '',
+      boq_ref: '',
       uom: ''
     }
     this.companyProject.project_details.push(project_details_obj)
@@ -164,9 +182,9 @@ export class ProjectAddComponent implements OnInit {
     this.dynamicMaterialList.splice(index, 1)
   }
 
-  changeMaterialType(id,i) {
+  changeMaterialType(id, i) {
     if (id > 0) {
-      this.getMaterialListByMaterialType(id,i);
+      this.getMaterialListByMaterialType(id, i);
     }
   }
 
@@ -176,19 +194,19 @@ export class ProjectAddComponent implements OnInit {
     })
   }
 
-  getMaterialListByMaterialType(materialType_id,i) {
+  getMaterialListByMaterialType(materialType_id, i) {
     this.materialService.getMaterialListByMaterialType(materialType_id).subscribe(
       (data: any[]) => {
-        this.companyProject.project_details[i].material='';
-        this.companyProject.project_details[i].quantity='';
-        this.companyProject.project_details[i].rate='';
-        this.companyProject.project_details[i].boq_ref='';
-       
-        var projectDetailArr =  this.companyProject.project_details;
-              
-        var filteredData  = data.filter(function(data_el){
-          return projectDetailArr.filter(function(project_details_el){
-             return project_details_el.material == data_el.id;
+        this.companyProject.project_details[i].material = '';
+        this.companyProject.project_details[i].quantity = '';
+        this.companyProject.project_details[i].rate = '';
+        this.companyProject.project_details[i].boq_ref = '';
+
+        var projectDetailArr = this.companyProject.project_details;
+
+        var filteredData = data.filter(function (data_el) {
+          return projectDetailArr.filter(function (project_details_el) {
+            return project_details_el.material == data_el.id;
           }).length == 0
         });
         this.dynamicMaterialList.splice(i, 1, filteredData)
@@ -200,9 +218,7 @@ export class ProjectAddComponent implements OnInit {
     return form.get('project_details').controls
   }
 
-  addNewCompanyProject() {
-    console.log(this.companyProject);
-    console.log(this.form.value);
+  addNewCompanyProject() {    
     if (this.form.valid) {
       this.loading = LoadingState.Processing;
       this.companyService.addNewCompanyProject(this.form.value).subscribe(
@@ -258,13 +274,13 @@ export class ProjectAddComponent implements OnInit {
   }
 
   isFieldValid(field: string) {
-    return !this.form.get(field).valid && this.form.get(field).touched;
+    return !this.form.get(field).valid && (this.form.get(field).dirty || this.form.get(field).touched);
   }
 
   displayFieldCss(field: string) {
     return {
-      'is-invalid': !this.form.get(field).valid && this.form.get(field).touched,
-      'is-valid': this.form.get(field).valid
+      'is-invalid': this.form.get(field).invalid && (this.form.get(field).dirty || this.form.get(field).touched),
+      'is-valid': this.form.get(field).valid && (this.form.get(field).dirty || this.form.get(field).touched)
     };
   }
 

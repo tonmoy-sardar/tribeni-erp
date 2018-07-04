@@ -24,6 +24,7 @@ export class GrnDetailsComponent implements OnInit {
   isApproveStatus;
   stock: any = []
   loading: LoadingState = LoadingState.NotReady;
+  status_visible_key: boolean;
   constructor(
     private grnService: GrnService,
     private router: Router,
@@ -35,6 +36,10 @@ export class GrnDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.user_approve_details = JSON.parse(localStorage.getItem('approve_details'));
+    var permission_chk = this.user_approve_details.filter(p => p.content == this.module)[0];
+    if (permission_chk != undefined) {
+      this.status_visible_key = true
+    }
     this.getGrnDetails(this.route.snapshot.params['id']);
     this.getHelp();
 

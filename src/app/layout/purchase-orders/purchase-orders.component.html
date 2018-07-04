@@ -56,7 +56,7 @@
                     <i class="fa fa-chevron-down inactive-color" [ngClass]="{'active-color':headerTh.sort_type=='desc'}"></i>
                   </span>
                 </th>
-                <th>Status</th>
+                <th *ngIf="status_visible_key">Status</th>
                 <th class="text-center">Details</th>
               </tr>
             </thead>
@@ -69,7 +69,7 @@
                 <td style="width:14%">{{purchaseOrder.requisition.requisition_number}}</td>
                 <td style="width:10%">{{purchaseOrder.grand_total}}</td>
                 <td style="width:12%">{{purchaseOrder.quotation_date | date:'dd-MM-yyyy'}}</td>
-                <td style="width:10%" *ngIf="!purchaseOrder.isApproveStatus">
+                <td style="width:10%" *ngIf="!purchaseOrder.isApproveStatus && status_visible_key">
                  
                   <label *ngIf="purchaseOrder.is_finalised == 1" style="display: inline;">Finalised</label>
                   <label *ngIf="purchaseOrder.is_approve == 1 && purchaseOrder.is_finalised == 0" style="display: inline;">Approved</label>
@@ -80,7 +80,7 @@
                     <option value='2'>Reject</option>
                   </select>
                 </td>
-                <td style="width:10%" *ngIf="purchaseOrder.isApproveStatus">
+                <td style="width:10%" *ngIf="purchaseOrder.isApproveStatus && status_visible_key">
                   <label *ngIf="purchaseOrder.is_finalised == 1" style="display: inline;">Finalised</label>
                   <label *ngIf="purchaseOrder.is_finalised == 0" style="display: inline;">Approved</label>
                 </td>

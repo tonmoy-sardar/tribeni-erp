@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {  ActivatedRoute, Router  } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { EmployeesService } from '../../../core/services/employees.service';
 import { FormGroup, Validators, FormBuilder, FormArray } from '@angular/forms';
@@ -23,17 +23,17 @@ export class ModuleActivatePermissionEditComponent implements OnInit {
 
   loading: LoadingState = LoadingState.NotReady;
 
-  in_time = {hour: '', minute: ''};
-  out_time = {hour: '', minute: ''};
+  in_time = { hour: '', minute: '' };
+  out_time = { hour: '', minute: '' };
   hourStep = 1;
   minuteStep = 15;
   secondStep = 30;
   meridian = false;
   prevMainLevel = 0;
   mainLevel = 0;
-  level =0;
+  level = 0;
 
-   constructor(
+  constructor(
     private employeesService: EmployeesService,
     private router: Router,
     private route: ActivatedRoute,
@@ -57,12 +57,12 @@ export class ModuleActivatePermissionEditComponent implements OnInit {
       ]
     }
     this.form = this.formBuilder.group({
-      content: ['', Validators.required],
+      content: [{ value: this.level, disabled: true }, Validators.required],
       emp_approve_details: this.formBuilder.array([]),
     });
     this.getEmployeeList();
     this.getHelp();
-   
+
     this.getContentDropdown();
     this.getEmployeeList();
 
@@ -73,24 +73,20 @@ export class ModuleActivatePermissionEditComponent implements OnInit {
   getEmployeeModuleActivateDetails(id) {
     this.employeesService.getEmployeeModuleActivateDetails(id).subscribe(res => {
       this.employeeModuleActivateDetails = res;
-      console.log(this.employeeModuleActivateDetails);
+      // console.log(this.employeeModuleActivateDetails);
       const emp_approve_details_control = <FormArray>this.form.controls['emp_approve_details'];
-     
-      this.employeeModuleActivateDetails.emp_approve_details.forEach(x => {
-        emp_approve_details_control.push(this.createEmpApproveDetails());
-      })
-
-
+      for (var i = 0; i < this.employeeModuleActivateDetails.emp_approve_details.length; i++) {
+        emp_approve_details_control.push(this.createEmpApproveDetails(i));
+      }
       
-     
       this.loading = LoadingState.Ready;
     },
-    error => {
-      this.loading = LoadingState.Ready;
-      this.toastr.error('Something went wrong', '', {
-        timeOut: 3000,
-      });
-    })
+      error => {
+        this.loading = LoadingState.Ready;
+        this.toastr.error('Something went wrong', '', {
+          timeOut: 3000,
+        });
+      })
   }
 
   getHelp() {
@@ -105,8 +101,8 @@ export class ModuleActivatePermissionEditComponent implements OnInit {
     return form.get('emp_approve_details').controls
   }
 
-  createEmpApproveDetails() {
-    this.level = this.level+1;
+  createEmpApproveDetails(i) {
+    this.level = this.level + 1;
     return this.formBuilder.group({
       emp_level: [this.level, Validators.required],
       primary_emp: ['', Validators.required],
@@ -119,33 +115,30 @@ export class ModuleActivatePermissionEditComponent implements OnInit {
     control.removeAt(index);
   }
 
-  addApproveDetails() {
+  addApproveDetails(i) {
     const control = <FormArray>this.form.controls['emp_approve_details'];
-    control.push(this.createEmpApproveDetails());
+    control.push(this.createEmpApproveDetails(i));
   }
 
-  moduleChange(id)
-  {
-
-
-    var contentDetails = this.moduleList.filter(p => p.content_id == this.form.value.content)[0];
-
-    this.mainLevel = contentDetails.approval_level;
-
-    console.log(contentDetails);
-
-    for(var i=this.prevMainLevel; i>0; i--)
-    {
-      this.deleteApproveDetails(i);
+  moduleChange(id) {
+    if (id > 0) {
+      this.level = 0;
+      var contentDetails = this.moduleList.filter(p => p.content_id == id)[0];
+      this.mainLevel = contentDetails.approval_level;
+      for (var i = this.prevMainLevel; i > -1; i--) {
+        this.deleteApproveDetails(i);
+      }
+      for (var i = 0; i < this.mainLevel; i++) {
+        this.addApproveDetails(i);
+      }
+      this.prevMainLevel = this.mainLevel;
     }
-   
-
-    for(var i=1; i<this.mainLevel; i++)
-    {
-      this.addApproveDetails();
+    else {
+      this.level = 0;
+      for (var i = this.prevMainLevel; i > -1; i--) {
+        this.deleteApproveDetails(i);
+      }
     }
-
-    this.prevMainLevel = this.mainLevel;
 
   }
 
@@ -161,7 +154,7 @@ export class ModuleActivatePermissionEditComponent implements OnInit {
     this.employeesService.getContentDropdown().subscribe(
       (data: any[]) => {
         this.moduleList = data;
-       
+
       }
     );
   };
@@ -171,7 +164,7 @@ export class ModuleActivatePermissionEditComponent implements OnInit {
 
     if (this.form.valid) {
       this.loading = LoadingState.Processing;
-     
+
       this.employeesService.updateModuleActivatePermission(this.employeeModuleActivateDetails).subscribe(
         response => {
           this.toastr.success('Module active permission updated successfully', '', {
@@ -192,7 +185,7 @@ export class ModuleActivatePermissionEditComponent implements OnInit {
     }
 
   }
-  reSet(){
+  reSet() {
     this.form.reset();
   }
 

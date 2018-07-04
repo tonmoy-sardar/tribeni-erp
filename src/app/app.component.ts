@@ -7,12 +7,10 @@ import { NgxPermissionsService } from 'ngx-permissions';
 })
 export class AppComponent implements OnInit {
   title = 'app';
-  
+
   constructor(private permissionsService: NgxPermissionsService) { }
 
   ngOnInit(): void {
-    console.log("get");
-    // this.permissionsService.loadPermissions(['Admin', 'Staff']);
     this.loadPermission();
   }
 

@@ -20,6 +20,7 @@ export class PurchaseRequisitionDeatilsComponent implements OnInit {
   user_approve_details: any = [];
   isApproveStatus;
   loading: LoadingState = LoadingState.NotReady;
+  status_visible_key: boolean
   constructor(
     private purchaseRequisitionService: PurchaseRequisitionService,
     private router: Router,
@@ -46,7 +47,10 @@ export class PurchaseRequisitionDeatilsComponent implements OnInit {
     this.getHelp();
 
     this.user_approve_details  = JSON.parse(localStorage.getItem('approve_details'));
-   
+    var permission_chk = this.user_approve_details.filter(p => p.content == this.module)[0];
+    if (permission_chk != undefined) {
+      this.status_visible_key = true
+    }
     
     //var contentDetails = this.moduleList.filter(p => p.content_id == this.form.value.content)[0];
   }
