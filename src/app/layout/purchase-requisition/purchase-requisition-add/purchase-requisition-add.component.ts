@@ -50,7 +50,7 @@ export class PurchaseRequisitionAddComponent implements OnInit {
       project: ['', Validators.required],
       company: ['', Validators.required],
       created_at: ['', Validators.required],
-      special_note: ['', Validators.required],
+      special_note: [''],
       requisition_detail: this.formBuilder.array([this.createRequisitionDetail()])
     });
 
@@ -103,22 +103,7 @@ export class PurchaseRequisitionAddComponent implements OnInit {
       this.form.patchValue({
         project: ''
       })
-      const requisition_detail_control = <FormArray>this.form.controls['requisition_detail'];
-      
-      for (var i = 0; i < this.form.value.requisition_detail.length; i++) {
-        requisition_detail_control.at(i).patchValue({
-          material_type: '',
-          material: '',
-          spc_quantity: null,
-          avl_qtn: null,
-          quantity: '',
-          uom: ''
-        });
-        this.projectSpcQuantity[i]['mat_id'] = '';
-        this.projectSpcQuantity[i]['spc_qtn'] = '';
-        this.projectSpcQuantity[i]['avl_qtn'] = '';
-        this.projectSpcQuantity[i]['qtn'] = '';
-      }
+      this.resetFormArray();
     })
   }
 
@@ -126,22 +111,7 @@ export class PurchaseRequisitionAddComponent implements OnInit {
     this.materialGroupService.getMaterialGroupListByProject(id).subscribe(res => {
       this.materialTypeList = res;
       // reset form field
-      const requisition_detail_control = <FormArray>this.form.controls['requisition_detail'];
-      
-      for (var i = 0; i < this.form.value.requisition_detail.length; i++) {
-        requisition_detail_control.at(i).patchValue({
-          material_type: '',
-          material: '',
-          spc_quantity: null,
-          avl_qtn: null,
-          quantity: '',
-          uom: ''
-        });
-        this.projectSpcQuantity[i]['mat_id'] = '';
-        this.projectSpcQuantity[i]['spc_qtn'] = '';
-        this.projectSpcQuantity[i]['avl_qtn'] = '';
-        this.projectSpcQuantity[i]['qtn'] = '';
-      }
+      this.resetFormArray();
     })
   }
 
@@ -190,22 +160,7 @@ export class PurchaseRequisitionAddComponent implements OnInit {
       this.form.patchValue({
         project: ''
       })
-      const requisition_detail_control = <FormArray>this.form.controls['requisition_detail'];
-      
-      for (var i = 0; i < this.form.value.requisition_detail.length; i++) {
-        requisition_detail_control.at(i).patchValue({
-          material_type: '',
-          material: '',
-          spc_quantity: null,
-          avl_qtn: null,
-          quantity: '',
-          uom: ''
-        });
-        this.projectSpcQuantity[i]['mat_id'] = '';
-        this.projectSpcQuantity[i]['spc_qtn'] = '';
-        this.projectSpcQuantity[i]['avl_qtn'] = '';
-        this.projectSpcQuantity[i]['qtn'] = '';
-      }
+      this.resetFormArray();
     }
 
   }
@@ -222,22 +177,7 @@ export class PurchaseRequisitionAddComponent implements OnInit {
     }
     else {
       // reset form field
-      const requisition_detail_control = <FormArray>this.form.controls['requisition_detail'];
-      
-      for (var i = 0; i < this.form.value.requisition_detail.length; i++) {
-        requisition_detail_control.at(i).patchValue({
-          material_type: '',
-          material: '',
-          spc_quantity: null,
-          avl_qtn: null,
-          quantity: '',
-          uom: ''
-        });
-        this.projectSpcQuantity[i]['mat_id'] = '';
-        this.projectSpcQuantity[i]['spc_qtn'] = '';
-        this.projectSpcQuantity[i]['avl_qtn'] = '';
-        this.projectSpcQuantity[i]['qtn'] = '';
-      }
+      this.resetFormArray();
     }
   }
 
@@ -265,6 +205,11 @@ export class PurchaseRequisitionAddComponent implements OnInit {
       if (obj != undefined) {
         d = { mat_id: material, spc_qtn: obj[0].quantity, avl_qtn: obj[0].avail_qty, qtn: '' }
         this.projectSpcQuantity.splice(i, 1, d);
+        if(obj[0].avail_qty < 1){
+          this.toastr.error('You can not use this material', '', {
+            timeOut: 3000,
+          });
+        }
       }
     }
   }
@@ -299,6 +244,26 @@ export class PurchaseRequisitionAddComponent implements OnInit {
     this.uomValueList.splice(index, 1)
     this.dynamicMaterialList.splice(index, 1)
     this.projectSpcQuantity.splice(index, 1)
+  }
+
+  resetFormArray() {
+    var n = this.form.value.requisition_detail.length;
+    for (var i = n; i > 0; i--) {
+      this.deleteRequisitionDetail(i)
+    }
+    const requisition_detail_control = <FormArray>this.form.controls['requisition_detail'];
+    requisition_detail_control.at(0).patchValue({
+      material_type: '',
+      material: '',
+      spc_quantity: null,
+      avl_qtn: null,
+      quantity: '',
+      uom: ''
+    });
+    this.projectSpcQuantity[0]['mat_id'] = '';
+    this.projectSpcQuantity[0]['spc_qtn'] = '';
+    this.projectSpcQuantity[0]['avl_qtn'] = '';
+    this.projectSpcQuantity[0]['qtn'] = '';
   }
 
   btnClickNav(toNav) {
@@ -366,7 +331,7 @@ export class PurchaseRequisitionAddComponent implements OnInit {
     this.form.reset();
   }
   isFieldValid(field: string) {
-    return !this.form.get(field).valid && this.form.get(field).touched;
+    return !this.form.get(field).valid && (this.form.get(field).dirty || this.form.get(field).touched);
   }
   displayFieldCss(field: string) {
     return {

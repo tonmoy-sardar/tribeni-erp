@@ -51,17 +51,11 @@
                                         </div>
                                     </div>
                                     <div class="form-group col-md-2">
-                                        <label>Quotation No.</label>
-                                        <input class="form-control" placeholder="Quotation No." name="quotation_no" formControlName="quotation_no" [ngClass]="displayFieldCss('quotation_no')">
-                                        <div class="invalid-feedback" *ngIf="form.controls['quotation_no'].hasError('required')">
-                                            Please enter quotation no
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-md-2">
                                         <label>Quotation Date</label>
                                         <div class="input-group">
                                             <input class="form-control" placeholder="yyyy-mm-dd" name="quotation_date" ngbDatepicker #d="ngbDatepicker" name="quotation_date"
-                                                formControlName="quotation_date" [ngClass]="displayFieldCss('quotation_date')">
+                                                formControlName="quotation_date" [ngClass]="displayFieldCss('quotation_date')"
+                                                (click)="d.open()">
                                             <div class="input-group-append">
                                                 <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
                                                     <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -72,6 +66,14 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="form-group col-md-2">
+                                        <label>Quotation No.</label>
+                                        <input class="form-control" placeholder="Quotation No." name="quotation_no" formControlName="quotation_no" [ngClass]="displayFieldCss('quotation_no')">
+                                        <div class="invalid-feedback" *ngIf="form.controls['quotation_no'].hasError('required')">
+                                            Please enter quotation no
+                                        </div>
+                                    </div>
+
                                 </div>
                                 <div class="card bg-light mb-3" *ngIf="visible_key">
                                     <div class="card-header">Header Line</div>
@@ -101,35 +103,35 @@
                                 <div class="card bg-light mb-3" *ngIf="visible_key && previous_purchase_list.length > 0">
                                     <div class="card-header">Previous Purchase Order</div>
                                     <div class="card-body">
-                                        <div class="card bg-light mb-3" *ngFor="let prevOrder of previous_purchase_list" >
-                                            <table class="card-body table table-sm " >
-                                                    <tbody>
-                                                        <tr>
-                                                            <td colspan="6">Purchase Order No ({{prevOrder.purchase_order_no}})</td>
-                                                        </tr>
-                                                    </tbody>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>Material Group</td>
-                                                            <td>Material</td>
-                                                            <td>PR. Qty.</td>
-                                                            <td>Qty. Taken</td>
-                                                            <td>UOM</td>
-                                                            <td>Average Rate</td>
-                                                        </tr>
-                                                    </tbody>
-                                                    <tbody>
-                                                        <tr *ngFor="let prevOrderDetail of prevOrder.purchase_order_detail">
-                                                            <td>{{prevOrderDetail.material.material_type.material_type}}</td>
-                                                            <td>{{prevOrderDetail.material.material_fullname}} ({{prevOrderDetail.material.material_code}})</td>
-                                                            <td>{{prevOrderDetail.requisition_quantity}}</td>
-                                                            <td>{{prevOrderDetail.order_quantity}}</td>
-                                                            <td>{{prevOrderDetail.uom.name}}</td>
-                                                            <td>{{prevOrderDetail.rate}}</td>
-                                                        </tr>
-                                                    </tbody>
+                                        <div class="card bg-light mb-3" *ngFor="let prevOrder of previous_purchase_list">
+                                            <table class="card-body table table-sm ">
+                                                <tbody>
+                                                    <tr>
+                                                        <td colspan="6">Purchase Order No ({{prevOrder.purchase_order_no}})</td>
+                                                    </tr>
+                                                </tbody>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Material Group</td>
+                                                        <td>Material</td>
+                                                        <td>PR. Qty.</td>
+                                                        <td>Qty. Taken</td>
+                                                        <td>UOM</td>
+                                                        <td>Average Rate</td>
+                                                    </tr>
+                                                </tbody>
+                                                <tbody>
+                                                    <tr *ngFor="let prevOrderDetail of prevOrder.purchase_order_detail">
+                                                        <td>{{prevOrderDetail.material.material_type.material_type}}</td>
+                                                        <td>{{prevOrderDetail.material.material_fullname}} ({{prevOrderDetail.material.material_code}})</td>
+                                                        <td>{{prevOrderDetail.requisition_quantity}}</td>
+                                                        <td>{{prevOrderDetail.order_quantity}}</td>
+                                                        <td>{{prevOrderDetail.uom.name}}</td>
+                                                        <td>{{prevOrderDetail.rate}}</td>
+                                                    </tr>
+                                                </tbody>
                                             </table>
-                                            
+
                                         </div>
                                     </div>
                                 </div>
@@ -169,10 +171,18 @@
                                                     <td>{{mat.avail_qty}}</td>
                                                     <td>{{mat.material_rate[0].rate}}</td>
                                                     <td>{{mat.uom.name}}</td>
-                                                    <td><span>{{mat.material.material_tax[0]?.hsn}}</span></td>
-                                                    <td><span>{{mat.material.material_tax[0]?.igst}}</span></td>
-                                                    <td><span>{{mat.material.material_tax[0]?.cgst}}</span></td>
-                                                    <td><span>{{mat.material.material_tax[0]?.sgst}}</span></td>
+                                                    <td>
+                                                        <span>{{mat.material.material_tax[0]?.hsn}}</span>
+                                                    </td>
+                                                    <td>
+                                                        <span>{{mat.material.material_tax[0]?.igst}}</span>
+                                                    </td>
+                                                    <td>
+                                                        <span>{{mat.material.material_tax[0]?.cgst}}</span>
+                                                    </td>
+                                                    <td>
+                                                        <span>{{mat.material.material_tax[0]?.sgst}}</span>
+                                                    </td>
                                                     <td width="80px">
                                                         <input appOnlyNumber type="text" class="form-control" name="order_quantity" [(ngModel)]="material_details_list[k].order_quantity"
                                                             (keyup)="getSubTotal(material_details_list[k].order_quantity,material_details_list[k].rate,material_details_list[k].discount_percent, k)"
@@ -194,7 +204,7 @@
                                                     <td width="150px">
                                                         <div class="input-group" *ngIf="getAvailQty(mat.avail_qty)">
                                                             <input class="form-control" placeholder="yyyy-mm-dd" name="delivery_date" ngbDatepicker #i="ngbDatepicker" [(ngModel)]="material_details_list[k].delivery_date"
-                                                                [ngModelOptions]="{standalone: true}">
+                                                                [ngModelOptions]="{standalone: true}" (click)="i.open()">
                                                             <div class="input-group-append">
                                                                 <button class="btn btn-outline-secondary" (click)="i.toggle()" type="button">
                                                                     <i class="fa fa-calendar" aria-hidden="true"></i>

@@ -4,7 +4,7 @@ import { DepartmentsService } from '../../../core/services/departments.service';
 import { CompanyService } from '../../../core/services/company.service';
 import { DesignationsService } from '../../../core/services/designations.service';
 import { EmployeesService } from '../../../core/services/employees.service';
-import { FormGroup, FormBuilder, Validators,FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { HelpService } from '../../../core/services/help.service';
 import { StatesService } from '../../../core/services/states.service';
@@ -40,10 +40,10 @@ export class EmployeesAddComponent implements OnInit {
     this.form = this.formBuilder.group({
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
-      groups:[[]],
+      groups: [[]],
       email: ['', [
         Validators.required,
-        Validators.pattern(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/)
+        Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)
       ]],
       employee_profile_details: this.formBuilder.array([this.createEmployeeProfile()]),
     });
@@ -52,30 +52,40 @@ export class EmployeesAddComponent implements OnInit {
     this.getStateList()
   }
 
-  createEmployeeProfile()
-  { 
+  createEmployeeProfile() {
     return this.formBuilder.group({
       contact: ['', [
         Validators.required,
         Validators.minLength(10),
         Validators.maxLength(12)
       ]],
-      alt_contact: ['',[
+      alt_contact: ['', [
         Validators.minLength(10),
         Validators.maxLength(12)
       ]],
       dob: ['', Validators.required],
       blood_group: [''],
       pan: [''],
-      adhaar_no: ['', Validators.required],
+      adhaar_no: ['', [
+        Validators.required,
+        Validators.minLength(16),
+        Validators.maxLength(16)
+      ]],
       emp_present_address: ['', Validators.required],
       emp_present_state: ['', Validators.required],
       emp_present_city: ['', Validators.required],
-      emp_present_pin: ['', Validators.required],
+      emp_present_pin: ['', [
+        Validators.required,
+        Validators.minLength(6),
+        Validators.maxLength(6)
+      ]],
       emp_permanent_address: [''],
       emp_permanent_state: [''],
       emp_permanent_city: [''],
-      emp_permanent_pin: [''],
+      emp_permanent_pin: ['', [
+        Validators.minLength(6),
+        Validators.maxLength(6)
+      ]],
       company: ['', Validators.required],
       departments: ['', Validators.required],
       designation: ['', Validators.required]
@@ -105,12 +115,12 @@ export class EmployeesAddComponent implements OnInit {
       this.company_list = res;
       this.loading = LoadingState.Ready;
     },
-    error => {
-      this.loading = LoadingState.Ready;
-      this.toastr.error('Something went wrong', '', {
-        timeOut: 3000,
-      });
-    })
+      error => {
+        this.loading = LoadingState.Ready;
+        this.toastr.error('Something went wrong', '', {
+          timeOut: 3000,
+        });
+      })
   }
 
   companyChange(val) {
@@ -143,16 +153,20 @@ export class EmployeesAddComponent implements OnInit {
 
   addEmployee() {
     if (this.form.valid) {
+      var email = this.form.value.email;
+      this.form.patchValue({
+        email: email.toLowerCase()
+      });
       this.loading = LoadingState.Processing;
       var date = new Date(this.form.value.employee_profile_details[0].dob.year, this.form.value.employee_profile_details[0].dob.month - 1, this.form.value.employee_profile_details[0].dob.day)
       this.form.patchValue({
         //dob: date.toISOString()
-        employee_profile_details:[
+        employee_profile_details: [
           {
-            dob:date.toISOString()
+            dob: date.toISOString()
           }]
       })
-      
+
       this.employeesService.addNewEmployee(this.form.value).subscribe(
         response => {
           this.toastr.success('Employee added successfully', '', {

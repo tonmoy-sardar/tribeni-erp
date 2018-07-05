@@ -34,7 +34,7 @@
                     <label>Date</label>
                     <div class="input-group">
                       <input class="form-control" [(ngModel)]="employee.date" placeholder="yyyy-mm-dd" name="date" ngbDatepicker #d="ngbDatepicker" formControlName="date"
-                        [ngClass]="displayFieldCss('date')">
+                        [ngClass]="displayFieldCss('date')" (click)="d.open()">
                       <div class="input-group-append">
                         <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
                           <i class="fa fa-calendar" aria-hidden="true"></i>

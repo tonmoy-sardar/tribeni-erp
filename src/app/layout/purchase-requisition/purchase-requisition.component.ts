@@ -127,11 +127,11 @@ export class PurchaseRequisitionComponent implements OnInit {
       params.set('search', this.search_key.toString());
     }
 
-    if (this.company_id != undefined) {
+    if (this.company_id != undefined && this.company_id != '') {
       params.set('company', this.company_id);
     }
 
-    if (this.project_id != undefined) {
+    if (this.project_id != undefined && this.project_id != '') {
       params.set('project', this.project_id);
     }
 

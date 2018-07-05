@@ -31,7 +31,7 @@ export class VendorEditComponent implements OnInit {
     private toastr: ToastrService,
     private statesService: StatesService,
     private vendorService: VendorService,
-    private vendorTypeService:VendorTypeService,
+    private vendorTypeService: VendorTypeService,
     private helpService: HelpService
   ) { }
 
@@ -41,7 +41,10 @@ export class VendorEditComponent implements OnInit {
       vendor_type: ['', Validators.required],
       pan_no: [''],
       cin_no: [''],
-      gst_no: [''],
+      gst_no: ['', [
+        Validators.minLength(15),
+        Validators.maxLength(15)
+      ]],
       vendor_address: this.formBuilder.array([]),
       vendor_account: this.formBuilder.array([])
     });
@@ -111,18 +114,18 @@ export class VendorEditComponent implements OnInit {
       })
       this.loading = LoadingState.Ready;
     },
-    error => {
-      this.loading = LoadingState.Ready;
-      this.toastr.error('Something went wrong', '', {
-        timeOut: 3000,
-      });
-    })
+      error => {
+        this.loading = LoadingState.Ready;
+        this.toastr.error('Something went wrong', '', {
+          timeOut: 3000,
+        });
+      })
   }
   createContactInfo() {
     return this.formBuilder.group({
       id: null,
       email: ['', [
-        Validators.pattern(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/)
+        Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)
       ]],
       mobile: ['', [
         Validators.required,
@@ -134,7 +137,11 @@ export class VendorEditComponent implements OnInit {
       address: ['', Validators.required],
       state: ['', Validators.required],
       city: ['', Validators.required],
-      pincode: ['', Validators.required]
+      pincode: ['', [
+        Validators.required,
+        Validators.minLength(6),
+        Validators.maxLength(6)
+      ]]
     });
   }
 
@@ -212,6 +219,10 @@ export class VendorEditComponent implements OnInit {
 
   updateVendor() {
     if (this.form.valid) {
+      for(var i =0; i< this.form.value.vendor_address.length ; i++){
+        var email = this.form.value.vendor_address[i].email;
+        this.vendor_details.vendor_address[i].email = email.toLowerCase();
+      }
       this.loading = LoadingState.Processing;
       this.vendorService.updateVendor(this.vendor_details).subscribe(
         response => {

@@ -89,6 +89,9 @@
                                         <label>Pin</label>
                                         <input type="text" appOnlyNumber class="form-control" placeholder="Pin" [(ngModel)]="company.company_pin" name="company_pin"
                                             formControlName="company_pin" [ngClass]="displayFieldCss('company_pin')">
+                                        <div class="invalid-feedback" *ngIf="form.controls['company_pin'].hasError('minlength') || form.controls['company_pin'].hasError('maxlength') && !form.controls['company_pin'].hasError('required')">
+                                            Pin number should be 6 digit
+                                        </div>
                                         <div class="invalid-feedback" *ngIf="form.controls['company_pin'].hasError('required')">
                                             Please enter pin
                                         </div>
@@ -96,7 +99,9 @@
                                     <div class="form-group col-md-4">
                                         <label>GSTIN</label>
                                         <input type="text" class="form-control" placeholder="GSTIN" [(ngModel)]="company.company_gst" name="company_gst" formControlName="company_gst">
-
+                                        <div class="invalid-feedback" *ngIf="form.controls['company_gst'].hasError('minlength') || form.controls['company_gst'].hasError('maxlength') && !form.controls['company_gst'].hasError('required')">
+                                            GSTIN should be 15 digit
+                                        </div>
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label>PAN</label>

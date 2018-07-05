@@ -23,11 +23,13 @@
               </div>
               <div class="col-md-3">
                 <ng-select class="form-control" placeholder="Select Company" [clearable]="false" name="company" [(ngModel)]="company_id">
+                  <ng-option value="">Select Company</ng-option>
                   <ng-option *ngFor="let company of companyList" [value]="company.id">{{company.company_name}}</ng-option>
                 </ng-select>
               </div>
               <div class="col-md-3">
                 <ng-select class="form-control" placeholder="Select Project" [clearable]="false" name="project" [(ngModel)]="project_id">
+                  <ng-option value="">Select Project</ng-option>
                   <ng-option *ngFor="let project of projectList" [value]="project.id">{{project.project_name}}</ng-option>
                 </ng-select>
               </div>

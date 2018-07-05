@@ -33,10 +33,13 @@ export class ContractorsAddComponent implements OnInit {
     this.form = this.formBuilder.group({
       contractor_name: ['', Validators.required],
       pan_no: [''],
-      gst_no: [''],
+      gst_no: ['', [
+        Validators.minLength(15),
+        Validators.maxLength(15)
+      ]],
       email: ['', [
         Validators.required,
-        Validators.pattern(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/)
+        Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)
       ]],
       mobile: ['', [
         Validators.required,
@@ -46,7 +49,11 @@ export class ContractorsAddComponent implements OnInit {
       address: ['', Validators.required],
       state: ['', Validators.required],
       city: ['', Validators.required],
-      pincode: ['', Validators.required],
+      pincode: ['', [
+        Validators.required,
+        Validators.minLength(6),
+        Validators.maxLength(6)
+      ]],
       contractor_account: this.formBuilder.array([this.createBankInfo()])
     });
 
@@ -96,13 +103,17 @@ export class ContractorsAddComponent implements OnInit {
   btnClickNav(toNav) {
     this.router.navigateByUrl('/' + toNav);
   };
-  
+
   goToList(toNav) {
     this.router.navigateByUrl('/' + toNav);
   };
 
   addContractor() {
     if (this.form.valid) {
+      var email = this.form.value.email;
+      this.form.patchValue({
+        email: email.toLowerCase()
+      });
       this.loading = LoadingState.Processing;
       // console.log(this.form.value);
       this.contractorService.addNewContractor(this.form.value).subscribe(

@@ -86,7 +86,7 @@ export class EmployeeAttendanceComponent implements OnInit {
 
   getEmployeeAttendanceList() {
     let params: URLSearchParams = new URLSearchParams();
-    if (this.month != '') {
+    if (this.month != '' && this.employee.emp != '') {
       if(this.employee.month<10)
       {
         var monthValue = '0'+this.employee.month

@@ -35,10 +35,13 @@ export class ContractorsEditComponent implements OnInit {
     this.form = this.formBuilder.group({
       contractor_name: ['', Validators.required],
       pan_no: [''],
-      gst_no: [''],
+      gst_no: ['', [
+        Validators.minLength(15),
+        Validators.maxLength(15)
+      ]],
       email: ['', [
         Validators.required,
-        Validators.pattern(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/)
+        Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)
       ]],
       mobile: ['', [
         Validators.required,
@@ -48,7 +51,11 @@ export class ContractorsEditComponent implements OnInit {
       address: ['', Validators.required],
       state: ['', Validators.required],
       city: ['', Validators.required],
-      pincode: ['', Validators.required],
+      pincode: ['', [
+        Validators.required,
+        Validators.minLength(6),
+        Validators.maxLength(6)
+      ]],
       contractor_account: this.formBuilder.array([])
     });
     this.contractor_details = {
@@ -61,7 +68,7 @@ export class ContractorsEditComponent implements OnInit {
       address: '',
       state: '',
       city: '',
-      pincode: '',      
+      pincode: '',
       contractor_account: [
         {
           bank_name: '',
@@ -75,7 +82,7 @@ export class ContractorsEditComponent implements OnInit {
     this.getContractorDetails(this.route.snapshot.params['id']);
     this.getHelp();
   }
-  
+
 
   getHelp() {
     this.helpService.getHelp().subscribe(res => {
@@ -96,17 +103,17 @@ export class ContractorsEditComponent implements OnInit {
       this.contractor_details = res;
       // console.log(this.contractor_details);
       const account_control = <FormArray>this.form.controls['contractor_account'];
-      this.contractor_details.contractor_account.forEach( x => {
+      this.contractor_details.contractor_account.forEach(x => {
         account_control.push(this.createBankInfo());
       })
       this.loading = LoadingState.Ready;
     },
-    error => {
-      this.loading = LoadingState.Ready;
-      this.toastr.error('Something went wrong', '', {
-        timeOut: 3000,
-      });
-    })
+      error => {
+        this.loading = LoadingState.Ready;
+        this.toastr.error('Something went wrong', '', {
+          timeOut: 3000,
+        });
+      })
   }
 
   createBankInfo() {
@@ -118,7 +125,7 @@ export class ContractorsEditComponent implements OnInit {
     });
   }
 
-  getBank(form){
+  getBank(form) {
     return form.get('contractor_account').controls
   }
 
@@ -152,6 +159,8 @@ export class ContractorsEditComponent implements OnInit {
 
   updateContractor() {
     if (this.form.valid) {
+      var email = this.form.value.email;
+      this.contractor_details.email = email.toLowerCase();
       this.loading = LoadingState.Processing;
       this.contractorsService.updateContractor(this.contractor_details).subscribe(
         response => {
@@ -183,7 +192,7 @@ export class ContractorsEditComponent implements OnInit {
       }
     });
   }
-  
+
   reSet() {
     this.form.reset();
   }

@@ -23,11 +23,13 @@
               </div>
               <div class="col-md-3">
                 <ng-select class="form-control" placeholder="Select Company" [clearable]="false" name="company" [(ngModel)]="company_id">
+                  <ng-option value="">Select Company</ng-option>
                   <ng-option *ngFor="let company of companyList" [value]="company.id">{{company.company_name}}</ng-option>
                 </ng-select>
               </div>
               <div class="col-md-3">
                 <ng-select class="form-control" placeholder="Select Project" [clearable]="false" name="project" [(ngModel)]="project_id">
+                  <ng-option value="">Select Project</ng-option>
                   <ng-option *ngFor="let project of projectList" [value]="project.id">{{project.project_name}}</ng-option>
                 </ng-select>
               </div>
@@ -70,11 +72,12 @@
                 <td style="width:10%">{{purchaseOrder.grand_total}}</td>
                 <td style="width:12%">{{purchaseOrder.quotation_date | date:'dd-MM-yyyy'}}</td>
                 <td style="width:10%" *ngIf="!purchaseOrder.isApproveStatus && status_visible_key">
-                 
+
                   <label *ngIf="purchaseOrder.is_finalised == 1" style="display: inline;">Finalised</label>
                   <label *ngIf="purchaseOrder.is_approve == 1 && purchaseOrder.is_finalised == 0" style="display: inline;">Approved</label>
                   <label *ngIf="purchaseOrder.is_approve == 2 && purchaseOrder.is_finalised == 0" style="display: inline;">Rejected</label>
-                  <select *ngIf="purchaseOrder.is_finalised == 0  && purchaseOrder.is_approve == 0" class="form-control" name="is_approve" (change)="changeApproveStatus($event.target.value,purchaseOrder.id,purchaseOrder.approval_level)">
+                  <select *ngIf="purchaseOrder.is_finalised == 0  && purchaseOrder.is_approve == 0" class="form-control" name="is_approve"
+                    (change)="changeApproveStatus($event.target.value,purchaseOrder.id,purchaseOrder.approval_level)">
                     <option value='0'>None</option>
                     <option value='1'>Approve</option>
                     <option value='2'>Reject</option>
@@ -84,7 +87,7 @@
                   <label *ngIf="purchaseOrder.is_finalised == 1" style="display: inline;">Finalised</label>
                   <label *ngIf="purchaseOrder.is_finalised == 0" style="display: inline;">Approved</label>
                 </td>
-                <td  style="width:5%" class="text-center">
+                <td style="width:5%" class="text-center">
                   <a href="javascript:void(0);" class="anchor-action" title="Details" name="Details" [routerLink]="['/purchase-orders/details', purchaseOrder.id]">
                     <i class="fa fa-eye"></i>
                   </a>

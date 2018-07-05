@@ -38,7 +38,10 @@ export class VendorAddComponent implements OnInit {
       vendor_type: ['', Validators.required],
       pan_no: [''],
       cin_no: [''],
-      gst_no: [''],
+      gst_no: ['',[
+        Validators.minLength(15),
+        Validators.maxLength(15)
+      ]],
       vendor_address: this.formBuilder.array([this.createContactInfo()]),
       vendor_account: this.formBuilder.array([this.createBankInfo()])
     });
@@ -76,7 +79,7 @@ export class VendorAddComponent implements OnInit {
   createContactInfo() {
     return this.formBuilder.group({
       email: ['', [
-        Validators.pattern(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/)
+        Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)
       ]],
       mobile: ['', [
         Validators.required,
@@ -88,7 +91,11 @@ export class VendorAddComponent implements OnInit {
       address: ['', Validators.required],
       state: ['', Validators.required],
       city: ['', Validators.required],
-      pincode: ['', Validators.required]
+      pincode: ['', [
+        Validators.required,
+        Validators.minLength(6),
+        Validators.maxLength(6)
+      ]]
     });
   }
 
@@ -134,6 +141,13 @@ export class VendorAddComponent implements OnInit {
   
   addVendor() {
     if (this.form.valid) {
+      const vendor_address_control = <FormArray>this.form.controls['vendor_address'];
+      for(var i =0; i< this.form.value.vendor_address.length ; i++){
+        var email = this.form.value.vendor_address[i].email;
+        vendor_address_control.at(i).patchValue({
+          email: email.toLowerCase()
+        });
+      }
       this.loading = LoadingState.Processing;
       this.vendorService.addNewVendor(this.form.value).subscribe(
         response => {
@@ -168,6 +182,10 @@ export class VendorAddComponent implements OnInit {
 
   reSet() {
     this.form.reset();
+  }
+
+  isFieldValid(field: string) {
+    return !this.form.get(field).valid && (this.form.get(field).dirty || this.form.get(field).touched);
   }
 
   displayFieldCss(field: string) {

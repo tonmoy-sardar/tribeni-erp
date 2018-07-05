@@ -36,7 +36,7 @@ export class TransportEditComponent implements OnInit {
     this.form = new FormGroup({
       transporter_name: new FormControl('', Validators.required),
       email: new FormControl('', [
-        Validators.pattern(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/)
+        Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)
       ]),
       phone: new FormControl('', [
         Validators.required,
@@ -46,9 +46,16 @@ export class TransportEditComponent implements OnInit {
       company: new FormControl('', Validators.required),
       state: new FormControl('', Validators.required),
       city: new FormControl('', Validators.required),
-      pin: new FormControl('', Validators.required),
+      pin: new FormControl('', [
+        Validators.required,
+        Validators.minLength(6),
+        Validators.maxLength(6)
+      ]),
       pan: new FormControl(''),
-      gstin: new FormControl('')
+      gstin: new FormControl('', [
+        Validators.minLength(15),
+        Validators.maxLength(15)
+      ])
     });
     this.getCompanyList();
     this.getStateList();
@@ -82,7 +89,7 @@ export class TransportEditComponent implements OnInit {
     }
     );
   };
-  
+
   getCompanyList() {
     this.companyService.getCompanyDropdownList().subscribe(
       (data: any[]) => {
@@ -95,18 +102,20 @@ export class TransportEditComponent implements OnInit {
       this.transport = res;
       this.loading = LoadingState.Ready;
     },
-    error => {
-      this.loading = LoadingState.Ready;
-      this.toastr.error('Something went wrong', '', {
-        timeOut: 3000,
-      });
-    })
+      error => {
+        this.loading = LoadingState.Ready;
+        this.toastr.error('Something went wrong', '', {
+          timeOut: 3000,
+        });
+      })
   }
   btnClickNav(toNav) {
     this.router.navigateByUrl('/' + toNav);
   };
   updateTransport() {
     if (this.form.valid) {
+      var email = this.form.value.email;
+      this.transport.email = email.toLowerCase();
       this.loading = LoadingState.Processing;
       this.transportService.updateTransporter(this.transport).subscribe(
         response => {

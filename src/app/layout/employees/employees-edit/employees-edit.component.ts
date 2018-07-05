@@ -4,7 +4,7 @@ import { DepartmentsService } from '../../../core/services/departments.service';
 import { CompanyService } from '../../../core/services/company.service';
 import { DesignationsService } from '../../../core/services/designations.service';
 import { EmployeesService } from '../../../core/services/employees.service';
-import { FormGroup, FormBuilder, Validators,FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { HelpService } from '../../../core/services/help.service';
 import { StatesService } from '../../../core/services/states.service';
@@ -44,8 +44,8 @@ export class EmployeesEditComponent implements OnInit {
       id: '',
       first_name: '',
       last_name: '',
-      email:'',
-      employee_profile_details:[
+      email: '',
+      employee_profile_details: [
         {
           id: null,
           contact: '',
@@ -67,50 +67,60 @@ export class EmployeesEditComponent implements OnInit {
           designation: ''
         }
       ],
-      
+
     }
-    
+
     this.form = this.formBuilder.group({
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
-      groups:[[]],
+      groups: [[]],
       email: ['', [
         Validators.required,
-        Validators.pattern(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/)
+        Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)
       ]],
       employee_profile_details: this.formBuilder.array([]),
     });
-    
+
     this.getHelp();
     this.getCompanyList();
     this.getStateList();
     this.getEmployeeDetails(this.route.snapshot.params['id']);
   }
 
-  createEmployeeProfile()
-  { 
+  createEmployeeProfile() {
     return this.formBuilder.group({
       contact: ['', [
         Validators.required,
         Validators.minLength(10),
         Validators.maxLength(12)
       ]],
-      alt_contact: ['',[
+      alt_contact: ['', [
         Validators.minLength(10),
         Validators.maxLength(12)
       ]],
       dob: ['', Validators.required],
       blood_group: [''],
       pan: [''],
-      adhaar_no: ['', Validators.required],
+      adhaar_no: ['', [
+        Validators.required,
+        Validators.minLength(16),
+        Validators.maxLength(16)
+      ]],
       emp_present_address: ['', Validators.required],
       emp_present_state: ['', Validators.required],
       emp_present_city: ['', Validators.required],
-      emp_present_pin: ['', Validators.required],
+      emp_present_pin: ['', [
+        Validators.required,
+        Validators.minLength(6),
+        Validators.maxLength(6)
+      ]],
       emp_permanent_address: [''],
       emp_permanent_state: [''],
       emp_permanent_city: [''],
-      emp_permanent_pin: [''],
+      emp_permanent_pin: ['', [
+        Validators.minLength(6),
+        Validators.maxLength(6)
+      ]],
       company: ['', Validators.required],
       departments: ['', Validators.required],
       designation: ['', Validators.required]
@@ -122,8 +132,8 @@ export class EmployeesEditComponent implements OnInit {
     return form.get('employee_profile_details').controls
   }
 
-  
-  getEmployeeDetails(id){
+
+  getEmployeeDetails(id) {
     this.employeesService.getEmployeeDetails(id).subscribe(res => {
       this.employee_details = res;
       console.log(this.employee_details)
@@ -135,7 +145,7 @@ export class EmployeesEditComponent implements OnInit {
       }
 
       const employee_profile_details_control = <FormArray>this.form.controls['employee_profile_details'];
-     
+
       this.employee_details.employee_profile_details.forEach(x => {
         employee_profile_details_control.push(this.createEmployeeProfile());
       })
@@ -144,12 +154,12 @@ export class EmployeesEditComponent implements OnInit {
       this.getDesignationList(this.employee_details.employee_profile_details[0].designation);
       this.loading = LoadingState.Ready;
     },
-    error => {
-      this.loading = LoadingState.Ready;
-      this.toastr.error('Something went wrong', '', {
-        timeOut: 3000,
-      });
-    })
+      error => {
+        this.loading = LoadingState.Ready;
+        this.toastr.error('Something went wrong', '', {
+          timeOut: 3000,
+        });
+      })
   }
 
   getStateList() {
@@ -168,7 +178,7 @@ export class EmployeesEditComponent implements OnInit {
 
   getCompanyList() {
     this.companyService.getCompanyDropdownList().subscribe(res => {
-      this.company_list = res;      
+      this.company_list = res;
     })
   }
 
@@ -202,14 +212,16 @@ export class EmployeesEditComponent implements OnInit {
 
   updateEmployee() {
     if (this.form.valid) {
+      var email = this.form.value.email;
+      this.employee_details.email = email.toLowerCase();
       this.loading = LoadingState.Processing;
       var date = new Date(this.form.value.employee_profile_details[0].dob.year, this.form.value.employee_profile_details[0].dob.month - 1, this.form.value.employee_profile_details[0].dob.day)
       this.form.patchValue({
-        //dob: date.toISOString()
-        employee_profile_details:[
+        employee_profile_details: [
           {
-            dob:date.toISOString()
-          }]
+            dob: date.toISOString()
+          }
+        ]
       })
       // console.log(this.form.value)
       this.employeesService.updateEmployee(this.employee_details).subscribe(

@@ -47,7 +47,7 @@
                                                 <label>PR Date</label>
                                                 <div class="input-group">
                                                     <input class="form-control" placeholder="yyyy-mm-dd" name="created_at" formControlName="created_at" [ngClass]="displayFieldCss('created_at')"
-                                                        ngbDatepicker #d="ngbDatepicker">
+                                                        ngbDatepicker #d="ngbDatepicker" (click)="d.open()">
                                                     <div class="input-group-append">
                                                         <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
                                                             <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -149,13 +149,12 @@
                                                         <label>Available Quantity</label>
                                                         <input formControlName="avl_qtn" class="form-control" placeholder="Available Quantity" [(ngModel)]="projectSpcQuantity[i]['avl_qtn']">
                                                     </div>
-                                                    <div class="form-group col-md-1">
+                                                    <div class="form-group col-md-1" *ngIf="this.projectSpcQuantity[i]['avl_qtn'] > 0">
                                                         <label>Quantity</label>
                                                         <input appOnlyNumber class="form-control" placeholder="Quantity" name="quantity" formControlName="quantity" [ngClass]="{
                                                         'is-invalid': requisition.get('quantity').invalid && (requisition.get('quantity').dirty || requisition.get('quantity').touched),
                                                         'is-valid': requisition.get('quantity').valid && (requisition.get('quantity').dirty || requisition.get('quantity').touched)
-                                                      }" (keyup)="getExactQuantity($event.target.value, i)" [(ngModel)]="projectSpcQuantity[i]['qtn']"
-                                                            [readonly]="this.projectSpcQuantity[i]['avl_qtn'] == 0">
+                                                      }" (keyup)="getExactQuantity($event.target.value, i)" [(ngModel)]="projectSpcQuantity[i]['qtn']">
                                                         <div class="invalid-feedback" *ngIf="requisition.get('quantity').touched && requisition.get('quantity').hasError('required')">
                                                             Please enter quantity
                                                         </div>
@@ -174,10 +173,7 @@
                                 <div class="row">
                                     <div class="form-group col-md-12">
                                         <label>Special Note</label>
-                                        <textarea class="form-control" rows="3" placeholder="Special Note" name="note" formControlName="special_note" [ngClass]="displayFieldCss('special_note')"></textarea>
-                                        <div class="invalid-feedback" *ngIf="isFieldValid('special_note')">
-                                            Please enter special note
-                                        </div>
+                                        <textarea class="form-control" rows="3" placeholder="Special Note" name="note" formControlName="special_note"></textarea>
                                     </div>
                                 </div>
                                 <div class="row">

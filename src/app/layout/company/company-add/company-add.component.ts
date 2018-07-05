@@ -51,7 +51,10 @@ export class CompanyAddComponent implements OnInit {
         Validators.minLength(6),
         Validators.maxLength(6)
       ]),
-      company_gst: new FormControl(''),
+      company_gst: new FormControl('', [
+        Validators.minLength(15),
+        Validators.maxLength(15)
+      ]),
       company_pan: new FormControl(''),
       company_cin: new FormControl('')
     });

@@ -39,7 +39,10 @@
 
                       <div class="form-group col-md-2">
                         <label>GSTIN</label>
-                        <input type="text" class="form-control" name="gst_no" placeholder="GSTIN" formControlName="gst_no">
+                        <input type="text" class="form-control" name="gst_no" placeholder="GSTIN" formControlName="gst_no" [ngClass]="displayFieldCss('gst_no')">
+                        <div class="invalid-feedback" *ngIf="form.controls['gst_no'].hasError('minlength') || form.controls['gst_no'].hasError('maxlength') && !form.controls['gst_no'].hasError('required')">
+                          GSTIN should be 15 digit
+                        </div>
                       </div>
 
                       <div class="form-group col-md-2">
@@ -93,6 +96,9 @@
                       <div class="form-group col-md-2">
                         <label>Pin</label>
                         <input type="text" class="form-control" name="pincode" placeholder="Pincode" formControlName="pincode" [ngClass]="displayFieldCss('pincode')">
+                        <div class="invalid-feedback" *ngIf="form.controls['pincode'].hasError('minlength') || form.controls['pincode'].hasError('maxlength') && !form.controls['pincode'].hasError('required')">
+                          Pin code should be 6 digit
+                        </div>
                         <div class="invalid-feedback" *ngIf="form.controls['pincode'].hasError('required')">
                           Please enter Pincode
                         </div>
@@ -147,12 +153,12 @@
                               Please enter IFSC
                             </div>
                           </div>
-                          <div class="form-group col-md-1" style="padding-top:30px;">
+                          <!-- <div class="form-group col-md-1" style="padding-top:30px;">
                             <a routerLink="." (click)="addBank()" title="Add More" name="Add More" *ngIf="i == 0">
                               <i class="fa fa-plus"></i> Add More</a>
                             <a href="javascript:void(0);" title="Delete" name="Delete" *ngIf="i > 0" (click)="deleteBank(i)">
                               <i class="fa fa-times-circle fa-2"></i> Delete</a>
-                          </div>
+                          </div> -->
                         </div>
                       </div>
                     </div>

@@ -85,7 +85,7 @@
                               <input class="form-control" placeholder="yyyy-mm-dd" name="dob" ngbDatepicker #d="ngbDatepicker" formControlName="dob" [ngClass]="{
                                 'is-invalid': employeeProfile.get('dob').invalid && (employeeProfile.get('dob').dirty || employeeProfile.get('dob').touched),
                                 'is-valid': employeeProfile.get('dob').valid && (employeeProfile.get('dob').dirty || employeeProfile.get('dob').touched)
-                              }">
+                              }" (click)="d.open()">
                               <div class="input-group-append">
                                 <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
                                   <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -110,6 +110,9 @@
                               'is-invalid': employeeProfile.get('adhaar_no').invalid && (employeeProfile.get('adhaar_no').dirty || employeeProfile.get('adhaar_no').touched),
                               'is-valid': employeeProfile.get('adhaar_no').valid && (employeeProfile.get('adhaar_no').dirty || employeeProfile.get('adhaar_no').touched)
                             }">
+                            <div class="invalid-feedback" *ngIf="employeeProfile.get('adhaar_no').hasError('minlength') || employeeProfile.get('adhaar_no').hasError('maxlength') && !employeeProfile.get('adhaar_no').hasError('required')">
+                              AADHAAR number should be 16 digit
+                            </div>
                             <div class="invalid-feedback" *ngIf="employeeProfile.get('adhaar_no').hasError('required')">
                               Please enter AADHAAR
                             </div>
@@ -159,6 +162,9 @@
                                       'is-invalid': employeeProfile.get('emp_present_pin').invalid && (employeeProfile.get('emp_present_pin').dirty || employeeProfile.get('emp_present_pin').touched),
                                       'is-valid': employeeProfile.get('emp_present_pin').valid && (employeeProfile.get('emp_present_pin').dirty || employeeProfile.get('emp_present_pin').touched)
                                     }">
+                                    <div class="invalid-feedback" *ngIf="employeeProfile.get('emp_present_pin').hasError('minlength') || employeeProfile.get('emp_present_pin').hasError('maxlength') && !employeeProfile.get('emp_present_pin').hasError('required')">
+                                      Pin code should be 6 digit
+                                    </div>
                                     <div class="invalid-feedback" *ngIf="employeeProfile.get('emp_present_pin').hasError('required')">
                                       Please enter pincode
                                     </div>
@@ -189,7 +195,13 @@
                                   </div>
                                   <div class="form-group col-md-2">
                                     <label>Pin</label>
-                                    <input class="form-control" placeholder="Pin" name="emp_permanent_pin" formControlName="emp_permanent_pin">
+                                    <input class="form-control" placeholder="Pin" name="emp_permanent_pin" formControlName="emp_permanent_pin" [ngClass]="{
+                                      'is-invalid': employeeProfile.get('emp_permanent_pin').invalid && (employeeProfile.get('emp_permanent_pin').dirty || employeeProfile.get('emp_permanent_pin').touched),
+                                      'is-valid': employeeProfile.get('emp_permanent_pin').valid && (employeeProfile.get('emp_permanent_pin').dirty || employeeProfile.get('emp_permanent_pin').touched)
+                                    }">
+                                    <div class="invalid-feedback" *ngIf="employeeProfile.get('emp_permanent_pin').hasError('minlength') || employeeProfile.get('emp_permanent_pin').hasError('maxlength') && !employeeProfile.get('emp_permanent_pin').hasError('required')">
+                                      Pin code should be 6 digit
+                                    </div>
                                   </div>
                                 </div>
                               </div>

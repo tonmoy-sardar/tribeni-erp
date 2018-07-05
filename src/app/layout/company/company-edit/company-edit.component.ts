@@ -36,7 +36,7 @@ export class CompanyEditComponent implements OnInit {
         Validators.pattern(/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/)
       ]),
       company_email: new FormControl('', [
-        Validators.pattern(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/)
+        Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)
       ]),
       company_contact: new FormControl('', [
         Validators.required,
@@ -46,8 +46,15 @@ export class CompanyEditComponent implements OnInit {
       company_address: new FormControl('', Validators.required),
       company_state: new FormControl('', Validators.required),
       company_city: new FormControl('', Validators.required),
-      company_pin: new FormControl('', Validators.required),
-      company_gst: new FormControl(''),
+      company_pin: new FormControl('', [
+        Validators.required,
+        Validators.minLength(6),
+        Validators.maxLength(6)
+      ]),
+      company_gst: new FormControl('', [
+        Validators.minLength(15),
+        Validators.maxLength(15)
+      ]),
       company_pan: new FormControl(''),
       company_cin: new FormControl('')
     });
@@ -100,6 +107,8 @@ export class CompanyEditComponent implements OnInit {
 
   updateCompany() {
     if (this.form.valid) {
+      var email = this.form.value.company_email
+      this.company.company_email = email;
       this.loading = LoadingState.Processing;
       this.companyService.updateCompany(this.company).subscribe(
         response => {
