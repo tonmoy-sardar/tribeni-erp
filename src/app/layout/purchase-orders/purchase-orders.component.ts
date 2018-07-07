@@ -112,14 +112,16 @@ export class PurchaseOrdersComponent implements OnInit {
   }
 
   getCompanyList() {
-    this.companyService.getCompanyDropdownList().subscribe(data => {
-      this.companyList = data;
+    this.purchaseOrdersService.getPurchaseOrderCompanyDropdown().subscribe(data => {
+      // console.log(data)
+      this.companyList = data.companies;
     });
   }
 
   getProjectList() {
-    this.companyService.getAllCompanyProjectDropdownList().subscribe(res => {
-      this.projectList = res;
+    this.purchaseOrdersService.getPurchaseOrderProjectDropdown().subscribe(res => {
+      // console.log(res)
+      this.projectList = res.projects;
     })
   }
 

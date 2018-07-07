@@ -52,4 +52,16 @@ export class PurchaseInvoiceService {
     })
   }
 
+  getPurchaseInvoiceCompanyDropdown(): Observable<any>{
+    return this.http.get(environment.apiEndpoint+'purchase_invoice_company_list_dropdown/', {
+      headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
+    })
+  }
+
+  getPurchaseInvoiceProjectDropdown(): Observable<any>{
+    return this.http.get(environment.apiEndpoint+'purchase_invoice_project_list_dropdown/', {
+      headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
+    })
+  }
+
 }

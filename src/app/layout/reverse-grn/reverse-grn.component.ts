@@ -127,14 +127,14 @@ export class ReverseGrnComponent implements OnInit {
   }
 
   getCompanyList() {
-    this.companyService.getCompanyDropdownList().subscribe(data => {
-      this.companyList = data;
+    this.grnService.getReverseGrnCompanyDropdown().subscribe(data => {
+      this.companyList = data.companies;
     });
   }
 
   getProjectList() {
-    this.companyService.getAllCompanyProjectDropdownList().subscribe(res => {
-      this.projectList = res;
+    this.grnService.getReverseGrnProjectDropdown().subscribe(res => {
+      this.projectList = res.projects;
     })
   }
   btnClickNav(toNav) {

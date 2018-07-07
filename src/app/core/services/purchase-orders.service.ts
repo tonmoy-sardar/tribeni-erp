@@ -58,4 +58,16 @@ export class PurchaseOrdersService {
     })
   }
 
+  getPurchaseOrderCompanyDropdown(): Observable<any>{
+    return this.http.get(environment.apiEndpoint+'purchase_order_company_list_dropdown/', {
+      headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
+    })
+  }
+
+  getPurchaseOrderProjectDropdown(): Observable<any>{
+    return this.http.get(environment.apiEndpoint+'purchase_order_project_list_dropdown/', {
+      headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
+    })
+  }
+
 }

@@ -68,5 +68,17 @@ export class PurchaseRequisitionService {
       headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
     })
   }
+ 
+  getRequisitionCompanyDropdown(): Observable<any>{
+    return this.http.get(environment.apiEndpoint+'requistion_company_dropdown/', {
+      headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
+    })
+  }
+
+  getRequisitionProjectDropdown(): Observable<any>{
+    return this.http.get(environment.apiEndpoint+'requistion_project_dropdown/', {
+      headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
+    })
+  }
 
 }

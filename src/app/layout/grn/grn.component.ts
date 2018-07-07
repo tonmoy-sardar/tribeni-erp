@@ -124,14 +124,14 @@ export class GrnComponent implements OnInit {
   }
 
   getCompanyList() {
-    this.companyService.getCompanyDropdownList().subscribe(data => {
-      this.companyList = data;
+    this.grnService.getGrnCompanyDropdown().subscribe(data => {
+      this.companyList = data.companies;
     });
   }
 
   getProjectList() {
-    this.companyService.getAllCompanyProjectDropdownList().subscribe(res => {
-      this.projectList = res;
+    this.grnService.getGrnProjectDropdown().subscribe(res => {
+      this.projectList = res.projects;
     })
   }
   btnClickNav(toNav) {

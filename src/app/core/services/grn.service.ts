@@ -69,4 +69,28 @@ export class GrnService {
     })
   }
 
+  getGrnCompanyDropdown(): Observable<any>{
+    return this.http.get(environment.apiEndpoint+'grn_company_list_dropdown/', {
+      headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
+    })
+  }
+
+  getGrnProjectDropdown(): Observable<any>{
+    return this.http.get(environment.apiEndpoint+'grn_project_list_dropdown/', {
+      headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
+    })
+  }
+
+  getReverseGrnCompanyDropdown(): Observable<any>{
+    return this.http.get(environment.apiEndpoint+'reverse_grn_company_list_dropdown/', {
+      headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
+    })
+  }
+
+  getReverseGrnProjectDropdown(): Observable<any>{
+    return this.http.get(environment.apiEndpoint+'reverse_grn_project_list_dropdown/', {
+      headers: new HttpHeaders().set('Authorization', 'Token '+localStorage.getItem('logedUserToken'))
+    })
+  }
+
 }

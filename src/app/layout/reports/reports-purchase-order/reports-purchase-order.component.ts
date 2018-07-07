@@ -113,14 +113,14 @@ export class ReportsPurchaseOrderComponent implements OnInit {
   }
 
   getCompanyList() {
-    this.companyService.getCompanyDropdownList().subscribe(res => {
-      this.company_list = res;
+    this.purchaseOrdersService.getPurchaseOrderCompanyDropdown().subscribe(res => {
+      this.company_list = res.companies;
     })
   }
 
   getCompanyProjectList() {
-    this.companyService.getAllCompanyProjectDropdownList().subscribe(res => {
-      this.project_list = res;
+    this.purchaseOrdersService.getPurchaseOrderProjectDropdown().subscribe(res => {
+      this.project_list = res.projects;
     })
   }  
 
