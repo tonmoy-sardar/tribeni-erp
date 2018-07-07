@@ -104,7 +104,7 @@ export class ReportsPurchaseRequisitionComponent implements OnInit {
 
   getCompanyList() {
     this.purchaseRequisitionService.getRequisitionCompanyDropdown().subscribe(res => {
-      this.company_list = res.companies;
+      this.company_list = res.company;
     })
   }  
 
